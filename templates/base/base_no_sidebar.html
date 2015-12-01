@@ -1,0 +1,267 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+
+<head lang="es"
+      prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# {{ FB_APLICATION }}: http://ogp.me/ns/fb/{{ FB_APLICATION }}#">
+    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-STORE">
+    <META HTTP-EQUIV="PRAGMA" CONTENT="NO-STORE">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description"
+          content="RENKA somos financiamiento colectivo donde personas invierten directo en negocios a cambio de recompensas o intereses.">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, target-densitydpi=device-dpi, user-scalable=no"/>
+
+    {% include 'base/favicons.html' %}
+
+    <title>{% block title %}{% endblock %} | RENKA</title>
+
+    <!-- <script src="{% static 'base/js/jquery-2.1.1.js' %}"></script> -->
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic|Roboto+Condensed:300italic,400italic,700italic,400,300,700'
+          rel='stylesheet' type='text/css'>
+    <link href="{% static 'base/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'base/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+
+    <link href="{% static 'base/css/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'base/css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'base/css/renka-design.css' %}" rel="stylesheet">
+    <link href="{% static 'base/css/main.css' %}" rel="stylesheet">
+    <link href="{% static 'base/css/base.css' %}" rel="stylesheet">
+
+    {% block styles %}
+
+    {% endblock %}
+
+    <meta property="fb:app_id" content="793051900816959"/>
+</head>
+
+<body class="top-navigation">
+<div id="fb-root"></div>
+<script>(function (d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "//connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v2.3&appId=793051900816959";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<div id="wrapper">
+    <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom white-bg">
+            <nav class="navbar navbar-fixed-top" role="navigation">
+                <div class="navbar-header">
+                    <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse"
+                            class="navbar-toggle collapsed" type="button">
+                        <i class="fa fa-reorder"></i>
+                    </button>
+                    <a href="#" class="navbar-brand">
+                        <img src="{% static 'base/img/logo-base.png' %}" alt=""/>
+                    </a>
+                </div>
+                <div class="navbar-collapse collapse" id="navbar">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#modal_crear_proyecto"> Sube tu proyecto </a>
+                            {% include 'base/base_modal_crear_proyecto.html' %}
+                        </li>
+                        <li>
+                            <a href="#"> Invierte y apoya </a>
+                        </li>
+                        <li>
+                            <a href="#"> ¿Cómo funciona? </a>
+                        </li>
+
+
+                        <li>
+                            <form role="search" method="get" class="navbar-form"
+                                  action="#">
+                                <button type="submit" class="input-group-addon pointer submit-query no-borders">
+                                    <i class="fa fa-search icon-buscar text-renka" style="cursor: pointer;"></i>
+                                </button>
+                                <div class="form-group inline">
+                                    <input type="text" placeholder="Buscar..."
+                                           class="form-control hidden-md hidden-sm border-bottom m-l-md" name="query"
+                                           id="top-search">
+                                </div>
+                            </form>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-top-links navbar-right">
+                        {% if user.is_authenticated %}
+
+                            <li data-toggle="dropdown" id="menu-profile" class="dropdown-toggle"
+                                aria-expanded="true">
+                                <a href="#">{{ user.get_short_name }}</a>
+                            </li>
+                            <li data-toggle="dropdown" id="menu-profile" class="dropdown-toggle"
+                                aria-expanded="true">
+                                {% if user.get_image != "" %}
+                                    <div class="avatar img-circle img-user">
+                                        <style>
+                                            .img-user {
+                                                cursor: pointer;
+                                                position: relative;
+                                                top: 10px;
+                                                background-image: url({{ user.get_image }});
+                                                width: 30px !important;
+                                                margin-right: 5px;
+                                                padding-bottom: 30px;
+                                            }
+                                        </style>
+                                    </div>
+                                {% else %}
+                                    <img alt="image" class="img-circle"
+                                         src="{% static 'base/img/avatar.jpg' %}"/>
+                                {% endif %}
+                            </li>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="menu-profile">
+                                <li><a href="#">Mis inversiones</a></li>
+                                {% if user.is_nutriologo %}
+                                    <li><a href="#">Mis proyectos</a></li>
+                                {% endif %}
+                                <li class="divider"></li>
+                                <li><a href="#">Mi cuenta</a></li>
+                                <li><a href="#">Invitar amigos</a></li>
+                                <li><a href="#"><i class="fa fa-sign-out"></i> Cerrar
+                                    sesión </a></li>
+                            </ul>
+                        {% else %}
+                            <li>
+                                <a href="{% url 'usuarios_app:login' %}">
+                                    <i class="fa fa-sign-in"></i> Ingresar
+                                </a>
+                            </li>
+                        {% endif %}
+                        <li class="hidden-sm">
+                            <a href="#">
+                                <i class="fa fa-question-circle"></i>FAQ
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <div class="wrapper wrapper-content">
+            <div class="container">
+                {% block content %}
+
+                {% endblock %}
+            </div>
+        </div>
+
+        <div class="content-dark footer-home" style="
+                                                        width: 100vw;
+                                                        margin-left: -15px;
+                                                        margin-right: 71px;
+                                                    ">
+            <div class="container">
+                <div class="row m-t-xl m-b-xl">
+                    <div class="col-xs-12 col-md-2 m-t-lg m-b-lg">
+                        <img src="{% static 'base/img/logo-renka-white.png' %}" alt="logo" style="width: 75px;">
+                        <span>©</span>
+                    </div>
+                    <div class="col-xs-6 col-md-2 m-t-lg m-b-lg">
+                        <h5>PROYECTOS</h5>
+                        <ul>
+                            <li><a class="text-white" href="{% url 'proyectos_app:proyectos' %}">Descubre Negocios</a>
+                            </li>
+                            <li><a class="text-white" href="#" data-toggle="modal" data-target="#modal_crear_proyecto">Sube
+                                tu proyecto</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-6 col-md-3 m-t-lg m-b-lg">
+                        <h5>SOPORTE</h5>
+                        <ul>
+                            <li><a class="text-white" href="#">Preguntas frecuentes (FAQ)</a></li>
+                            <li><a class="text-white" href="#">¿Cómo funciona
+                                RENKA©?</a></li>
+                            <li><a class="text-white" href="#">¿Cómo hacer una buena
+                                campaña?</a></li>
+                            <li><a class="text-white" href="#">Recomendaciones para tu
+                                video</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-6 col-md-3 m-t-lg m-b-lg">
+                        <h5>LEGAL</h5>
+                        <ul>
+                            <li><a class="text-white" href="#">Términos y
+                                Condiciones</a></li>
+                            <li><a class="text-white" href="#">Aviso de
+                                privacidad</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-6 col-md-2 m-t-lg m-b-lg">
+                        <h5>CONTACTO</h5>
+                        <ul>
+                            <li>
+                                <a target="_blank" class="text-white"
+                                   href="#">Blog</a>
+                            </li>
+                            <li>
+                                <a target="_blank" class="text-white"
+                                   href="{% url 'home_app:equipo' %}">Equipo</a>
+                            </li>
+                            <li><span>contacto@renka.com.mx</span></li>
+                            <li>
+                                <a target="_blank" class="text-white text-facebook"
+                                   href="#">
+                                    <i class="fa fa-phone fa-2x"></i>&nbsp;&nbsp;
+                                    <i class="fa fa-whatsapp fa-2x"></i><br>
+                                    +52 x xx xxxx xxxx
+                                </a>
+                            </li>
+                            <li>
+                                <a target="_blank" class="text-white text-facebook"
+                                   href="#"><i
+                                        class="fa fa-facebook-official fa-2x"></i></a>
+                                <a target="_blank" class="text-white text-twitter m-l-sm"
+                                   href="#"><i
+                                        class="fa fa-twitter fa-2x"></i></a>
+                            </li>
+                            <li><i class="fb-like text-white" data-href="#"
+                                   data-width="47" style="overflow: hidden"></i></li>
+                            <style scoped>
+                                #u_0_2 {
+                                    color: #FAFAFA !important;
+                                }
+                            </style>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="{% static 'base/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'base/js/plugins/metisMenu/jquery.metisMenu.js' %}"></script>
+<script src="{% static 'base/js/plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
+
+<script src="{% static 'base/js/plugins/chartJs/Chart.min.js' %}"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="{% static 'base/js/inspinia.js' %}"></script>
+<script src="{% static 'base/js/plugins/pace/pace.min.js' %}"></script>
+
+<script src="{% static 'base/js/plugins/jquery-ui/jquery-ui.min.js' %}"></script>
+
+<!-- Flot -->
+<script src="{% static 'base/js/plugins/flot/jquery.flot.js' %}"></script>
+<script src="{% static 'base/js/plugins/flot/jquery.flot.tooltip.min.js' %}"></script>
+<script src="{% static 'base/js/plugins/flot/jquery.flot.resize.js' %}"></script>
+
+<script src="{% static 'base/js/plugins/jquery.number.min.js' %}"></script>
+<script src="{% static 'base/js/plugins/jquery.numeric.min.js' %}"></script>
+<script src="{% static 'base/js/plugins/jquery.mask.min.js' %}"></script>
+
+{% block scripts %}
+
+{% endblock %}
+
+</body>
+</html>

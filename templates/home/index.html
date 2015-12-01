@@ -1,0 +1,250 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>EDS - Material</title>
+	<link rel="stylesheet" href="{% static 'home/css/materialize.css' %}">
+
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+	<script src="{% static 'home/js/materialize.js' %}"></script>
+</head>
+<body>
+	<header>
+  <!--Main Button-->
+    <div class="fixed-action-btn horizontal click-to-toggle" style="bottom: 45px; right: 24px;">
+      <a class="btn-floating btn-large red">
+        <i class="large mdi-navigation-menu"></i>
+      </a>
+      <ul>
+        <li><a class="btn-floating red"><i class="material-icons">code</i></a></li>
+        <li><a class="btn-floating yellow darken-1"><i class="material-icons">info_outline</i></a></li>
+        <li><a class="btn-floating green"><i class="material-icons">input</i></a></li>
+        <li><a class="btn-floating blue"><i class="material-icons">perm_identity</i></a></li>
+      </ul>
+    </div>
+              
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal">
+      <div class="modal-content">
+        <h4>Modal Header</h4>
+        <p>A bunch of text</p>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+      </div>
+    </div>
+
+		<!--Parallax-->
+			<div class="parallax-container">
+    			<div class="parallax"><img src="{% static 'home/images/parallax1.jpg' %}">
+					<!--Add-->
+    			</div>
+  			</div>
+
+  	<!--Section 1/3-->
+  		<div class="row">
+  			<div class="container">
+  				<h2 class="green-text text-darken-3">¿Qué es EDS?</h2>
+  				<hr>
+  				<p class="flow-text">
+  					EDS es una herramienta web de vinculación y seguimiento del tratamiento de personas que tienen desordenes alimenticios, a través de la generación de dietas electrónicas según un régimen alimentario, realizados por un <b>nutriólogo profesional.</b>
+  				</p>
+  			</div>
+  		</div>
+  		
+    <!--Section 2/3-->
+    <div class="row">
+        <div class="container">
+          <h2 class="green-text text-darken-3">¿A quién va dirigido?</h2>
+          <hr>
+          <p class="flow-text">
+            Este sistema está dirigido a <b>cualquier persona</b> que tenga como objetivo el lograr llegar a su peso ideal y esté dispuesta a seguir adecuadamente una dieta o régimen alimenticio.
+          </p>
+        </div>
+      </div>
+
+    <!--Slider-->
+    <div class="row">
+        <div class="container">
+          <div class="slider">
+            <ul class="slides">
+              <li>
+                <img src="{% static 'home/images/slider1.jpg' %}">
+                <div class="caption center-align">
+                  <h3 class="white-text">This is our big Tagline!</h3>
+                  <h5 class="light teal-text text-lighten-3"></h5>
+                </div>
+              </li>
+              <li>
+                <img src="http://lorempixel.com/580/250/nature/2"> <!-- random image -->
+                <div class="caption left-align">
+                  <h3>Left Aligned Caption</h3>
+                  <h5 class="light grey-text text-lighten-3">Here's our small slogan.</h5>
+                </div>
+              </li>
+              <li>
+                <img src="{% static 'home/images/slider1.jpg' %}"> <!-- image 3 -->
+                <div class="caption right-align">
+                  <h3 class="white-text">¡Mereces el cuerpo que quieres!</h3>
+                  <h5 class="light grey-text text-lighten-3">¿Puedes lograrlo?</h5>
+                </div>
+              </li>
+              <li>
+                <img src="http://lorempixel.com/580/250/nature/4"> <!-- random image -->
+                <div class="caption center-align">
+                  <h3>This is our big Tagline!</h3>
+                  <h5 class="light grey-text text-lighten-3">Here's our small slogan.</h5>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    <!--Section 3/3-->
+  		<div class="row">
+  			<div class="container">
+  				<h2 class="green-text text-darken-3">¿Cómo funciona?</h2>
+  				<hr>
+  			</div>
+  		</div>
+
+  	<!--PopOut-->
+      <div class="row">
+        <div class="container">
+          <ul class="collapsible popout" data-collapsible="accordion">
+            <li>
+              <div class="collapsible-header"><i class="material-icons">power_settings_new</i>Primero</div>
+                <div class="collapsible-body">
+                  <div class="container">
+                    <blockquote><p class="flow-text">Sabemos que mueres por probar la aplicación, pero antes;</p></blockquote>
+                    <!--Tooltip 1-->
+                    <div class="container">
+                      <a class="btn tooltipped modal-trigger" data-position="bottom" data-delay="20" data-tooltip="Necesitas una cuenta de Facebook" href="#modal2">¡Regístrate!</a>
+                      <a class="btn tooltipped modal-trigger" data-position="bottom" data-delay="20" data-tooltip="Inicia sesión :)" href="#modal2">¿Ya tienes cuenta?</a>
+                    </div>
+                  </div>
+                  <br>
+                </div>
+            </li>
+            <li>
+              <div class="collapsible-header"><i class="material-icons">loop</i>Segundo</div>
+                <div class="collapsible-body">
+                  <div class="container">
+                    <blockquote><p class="flow-text">Para poder utilizar EDS necesitas tener tu información al día.</p></blockquote>
+                    <!--Tooltip 2-->
+                    <div class="container">
+                      <a class="btn tooltipped modal-trigger" data-position="bottom" data-delay="120" data-tooltip="No te preocupes tu infomación está segura" href="">Actualiza tu información</a>
+                    </div>
+                  </div>
+                  <br>
+                </div>
+            </li>
+            <li>
+              <div class="collapsible-header"><i class="material-icons">done</i>Tercero</div>
+              <div class="collapsible-body">
+                <div class="container">
+                    <blockquote><p class="flow-text">¡Este el momento!</p></blockquote>
+                    <!--Tooltip 3-->
+                    <div class="container">
+                      <a class="btn tooltipped modal-trigger" data-position="bottom" data-delay="120" data-tooltip="¡Con toda la actitud!" href="">Tour por la aplicación</a>
+                    </div>
+                  </div>
+                  <br>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!--Section 3/3-->
+      <div class="row">
+        <div class="container">
+          <h2 class="green-text text-darken-3">¿Necesitas más?</h2>
+          <hr>
+          
+        </div>
+      </div>
+
+      <!--Card-->
+      <div class="row">
+        <div class="container">
+        <div class="col s12 m6 l6">
+          <div class="card">
+              <div class="card-image waves-effect waves-block waves-light">
+                <img class="activator" src="images/card1.jpg">
+              </div>
+              <div class="card-content">
+                <span class="card-title activator grey-text text-darken-4">Ejercicio y Rutinas<i class="material-icons right">more_vert</i></span>
+                <p><a href="#">Coming soon...</a></p>
+              </div>
+            <div class="card-reveal">
+              <span class="card-title grey-text text-darken-4">Rutinas y Ejericio<i class="material-icons right">close</i></span>
+              <p>En pro de tu salud estamos desarollando un módulo en donde puedas incluir, compartir o descrubrir nuevas rutinas que ayuden a llegar más rápido a tu meta. </p>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+        <div class="col s12 m6 l6">
+          <p class="black-text">
+            En pro de tu salud estamos desarollando una <b>nueva función</b> que permitirá elegir una rutina avalada por un profesional, podrás compartir tu rutina y descubrir nuevas. 
+          </p>
+        </div>
+        
+          <div class="col s12 m8 offset-m2 l6 offset-l3">
+            <div class="card-panel grey lighten-5 z-depth-1">
+              <div class="row valign-wrapper">
+                <div class="col s2">
+                  <img src="{% static 'home/images/cir1.jpg' %}" alt="" class="circle responsive-img"> <!-- notice the "circle" class -->
+                </div>
+                <div class="col s10">
+                  <span class="black-text">
+                    "En EDS es una prioridad tu salud, y por esta razón estaremos en constantes cambios para brindarte la mejor experiencia"
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+
+	   <!--Footer-->
+	    <footer class="page-footer green darken-1">
+        <div class="container">
+          <div class="row">
+            <div class="col l6 s12">
+              <h5 class="white-text">Electronic Diet System</h5>
+              <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
+            </div>
+          <div class="col l4 offset-l2 s12">
+            <h5 class="white-text">Social Meeting</h5>
+              <ul>
+                <li><a class="grey-text text-lighten-3" href="#!">Google + (Botón inteligente para publicar)</a></li>
+                <li><a class="grey-text text-lighten-3" href="#!">Facebook (Botón para publicar)</a></li>
+                <li><a class="grey-text text-lighten-3" href="#!">Twitter (Botón inteligente para publicar)</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="footer-copyright">
+          <div class="container">
+            © 2014 Copyright EDS
+            <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+          </div>
+        </div>
+      </footer>
+
+	<script>
+		$(document).ready(function(){
+      	$(".button-collapse").sideNav();
+      	$('.slider').slider({full_width: true});
+      	$('.parallax').parallax();
+      	$('.modal-trigger').leanModal();
+        $('.tooltipped').tooltip({delay: 50});
+    });
+	</script>
+</body>
+</html>

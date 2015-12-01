@@ -1,0 +1,449 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+
+<head lang="es">
+    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-STORE">
+    <META HTTP-EQUIV="PRAGMA" CONTENT="NO-STORE">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description"
+          content="META DESCRIPCION.">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, target-densitydpi=device-dpi, user-scalable=no"/>
+
+    {% include 'base/favicons.html' %}
+
+    <title>{% block title %}{% endblock %} | Renka</title>
+
+    <!-- <script src="{% static 'base/js/jquery-2.1.1.js' %}"></script> -->
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="{% static 'proyectos/js/icheck.min.js' %}"></script>
+
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic|Roboto+Condensed:300italic,400italic,700italic,400,300,700'
+          rel='stylesheet' type='text/css'>
+    <link href="{% static 'base/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'base/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+
+    <link href="{% static 'base/css/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'base/css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'base/css/renka-design.css' %}" rel="stylesheet">
+    <link href="{% static 'base/css/main.css' %}" rel="stylesheet">
+    <link href="{% static 'base/css/base.css' %}" rel="stylesheet">
+
+    {% block styles %}
+
+    {% endblock %}
+
+    <meta property="fb:app_id" content="793051900816959"/>
+</head>
+<body class="pace-done fixed-nav fixed-sidebar">
+<div id="fb-root"></div>
+
+<script>(function (d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "//connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v2.3&appId=793051900816959";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<div id="wrapper">
+    <nav class="navbar-default navbar-static-side shadow" role="navigation">
+
+        <div class="sidebar-collapse">
+            <ul class="nav" id="side-menu">
+                <li class="nav-header">
+                    {% if user.is_authenticated %}
+                        <div class="dropdown profile-element pointer text-center">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#" aria-expanded="false">
+                                <img alt="image" class="img-circle center-block m-b-xs" src="{{ user.get_image }}"
+                                     style="height: 48px; width: 48px; border: 3px solid #FFFFFF;"/>
+                                <span class="text-muted font-bold m-t-sm">{{ user.get_short_name }}</span>
+                            </a>
+
+                            {% comment %}
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'socios_app:perfil' %}">Mi Cuenta</a></li>
+                                <li class="divider"></li>
+                                <li><a href="{% url 'usuarios_app:editar_perfil' %}">Editar Perfil</a></li>
+                                <li><a href="{% url 'usuarios_app:logout' %}"><i class="fa fa-sign-out"></i> Cerrar sesión </a></li>
+                            </ul>
+                            {% endcomment %}
+                        </div>
+                    {% endif %}
+                    <div class="logo-element">
+                        <a href="{% url 'index_app:home' %}">
+                            <img src="{% static 'base/img/logo-base.png' %}" alt="" style="width: 50%;"/>
+                        </a>
+                    </div>
+                </li>
+                <li class="visible-xs vis">
+                    <a href="#" data-toggle="modal" data-target="#modal_crear_proyecto"> Sube tu proyecto </a>
+                </li>
+                <li class="visible-xs">
+                    <a href="{% url 'proyectos_app:proyectos' %}"> Descubre Negocios </a>
+                </li>
+                <li class="visible-xs">
+                    <a href="{% url 'faq_app:info_como_funciona' %}"> ¿Cómo funciona? </a>
+                </li>
+                <li>
+                    <a href="{% url 'socios_app:perfil' %}"><i class="fa fa-usd"></i> <span class="nav-label">Mis inversiones</span></a>
+                    <ul class="nav nav-second-level collapse in">
+                        <li><a href="{% url 'socios_app:perfil' %}">Ver inversiones</a></li>
+                        <li><a href="{% url 'socios_app:estado_cuenta' %}">Estado de cuenta</a></li>
+                        <li><a href="{% url 'invitados_app:buscar' %}">Invitar amigos</a></li>
+                        {% if tiene_cupon_personal %}
+                            <li><a href="{% url 'cupones_app:cupon_personal' %}">Cupón personal</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
+
+                {% if user.isEmpresario %}
+                    <hr>
+                    <li>
+                        <a href="{% url 'empresarios_app:perfil' %}"><i class="fa fa-th-large"></i> <span
+                                class="nav-label">Mis Proyectos</span> </a>
+                        <ul class="nav nav-second-level collapse in">
+                            <li><a href="{% url 'empresarios_app:perfil' %}">Ver proyectos</a></li>
+                            <li><a href="{% url 'empresarios_app:estado_cuenta' %}">Estado de cuenta</a></li>
+                        </ul>
+                    </li>
+                {% endif %}
+                {% if user.isCofundador %}
+                    <hr>
+                    <li>
+                        <a href="#"><i class="fa fa-users"></i> <span class="nav-label">Cofundador</span> </a>
+                        <ul class="nav nav-second-level collapse in">
+                            <li><a href="{% url 'empresarios_app:cofunder' %}">Ver proyectos</a></li>
+                        </ul>
+                    </li>
+                {% endif %}
+                <hr>
+                <li>
+                    <a href="#"><i class="fa fa-user"></i> <span class="nav-label">Mi cuenta</span></a>
+                    <ul class="nav nav-second-level collapse in">
+                        <li><a href="{% url 'usuarios_app:perfil' %}">Editar Perfil</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+    <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-fixed-top white-bg" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary visible-xs" href="#"><i
+                            class="fa fa-bars"></i>
+                    </a>
+                    <a href="{% url 'index_app:index' %}" class="navbar-brand p-m hidden-xs">
+                        <img src="{% static 'base/img/logo-base.png' %}" alt=""/>
+                    </a>
+                    <ul class="nav navbar-nav m-xs hidden-xs">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#modal_crear_proyecto"> Sube tu proyecto </a>
+                            {% include 'base/base_modal_crear_proyecto.html' %}
+                        </li>
+                        <li>
+                            <a href="{% url 'proyectos_app:proyectos' %}"> Invierte y apoya </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'faq_app:info_como_funciona' %}"> ¿Cómo funciona? </a>
+                        </li>
+                        <li class="visible-md-block visible-lg-block">
+                            <form role="search" method="get" class="navbar-form"
+                                  action="{% url 'proyectos_app:buscar' %}">
+                                <button type="submit" class="input-group-addon pointer submit-query no-borders">
+                                    <i class="fa fa-search icon-buscar text-renka" style="cursor: pointer;"></i>
+                                </button>
+                                <div class="form-group inline">
+                                    <input type="text" placeholder="Buscar..."
+                                           class="form-control hidden-md hidden-sm border-bottom m-l-md" name="query"
+                                           id="top-search">
+                                </div>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+                <ul class="nav navbar-top-links navbar-right">
+                    {% if user.is_authenticated %}
+
+                        {% include 'base/base_notif.html' %}
+
+                        <li data-toggle="dropdown" id="menu-profile" class="dropdown-toggle"
+                            aria-expanded="true">
+                            <a href="#">{{ user.get_short_name }}</a>
+                        </li>
+                        <li data-toggle="dropdown" id="menu-profile" class="dropdown-toggle"
+                            aria-expanded="true">
+                            {% if user.get_image != "" %}
+                                <div class="avatar img-circle img-user">
+                                    <style>
+                                        .img-user {
+                                            cursor: pointer;
+                                            position: relative;
+                                            top: 10px;
+                                            background-image: url({{ user.get_image }});
+                                            width: 30px !important;
+                                            margin-right: 5px;
+                                            padding-bottom: 30px;
+                                        }
+                                    </style>
+                                </div>
+                            {% else %}
+                                <img alt="image" class="img-circle"
+                                     src="{% static 'base/img/avatar.jpg' %}"/>
+                            {% endif %}
+                        </li>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="menu-profile">
+                            <li><a href="{% url 'socios_app:perfil' %}">Mis inversiones</a></li>
+                            {% if user.isEmpresario %}
+                                <li><a href="{% url 'empresarios_app:perfil' %}">Mis proyectos</a></li>
+                            {% endif %}
+                            <li class="divider"></li>
+                            <li><a href="{% url 'usuarios_app:perfil' %}">Mi cuenta</a></li>
+                            <li><a href="{% url 'invitados_app:buscar' %}">Invitar amigos</a></li>
+                            <li><a href="{% url 'usuarios_app:logout' %}"><i class="fa fa-sign-out"></i> Cerrar
+                                sesión </a></li>
+                        </ul>
+                    {% else %}
+                        <li>
+                            <a href="{% url 'usuarios_app:login' %}">
+                                <i class="fa fa-user"></i> Comienza ahora
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li class="hidden-sm">
+                        <a href="{% url 'faq_app:FAQ' %}">
+                            <i class="fa fa-question-circle"></i>FAQ
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="wrapper wrapper-content">
+            <div class="container-fluid">
+                {% block content %}
+
+                {% endblock %}
+            </div>
+        </div>
+
+        <div class="content-dark footer-home" style="
+                                                    width: 100vw;
+                                                    margin-left: -15px;
+                                                    margin-right: 71px;
+                                                ">
+            <div class="container-fluid">
+                <div class="row m-t-xl">
+                    <div class="hidden col-xs-12 col-md-2 m-t-lg m-b-lg">
+                        <img src="{% static 'base/img/logo-renka-white.png' %}" alt="logo" style="width: 75px;">
+                        <span>©</span>
+                    </div>
+                    <div class="col-xs-6 col-md-2 m-t-lg m-b-lg">
+                        <h5>PROYECTOS</h5>
+                        <ul>
+                            <li><a class="text-white" href="{% url 'proyectos_app:proyectos' %}">Descubre Negocios</a>
+                            </li>
+                            <li><a class="text-white" href="#" data-toggle="modal" data-target="#modal_crear_proyecto">Sube
+                                tu proyecto</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-6 col-md-3 m-t-lg m-b-lg">
+                        <h5>SOPORTE</h5>
+                        <ul>
+                            <li><a class="text-white" href="{% url 'faq_app:faq' %}">Preguntas frecuentes (FAQ)</a></li>
+                            <li><a class="text-white" href="{% url 'faq_app:info_como_funciona' %}">¿Cómo funciona
+                                RENKA©?</a></li>
+                            <li><a class="text-white" href="{% url 'faq_app:info_como_campana' %}">¿Cómo hacer una buena
+                                campaña?</a></li>
+                            <li><a class="text-white" href="{% url 'faq_app:info_como_video' %}">Recomendaciones para tu
+                                video</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-6 col-md-3 m-t-lg m-b-lg">
+                        <h5>LEGAL</h5>
+                        <ul>
+                            <li><a class="text-white" href="{% url 'registros_app:terminosycondiciones' %}">Términos y
+                                Condiciones</a></li>
+                            <li><a class="text-white" href="{% url 'registros_app:avisodeprivacidad' %}">Aviso de
+                                privacidad</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-6 col-md-2 m-t-lg m-b-lg">
+                        <h5>CONTACTO</h5>
+                        <ul>
+                            <li>
+                                <a target="_blank" class="text-white"
+                                   href="{% url 'blog_app:blog' %}">Blog</a>
+                            </li>
+                            <li>
+                                <a target="_blank" class="text-white"
+                                   href="{% url 'index_app:equipo' %}">Equipo</a>
+                            </li>
+                            <li><span>contacto@renka.com.mx</span></li>
+                            <li>
+                                <a target="_blank" class="text-white text-facebook"
+                                   href="https://www.facebook.com/somosrenka">
+                                    <i class="fa fa-phone fa-2x"></i>&nbsp;&nbsp;
+                                    <i class="fa fa-whatsapp fa-2x"></i><br>
+                                    +52 1 55 6219 5309
+                                </a>
+                            </li>
+                            <li>
+                                <a target="_blank" class="text-white text-facebook"
+                                   href="https://www.facebook.com/somosrenka"><i
+                                        class="fa fa-facebook-official fa-2x"></i></a>
+                                <a target="_blank" class="text-white text-twitter m-l-sm"
+                                   href="https://twitter.com/somosRENKA"><i
+                                        class="fa fa-twitter fa-2x"></i></a>
+                            </li>
+                            <li><i class="fb-like text-white" data-href="https://www.facebook.com/somosrenka"
+                                   data-width="47" style="overflow: hidden"></i></li>
+                            <style scoped>
+                                #u_0_2 {
+                                    color: #FAFAFA !important;
+                                }
+                            </style>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Mainly scripts -->
+<script src="{% static 'base/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'base/js/plugins/metisMenu/jquery.metisMenu.js' %}"></script>
+<script src="{% static 'base/js/plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
+
+<script src="{% static 'base/js/plugins/chartJs/Chart.min.js' %}"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="{% static 'base/js/inspinia.js' %}"></script>
+<script src="{% static 'base/js/plugins/pace/pace.min.js' %}"></script>
+
+<!-- Flot -->
+<script src="{% static 'base/js/plugins/flot/jquery.flot.js' %}"></script>
+<script src="{% static 'base/js/plugins/flot/jquery.flot.tooltip.min.js' %}"></script>
+<script src="{% static 'base/js/plugins/flot/jquery.flot.resize.js' %}"></script>
+<script src="{% static 'base/js/plugins/flot/jquery.flot.time.js' %}"></script>
+
+<script src="{% static 'base/js/plugins/jquery.number.min.js' %}"></script>
+<script src="{% static 'base/js/plugins/jquery.numeric.min.js' %}"></script>
+<script src="{% static 'base/js/plugins/jquery.mask.min.js' %}"></script>
+
+<script>
+    $.jMaskGlobals = {
+        translation: {
+            'L': {pattern: /[a-zA-Z ]+/, recursive: true},
+            '0': {pattern: /\d/},
+            '9': {pattern: /\d/, optional: true},
+            '#': {pattern: /\d/, recursive: true},
+            'A': {pattern: /[a-zA-Z0-9]/},
+            'S': {pattern: /[a-zA-Z]/}
+        }
+    };
+
+    function mostrar_error(mensaje) {
+        $('#modal_error').modal('show');
+        $("#mensaje_error_modal").html(mensaje);
+    }
+    function mostrar_error_2(mensaje) {
+        $('#modal_error_2').modal('show');
+        $("#mensaje_error_modal").html(mensaje);
+    }
+
+    $('.icon-buscar').click(function () {
+        $('form.navbar-form').submit();
+    });
+
+    $("input[name='span_proyecto']").numeric({negative: false}, function () {
+        this.value = "";
+        this.focus();
+    });
+    $("input[name='span_proyecto']").number(true, 0);
+
+    $('form#pre-wizard').submit(function () {
+        $("input[name='monto_proyecto']").val($("input[name='span_proyecto']").val())
+    });
+</script>
+
+<!-- iCheck -->
+<script src="{% static 'proyectos/js/icheck.min.js' %}"></script>
+<script>
+
+    $(document).ready(function () {
+        // $('input[name="cantidad_*"]').val(1);
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green'
+        });
+    });
+    $(document).ready(function () {
+        setInterval(notifAsync, 10000);
+    });
+
+</script>
+<!--Start of Zopim Live Chat Script-->
+<script type="text/javascript">
+    window.$zopim || (function (d, s) {
+        var z = $zopim = function (c) {
+            z._.push(c)
+        }, $ = z.s =
+                d.createElement(s), e = d.getElementsByTagName(s)[0];
+        z.set = function (o) {
+            z.set.
+                    _.push(o)
+        };
+        z._ = [];
+        z.set._ = [];
+        $.async = !0;
+        $.setAttribute("charset", "utf-8");
+        $.src = "//v2.zopim.com/?3SjlbUkDtQNSTAKsakFyjvRj86CxM9My";
+        z.t = +new Date;
+        $.
+                type = "text/javascript";
+        e.parentNode.insertBefore($, e)
+    })(document, "script");
+    $zopim(function () {
+        $zopim.livechat.setName('{{ user.username }}');
+        $zopim.livechat.setEmail('{{ user.email }}');
+        $zopim.livechat.setGreetings({
+            'online': 'RenkaChat',
+            'offline': 'Offline'
+        });
+        $zopim.livechat.offlineForm.setGreetings('Por el momento no estamos, pero atenderemos tus dudas lo antes posible');
+        $zopim.livechat.sendVisitorPath();
+    });
+</script>
+<script>
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-69272153-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+<!--End of Zopim Live Chat Script-->
+{% block scripts %}
+
+{% endblock %}
+
+
+</body>
+</html>

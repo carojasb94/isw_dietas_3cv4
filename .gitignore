@@ -1,0 +1,11 @@
+*.pyc
+.idea/*
+__pycache__
+*.swp
+*.log
+env/*
+linux-env/*
+*.sublime-workspace
+*.sublime-project
+Thumbs.db
+
