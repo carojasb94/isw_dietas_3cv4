@@ -8,7 +8,6 @@ from apps.usuarios.models import Usuario
 
 from social.pipeline.partial import partial
 from django.shortcuts import redirect
-from apps.catalogos.models import TipoRedSocial
 from django.core.files.base import ContentFile
 import json
 from requests import request as req, HTTPError
