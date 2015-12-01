@@ -1,4 +1,9 @@
+# -*- encoding: utf-8 -*-
 __author__ = 'metallica'
+
+from django.shortcuts import redirect
+from social.apps.django_app.middleware import SocialAuthExceptionMiddleware
+from social.exceptions import *
 
 class CustomSocialAuthExceptionMiddleware(SocialAuthExceptionMiddleware):
     def process_exception(self, request, exception):
