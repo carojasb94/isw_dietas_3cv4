@@ -77,11 +77,20 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'django.middleware.security.SecurityMiddleware',
     # 'django_user_agents.middleware.UserAgentMiddleware',
+    'apps.usuarios.middleware.CustomSocialAuthExceptionMiddleware',
 )
 
 AUTHENTICATION_BACKENDS = (
+    'social.backends.facebook.FacebookAppOAuth2',
+    'social.backends.facebook.FacebookOAuth2',
+    'social.backends.google.GoogleOAuth2',
+    'social.backends.twitter.TwitterOAuth',
+    'social.backends.linkedin.LinkedinOAuth',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+
+
 
 ROOT_URLCONF = 'sistema_dietas.urls'
 
@@ -167,9 +176,8 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.load_extra_data',
     'apps.usuarios.pipelineCustom.user_details',
     'apps.usuarios.pipelineCustom.get_avatar',
-    'apps.usuarios.pipelineCustom.verificarRed',
+    #'apps.usuarios.pipelineCustom.verificarRed',
     'apps.usuarios.pipelineCustom.descargar_imagen',
-    'apps.usuarios.pipelineCustom.crear_relaciones_usuario_social',
     # 'apps.usuarios.pipelineCustom.firma_Termino_y_Condicion',
     # 'apps.usuarios.pipelineCustom.robar_informacion',
 )
