@@ -1,0 +1,144 @@
+.wizard > .steps > ul > li{
+    width: 16.666666666667%;
+}
+
+.wizard-big > .content{
+    min-height: 400px !important;
+    height: 100%;
+    overflow-y: scroll;
+}
+
+.wizard > .steps > ul > li > a {
+    white-space: nowrap;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+       text-overflow: ellipsis;
+}
+
+.bootstrap-tagsinput {
+    width: 100%;
+}
+
+.bootstrap-tagsinput input {
+    border: none !important;
+    display: inline-block !important;
+}
+
+.preguntas textarea{
+    height: 5em;
+}
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    background: red;
+    cursor: inherit;
+    display: block;
+}
+
+input[readonly], textarea[readonly] {
+    /* background-color: white !important; */
+  cursor: text !important;
+}
+
+.row-social label i{
+    font-size: 2em;
+}
+
+#slider-intereses {
+    /* background-color: #fafafa !important; */
+}
+
+.div-recompensa .jumbotron {
+    padding: 25px;
+    min-height: 300px;
+}
+
+.add-recompensa {
+    text-align: center;
+    width: 100%;
+    height: 300px;
+    border: 5px dashed #BDBDBD;
+    color: #BDBDBD;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+    cursor: pointer;
+}
+
+.add-recompensa:hover {
+    color: #9E9E9E;
+    border-color: #9E9E9E;
+}
+
+.add-recompensa i {
+    position: relative;
+    top: 118px;
+}
+
+.div-recompensa .fa {
+    position: relative;
+    cursor: pointer;
+}
+
+.form-recompensa .fa {
+    font-size: 1.4em;
+    cursor: pointer;
+}
+
+.col-recompensa .fa-times:hover {
+    color: #dd3717;
+}
+
+.col-recompensa .fa-pencil:hover {
+    color: #23c6c8;
+}
+
+.col-recompensa .fa-eye:hover {
+    color: #23c6c8;
+}
+
+#imagenPerfilInputPreview {
+    max-width: 75%;
+    margin: 0 auto;
+}
+
+.content.clearfix {
+    min-height: 67vh !important;
+    overflow-y: auto;
+    background-color: #F5F5F5;
+}
+
+.span-interes, .span-comision, .span-comision-renka {
+    font-size: 0.8em;
+}
+
+.wizard > .content > .body label.error {
+    color: #ff8500 !important;
+}
+
+@media only screen and (max-width: 480px){
+    .content.clearfix{
+        min-height: 50vh !important;
+    }
+
+    .wizard > .steps > ul > li{
+        display: none;
+    }
+
+    .wizard > .steps > ul > li.current{
+        display: block;
+        width: 100%;
+    }
+}

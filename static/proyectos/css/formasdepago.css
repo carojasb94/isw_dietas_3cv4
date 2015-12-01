@@ -1,0 +1,35 @@
+.inversiones-cards .jumbotron{
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+    color: #636363;
+    cursor: pointer;
+    padding: 15px;
+    border: 1px solid #e7eaec;
+    background-color: #FFFFFF;
+}
+
+.inversiones-cards .jumbotron:hover {
+    transform: scale(1.05);
+}
+.inversiones-cards .jumbotron h1{
+    font-size: 3em;
+}
+.inversiones-cards .jumbotron h1 > small{
+    font-size: 0.5em;
+}
+.inversiones-cards .jumbotron strong{
+    font-size: 1.8em;
+    line-height: 1.1;
+    margin-bottom: 20px;
+}
+.inversiones-cards .jumbotron p{
+    margin-top: 13px;
+    font-size: 1.2em;
+    font-weight: 500;
+}
+
+.btn-invertir {
+    padding: 12px 60px;
+}

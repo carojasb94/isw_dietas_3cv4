@@ -1,0 +1,297 @@
+.proyecto-home .title-proyecto p {
+    font-size: 2em;
+}
+
+.proyecto-home .proyecto-imagen img {
+    width: 100%;
+}
+
+.proyecto-home .proyecto-info {
+    padding-top: 20px;
+}
+
+.proyecto-home .proyecto-info .img-perfil {
+
+}
+
+.proyecto-home .proyecto-info .nombre-perfil {
+    font-size: 1.5em;
+    margin-bottom: 0;
+    margin-top: 10px;
+}
+
+.proyecto-home .proyecto-info .ubicacion-perfil {
+    font-size: 0.8em;
+    color: #263238;
+}
+
+.proyecto-home .proyecto-info .ubicacion-perfil i {
+    padding: 0 5px;
+    font-size: 1.2em;
+    color: #2F4AFB;
+}
+
+.proyecto-home .proyecto-info .descr-proyecto {
+    padding: 30px 0;
+    font-size: 1.3em;
+    text-align: justify;
+}
+
+.proyecto-home .proyecto-info .dias-restantes {
+    margin-bottom: -10px;
+}
+
+.proyecto-home .proyecto-info .dias-restantes .data {
+    color: #2F4AFB;
+    font-size: 2.5em;
+    font-weight: 500;
+}
+
+.proyecto-home .proyecto-info .dias-restantes .fecha-fin {
+    color: #aaaaaa;
+}
+
+.proyecto-home .proyecto-info .progress-bar {
+    background-color: #dddddd;
+    margin: 15px 0;
+    width: 100%;
+    height: 14px;
+    border-radius: 3px;
+}
+
+.proyecto-home .proyecto-info .progress-bar .bar {
+    width: 65%;
+    height: 100%;
+    border-radius: 3px;
+
+    /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzRiMDBiOSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjElIiBzdG9wLWNvbG9yPSIjNGIwMGI5IiBzdG9wLW9wYWNpdHk9IjEiLz4KICAgIDxzdG9wIG9mZnNldD0iMzQlIiBzdG9wLWNvbG9yPSIjMmY0YWZiIiBzdG9wLW9wYWNpdHk9IjEiLz4KICAgIDxzdG9wIG9mZnNldD0iNTElIiBzdG9wLWNvbG9yPSIjM2JhZGQxIiBzdG9wLW9wYWNpdHk9IjEiLz4KICAgIDxzdG9wIG9mZnNldD0iNjUlIiBzdG9wLWNvbG9yPSIjNDVmZmFmIiBzdG9wLW9wYWNpdHk9IjAuNzEiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9saW5lYXJHcmFkaWVudD4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSJ1cmwoI2dyYWQtdWNnZy1nZW5lcmF0ZWQpIiAvPgo8L3N2Zz4=);
+    background: -moz-linear-gradient(left, rgba(75, 0, 185, 1) 0%, rgba(75, 0, 185, 1) 1%, rgba(47, 74, 251, 1) 34%, rgba(59, 173, 209, 1) 51%, rgba(69, 255, 175, 0.71) 65%, rgba(255, 255, 255, 0) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(75, 0, 185, 1)), color-stop(1%, rgba(75, 0, 185, 1)), color-stop(34%, rgba(47, 74, 251, 1)), color-stop(51%, rgba(59, 173, 209, 1)), color-stop(65%, rgba(69, 255, 175, 0.71)), color-stop(100%, rgba(255, 255, 255, 0))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(left, rgba(75, 0, 185, 1) 0%, rgba(75, 0, 185, 1) 1%, rgba(47, 74, 251, 1) 34%, rgba(59, 173, 209, 1) 51%, rgba(69, 255, 175, 0.71) 65%, rgba(255, 255, 255, 0) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(left, rgba(75, 0, 185, 1) 0%, rgba(75, 0, 185, 1) 1%, rgba(47, 74, 251, 1) 34%, rgba(59, 173, 209, 1) 51%, rgba(69, 255, 175, 0.71) 65%, rgba(255, 255, 255, 0) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(left, rgba(75, 0, 185, 1) 0%, rgba(75, 0, 185, 1) 1%, rgba(47, 74, 251, 1) 34%, rgba(59, 173, 209, 1) 51%, rgba(69, 255, 175, 0.71) 65%, rgba(255, 255, 255, 0) 100%); /* IE10+ */
+    background: linear-gradient(to right, rgba(75, 0, 185, 1) 0%, rgba(75, 0, 185, 1) 1%, rgba(47, 74, 251, 1) 34%, rgba(59, 173, 209, 1) 51%, rgba(69, 255, 175, 0.71) 65%, rgba(255, 255, 255, 0) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4b00b9', endColorstr='#00ffffff', GradientType=1); /* IE6-8 */
+}
+
+.proyecto-home .proyecto-info .socios span {
+    color: #2F4AFB;
+    font-size: 1.5em;
+}
+
+.proyecto-home .proyecto-info .faltan {
+    float: right;
+}
+
+.proyecto-home .proyecto-info .faltan span {
+    color: #2F4AFB;
+    font-size: 1.5em;
+}
+
+.big-btn {
+    background-color: #bdbdbd;
+    border-radius: 5px;
+    padding: 10px 40px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.big-btn a {
+    color: #F5F5F5;
+    font-size: 1.2em;
+    font-weight: 500;
+}
+
+.proyecto-home .social-buttons {
+    padding: 0 20px;
+    margin-top: 20px;
+}
+
+.proyecto-home .social-buttons .social-btn {
+    margin-top: 10px;
+    margin-left: -20px;
+    padding: 5px 20px;
+    width: 120%;
+
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.proyecto-home .social-buttons .social-btn i {
+    padding: 0 10px;
+    font-size: 1.2em;
+    border-right: 1px solid #9b9b9b;
+    margin-right: 10px;
+}
+
+.proyecto-home .social-buttons .social-btn span {
+    font-weight: 300;
+    font-size: 0.9em;
+    color: #263238;
+}
+
+.proyecto-home .social-buttons .fb-btn {
+    border-color: #3b5998;
+    color: #3b5998;
+}
+
+.proyecto-home .social-buttons .fb-btn:hover {
+    background-color: #3b5998;
+    color: #F5F5F5;
+}
+
+.proyecto-home .social-buttons .twt-btn {
+    border-color: #55acee;
+    color: #55acee;
+}
+
+.proyecto-home .social-buttons .twt-btn:hover {
+    background-color: #55acee;
+    color: #F5F5F5;
+}
+
+.proyecto-home .social-buttons .share-btn {
+    border-color: #f50057;
+    color: #f50057;
+}
+
+.proyecto-home .social-buttons .share-btn:hover {
+    background-color: #f50057;
+    color: #F5F5F5;
+}
+
+.proyecto-home .social-buttons .favorito {
+    padding: 15px 0;
+}
+
+.proyecto-home .barra-datos {
+    background-color: #fff;
+    padding: 10px;
+    margin-top: 25px;
+    font-size: 1.8em;
+}
+
+.proyecto-home .barra-datos span {
+    color: #2F4AFB;
+}
+
+.nav-tabs li {
+    background: none !important;
+}
+
+.nav-tabs li:hover {
+    background: none !important;
+}
+
+#inversiones-tab .jumbotron button {
+    border-color: transparent;
+}
+
+#inversiones-tab .jumbotron {
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+    color: #18a689;
+    cursor: pointer;
+    padding: 15px;
+    border-bottom: 1px solid #DDDDDD;
+    background-color: inherit;
+}
+
+#inversiones-tab .jumbotron h1 {
+    font-size: 3em;
+}
+
+#inversiones-tab .jumbotron h1 > small {
+    font-size: 0.5em;
+}
+
+#inversiones-tab .jumbotron strong {
+    font-size: 1.8em;
+    line-height: 1.1;
+    margin-bottom: 20px;
+}
+
+#inversiones-tab .jumbotron p {
+    margin-top: 13px;
+    font-size: 1.2em;
+    font-weight: 500;
+}
+
+#recompensas-tab .jumbotron {
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+    color: #18a689;
+    cursor: pointer;
+    padding: 25px;
+    border-bottom: 1px solid #DDDDDD;
+    background-color: inherit;
+}
+
+#recompensas-tab .jumbotron h1 {
+    font-size: 3em;
+}
+
+#recompensas-tab .jumbotron h1 > small {
+    font-size: 0.5em;
+}
+
+#recompensas-tab .jumbotron strong {
+    font-size: 1.8em;
+    line-height: 1.1;
+    margin-bottom: 20px;
+}
+
+#recompensas-tab .jumbotron p {
+    margin-top: 13px;
+    font-size: 1.2em;
+    color: #aaadaf;
+    font-weight: 500;
+}
+
+#galeria-modal {
+    margin: 10px auto;
+    width: 95%;
+}
+
+iframe {
+    width: 100% !important;
+}
+
+/* Custom, iPhone Retina */
+@media only screen and (min-width: 320px) {
+    .proyecto-home .proyecto-imagen img {
+        height: 200px;
+    }
+}
+
+/* Extra Small Devices, Phones */
+@media only screen and (min-width: 480px) {
+    .proyecto-home .proyecto-imagen img {
+        height: 250px;
+    }
+}
+
+/* Small Devices, Tablets */
+@media only screen and (min-width: 768px) {
+    .proyecto-home .proyecto-imagen img {
+        height: 350px;
+    }
+}
+
+/* Medium Devices, Desktops */
+@media only screen and (min-width: 992px) {
+    .proyecto-home .proyecto-imagen img {
+        height: 400px;
+    }
+}
+
+/* Large Devices, Wide Screens */
+@media only screen and (min-width: 1200px) {
+
+}

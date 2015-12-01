@@ -58,6 +58,7 @@ LOCAL_APPS = (
 
 THIRD_PARTY_APPS = (
     'suit',
+    'social.apps.django_app.default',
 )
 
 FIXTURE_DIRS = (

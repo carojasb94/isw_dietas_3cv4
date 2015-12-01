@@ -1,0 +1,229 @@
+.proyecto-div {
+    min-height: 300px;
+    -webkit-border-radius: 3px;
+       -moz-border-radius: 3px;
+            border-radius: 3px;
+    -webkit-transition: all 250ms;
+    -moz-transition: all 250ms;
+    -o-transition: all 250ms;
+       transition: all 250ms;
+    cursor: pointer;
+}
+
+.proyecto-div a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.proyecto-div:hover {
+    -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+       -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.proyecto-div .img-proyecto {
+    -webkit-border-radius: 3px 3px 0 0;
+       -moz-border-radius: 3px 3px 0 0;
+            border-radius: 3px 3px 0 0;
+    height: 100px;
+    min-height: 100px;
+    max-height: 100px;
+}
+
+.proyecto-div .img-bg {
+    width: 100%;
+    padding-bottom: 50%;
+    background: no-repeat center center;
+    -webkit-background-size: cover;
+       -moz-background-size: cover;
+         -o-background-size: cover;
+            background-size: cover;
+}
+
+.proyecto-div.big .img-proyecto.img-bg {
+    width: 100%;
+    padding-bottom: 68%;
+    background: no-repeat center center;
+    -webkit-background-size: cover;
+       -moz-background-size: cover;
+         -o-background-size: cover;
+            background-size: cover;
+}
+
+.big .col-img {
+
+}
+
+.proyecto-div .empresario-proyecto {
+    padding-left: 5%;
+}
+
+.proyecto-div.big .empresario-proyecto {
+    padding-left: 0;
+}
+
+.proyecto-div .img-empresario {
+    width: 64px;
+    background-color: #FFF;
+    margin-top: -24px;
+    padding-bottom: 60px;
+    border: 3px solid #fff;
+}
+
+.proyecto-div.big .img-empresario {
+    margin-top: 0;
+}
+
+.proyecto-div .empresario-info {
+    margin-top: -40px;
+    margin-left: 72px;
+}
+
+.proyecto-div .empresario-info p {
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+.proyecto-div .empresario-info span {
+    font-size: 0.9em;
+}
+
+.proyecto-div .empresario-info span i {
+    font-size: 1.2em;
+}
+
+.proyecto-div .data-proyecto {
+    padding: 14px;
+}
+
+.proyecto-div.big .data-proyecto {
+}
+
+.proyecto-div .data-proyecto .titulo {
+    white-space: nowrap;
+    width: 100%;
+    line-height: 1.2em;
+    font-weight: 600;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+       text-overflow: ellipsis;
+}
+
+.proyecto-div.big .data-proyecto .titulo {
+    font-size: 1.5em;
+    white-space: normal;
+}
+
+.proyecto-div .data-proyecto .descr {
+    height: 48px;
+    text-align: justify;
+    line-height: 0.8em;
+    font-size: 1.4em;
+}
+
+.proyecto-div.big .data-proyecto .descr {
+    font-size: 1.8em;
+}
+
+.proyecto-div .data-proyecto .descr small {
+    font-weight: 400;
+}
+
+.proyecto-div .data-proyecto .datos {
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+.proyecto-div.big .data-proyecto .datos {
+    margin-top: 0;
+}
+
+.proyecto-div .data-proyecto .datos .num span {
+    font-size: 1.1em;
+    color: #848484;
+}
+
+.proyecto-div.big .data-proyecto .datos .num span {
+    font-size: 1.2em;
+}
+
+.proyecto-div .data-proyecto .datos div {
+    border-right: 1px solid #fafafa;
+    border-left: 1px solid #FAFAFA;
+}
+
+.proyecto-div .data-proyecto .datos .num {
+    font-weight: 700;
+    font-size: 1.1em;
+    margin-bottom: 0;
+}
+
+.proyecto-div.big .data-proyecto .datos .num {
+    font-size: 1.8em;
+}
+
+.proyecto-div .data-proyecto .datos .text {
+    font-weight: 400;
+    font-size: 0.9em;
+    color: #363636;
+}
+
+.proyecto-div.big .data-proyecto .datos .text {
+    font-size: 1.2em;
+}
+
+.proyecto-div .data-proyecto .progress-bar {
+    height: 7px;
+}
+
+.proyecto-div .data-proyecto .bottom p {
+    margin: 0;
+}
+
+.proyecto-div .data-proyecto .bottom p span {
+    font-size: 1.2em;
+    font-weight: 600 !important;
+}
+
+.proyecto-div.big .data-proyecto .bottom p span {
+    font-size: 1.4em;
+}
+
+ul.list-busqueda {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+ul.list-busqueda li {
+    padding: 5px 15px;
+    border: 1px solid #e0e0e0;
+    -webkit-border-radius: 3px;
+       -moz-border-radius: 3px;
+            border-radius: 3px;
+    margin-top: 4px;
+    cursor: pointer;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+}
+
+ul.list-busqueda li.active {
+    border-color: #486acc;
+    background-color: #486acc;
+    color: #FAFAFA;
+}
+
+ul.list-busqueda li.more {
+    border: none;
+}
+
+ul.list-busqueda li:hover {
+    border-color: #486acc;
+}
+
+ul.list-busqueda a {
+    margin-top: 10px;
+    padding: 5px 15px;
+}

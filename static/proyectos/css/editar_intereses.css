@@ -1,0 +1,31 @@
+.jumbotron {
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+    color: #18a689;
+    cursor: pointer;
+    padding: 15px;
+    border-bottom: 1px solid #DDDDDD;
+    background-color: inherit;
+}
+
+.jumbotron h1 {
+    font-size: 3em;
+}
+
+.jumbotron h1 > small {
+    font-size: 0.5em;
+}
+
+.jumbotron strong {
+    font-size: 1.8em;
+    line-height: 1.1;
+    margin-bottom: 20px;
+}
+
+.jumbotron p {
+    margin-top: 13px;
+    font-size: 1.2em;
+    font-weight: 500;
+}

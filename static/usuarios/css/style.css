@@ -1,0 +1,49 @@
+.btn-twitter{
+    background-color: #55ACEE;
+    border-color: #55ACEE;
+}
+.btn-twitter:hover{
+    background-color: #538ece;
+    border-color: #538ece;
+}
+
+.btn-facebook{
+    background-color: #3b5998;
+    border-color: #3b5998;
+}
+.btn-facebook:hover{
+    background-color: #39407d;
+    border-color: #39407d;
+}
+
+.btn-google-plus{
+    background-color: #dd4b39;
+    border-color: #dd4b39;
+}
+.btn-google-plus:hover{
+    background-color: #ca4835;
+    border-color: #ca4835;
+}
+
+.btn-linkedin{
+    background-color: #0077B5;
+    border-color: #0077B5;
+}
+.btn-linkedin:hover{
+    background-color: #0067a2;
+    border-color: #0067a2;
+}
+
+.forms{
+    margin: 80px auto;
+}
+
+.button{
+    background-color: #2F4AFB;
+    border-radius: 5px;
+    padding: 5px 30px;
+    color: #F5F5F5;
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+}

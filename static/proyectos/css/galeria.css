@@ -1,0 +1,53 @@
+.cont{
+    position: relative;
+}
+
+.img-galeria{
+    border: 2px solid #fff;
+    box-sizing: border-box;
+    cursor: pointer;
+    width: 100%;
+}
+
+.hover-aceptar{
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #1a2d41;
+    opacity: 0.9;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
+.hover-aceptar button{
+    height: 40px;
+    position: relative;
+    margin: auto -25%;
+    width: 50%;
+    top: 40%;
+    left: 50%;
+}
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    background: red;
+    cursor: inherit;
+    display: block;
+}
+input[readonly] {
+    background-color: white !important;
+}

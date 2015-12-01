@@ -1,0 +1,350 @@
+{% extends 'base/base_no_sidebar.html' %}
+
+{% load staticfiles %}
+
+{% block title %}
+    Regístrate | Inicia Sesión
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'usuarios/css/style.css' %}"/>
+    <link rel="stylesheet" href="{% static 'usuarios/css/strength.css' %}"/>
+    <link rel="stylesheet" href="{% static 'proyectos/css/custom.css' %}"/>
+
+    <style>
+
+        .form-group, .input-group{
+            margin-bottom: 5px;
+        }
+
+        #id_password_signin {
+            position: relative;
+            width: 100%;
+            z-index: 10;
+        }
+
+        .nav.nav-tabs li {
+            width: 50%;
+            color: #009688 !important;
+        }
+
+        .top-navigation .nav > li.active {
+            background: none;
+        }
+
+        .nav.nav-tabs li a {
+            color: #444DFF !important;
+            text-decoration: underline;
+        }
+
+        .nav.nav-tabs li.active a {
+            color: #000 !important;
+            text-decoration: none;
+        }
+
+        .wrapper .middle-box {
+            margin-top: 0;
+            margin-bottom: 40px;
+        }
+
+        .psw {
+            position: relative;
+            width: 100%;
+            z-index: 10;
+            background: transparent;
+            height: 34px;
+            -webkit-transition: border .25s linear, color .25s linear;
+            -moz-transition: border .25s linear, color .25s linear;
+            -o-transition: border .25s linear, color .25s linear;
+            transition: border .25s linear, color .25s linear;
+            -webkit-backface-visibility: hidden;
+            width: 100%;
+        }
+
+        .psw:focus {
+            outline: 0;
+        }
+
+        .strength_meter {
+            background: #fff;
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            width: 85%;
+            height: 34px;
+            z-index: 0;
+            border-radius: 5px;
+            padding-right: 13px;
+        }
+
+        .button_strength {
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        .strength_meter div {
+            width: 0%;
+            height: 34px;
+            text-align: right;
+            color: #000;
+            line-height: 34px;
+            -webkit-transition: all .3s ease-in-out;
+            -moz-transition: all .3s ease-in-out;
+            -o-transition: all .3s ease-in-out;
+            -ms-transition: all .3s ease-in-out;
+            transition: all .3s ease-in-out;
+            padding-right: 12px;
+            border-radius: 5px;
+        }
+
+        .strength_meter div p {
+            position: absolute;
+            top: 22px;
+            right: 0px;
+            color: #FFF;
+            font-size: 13px;
+        }
+
+        .veryweak {
+            background-color: #dd3717;
+            border-color: #dd3717 !important;
+            width: 25% !important;
+            opacity: 0.4;
+        }
+
+        .weak {
+            background-color: #ff8500;
+            border-color: #ff8500 !important;
+            width: 50% !important;
+            opacity: 0.4;
+        }
+
+        .medium {
+            background-color: #41e094;
+            border-color: #41e094 !important;
+            width: 75% !important;
+            opacity: 0.4;
+        }
+
+        .strong {
+            background-color: #486acc;
+            border-color: #486acc !important;
+            width: 100% !important;
+            opacity: 0.4;
+        }
+
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <div class="row row-centered m-t-sm m-b-sm">
+        <div class="col-xs-12">
+            <h1>Entra fácilmente con</h1>
+        </div>
+
+
+        <div class="col-xs-4 col-md-2 col-md-offset-3">
+            <a href="{% url 'social:begin' 'facebook' %}?next={{ url_redireccion }}"
+               class="btn btn-primary btn-block btn-facebook">
+                <i class="fa fa-facebook m-r-sm"></i> <span class="hidden-xs">Facebook</span>
+            </a>
+        </div>
+        <div class="col-xs-4 col-md-2">
+                <a href="{% url 'social:begin' 'twitter' %}?next={{ url_redireccion }}"
+                   class="btn btn-primary btn-block btn-twitter ">
+                    <i class="fa fa-twitter m-r-sm"></i> <span class="hidden-xs">Twitter</span>
+                </a>
+            </div>
+        <div class="col-xs-4 col-md-2">
+                <a href="{% url 'social:begin' 'linkedin' %}?next={{ url_redireccion }}"
+                   class="btn btn-primary btn-block btn-linkedin ">
+                    <i class="fa fa-linkedin m-r-sm"> </i> <span class="hidden-xs">LinkedIn</span>
+                </a>
+            </div>
+        <div class="col-xs-12">
+            <h5 class="m-t-sm"><i class="fa fa-lock"></i> No publicaremos nada ni compartiremos tus datos, es sólo
+                facilidad.</h5>
+            {% if confirmo_correo %}
+                <span class="error text-success">GRACIAS POR CONFIRMAR TU CUENTA, YA PUEDES LOGUEARTE</span>
+            {% endif %}
+        </div>
+        </div>
+        <hr/>
+    <div class="row m-b-xl">
+        <div class="col-sm-6 col-sm-offset-3 col-lg-4 col-lg-offset-4">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li class="{% if not register_error %}active{% endif %}"><a data-toggle="tab" href="#tab-login">¿Tienes cuenta?</a></li>
+                    <li class="{% if register_error %}active{% endif %}"><a data-toggle="tab" href="#tab-signup">¿Eres nuevo?</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tab-login" class="tab-pane {% if not register_error %}active{% endif %}">
+                        <div class="panel-body">
+                            <h3>Inicia sesión</h3>
+                            {% if error != '' %}
+                                <p class="error text-danger">
+                                    {{ error }}
+                                </p>
+                            {% endif %}
+                            <form class="m-t" role="form" method="post" accept-charset="utf-8">
+                                {% csrf_token %}
+
+                                <div class="form-group  ">
+                                    <label for="id_username">Nombre de usuario/Email:</label>
+                                    <input class="form-control" id="id_username" maxlength="50" name="username" required="true" type="text">
+                                </div>
+
+                                <div class="form-group  ">
+                                    <label for="id_password">Password:</label>
+                                    <input class="form-control" id="id_password" maxlength="50" name="password" required="true" type="password">
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="checkbox i-checks recuerdame">
+                                        <label>
+                                            <div class="icheckbox_square-green" style="position: relative;">
+                                                <input id="id_recordarme" name="recordarme" type="checkbox" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>
+                                            </div>
+                                            <span class="m-l-md">Recuerda mi cuenta</span></label></div>
+                                </div>
+
+                                <button class="btn btn-primary pull-right btn-login" type="submit" name="login_form">Inicia
+                                    Sesión
+                                </button>
+                            </form>
+
+                            <!-- Parte para solicitar la reposición de tu contraseña -->
+                            <p>
+                                <a href="{% url 'reset_password_reset1' %}">
+                                    <small>¿Olvidaste tu contraseña?</small>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                    <div id="tab-signup" class="tab-pane {% if register_error %}active{% endif %}">
+                        <div class="panel-body">
+                            <h3>Regístrate</h3>
+
+                            <form role="form" method="post" accept-charset="utf-8">
+                                {% csrf_token %}
+
+                                {% for field in user_register %}
+                                    {% if field.label == 'Contraseña' %}
+                                        {{ field.label_tag }}
+                                        <div class="input-group {% if field.errors %}has-error{% endif %}">
+                                            {{ user_register.password }}
+                                            {% if field.errors %}
+                                                {% for error in field.errors %}
+                                                    <span class="text-danger pull-right">
+                                                    {{ error|safe }}&nbsp;
+                                                    <i class="fa fa-exclamation-circle text-danger"></i>
+                                                </span>
+                                                {% endfor %}
+                                            {% endif %}
+                                            <span class="input-group-btn ver-contraseña"></span>
+                                        </div>
+                                    {% else %}
+                                    <!-- Render the field label tag -->
+                                    <div class="form-group {% if field.errors %}has-error{% endif %} ">
+                                        {{ field.label_tag }}
+                                        {{ field }}
+                                        {% if field.errors %}
+                                            {% for error in field.errors %}
+                                                <span class="text-danger pull-right">
+                                                    {{ error|safe }}&nbsp;
+                                                    <i class="fa fa-exclamation-circle text-danger"></i>
+                                                </span>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                                <div class="form-group repass-group">
+                                    <label for="repass">Repite tu Contraseña</label>
+                                    <input id="repass" class="form-control" type="password" required="true"/>
+
+                                    <p class="div-error font-bold text-danger"></p>
+                                </div>
+
+                                <div class="form-group m-t-md">
+                                    <label>
+                                    <span class="pull-left">Acepto los <br><a
+                                            href="#">
+                                        Términos y Condiciones</a></span></label>
+                                    <button class="btn btn-primary btn-signin pull-right" id="btn-submit" type="submit"
+                                        name="register_form">Registrate
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+{% endblock %}
+
+
+
+{% block scripts %}
+    <script src="{% static 'usuarios/js/strength.js' %}"></script>
+    <!-- iCheck -->
+    <script src="{% static 'proyectos/js/icheck.min.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green'
+            });
+        });
+
+        $('#tab-login form').submit(function () {
+            $('.btn-login').addClass('disabled').html('<i class="fa fa-refresh fa-spin"></i>&nbsp;&nbsp;Iniciando sesión');
+        });
+        $('#tab-signup form').submit(function () {
+            $('.btn-signin').addClass('disabled').html('<i class="fa fa-refresh fa-spin"></i>&nbsp;&nbsp;Registrando');
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+
+            $(function () {
+                // $('[data-toggle="tooltip"]').tooltip({'trigger':'focus', 'data-placement': 'right'})
+            });
+
+            // $('#id_recordarme').prependTo('.recuerdame > label');
+
+            $('#tab-signup input[name="password"]').attr('id', 'id_password_signin');
+
+            $('#id_password_signin').strength({
+                strengthClass: 'strength',
+                strengthMeterClass: 'strength_meter',
+                strengthButtonClass: 'button_strength',
+                strengthButtonText: '<i class="fa fa-eye"></i>',
+                strengthButtonTextToggle: '<i class="fa fa-eye-slash"></i>'
+            });
+
+            $('.button_strength').addClass('no-shadow').html('<i class="fa fa-eye"></i>').appendTo('.ver-contraseña');
+
+        });
+        $('#repass').keyup(function (e) {
+            if ($('#tab-signup input[name="password"]').val() != $('#repass').val()) {
+                $('.repass-group').addClass('has-error').find('.div-error').html('Las contraseñas no coinciden');
+                $('#repass').addClass('error');
+                $('.btn-signin').addClass('disabled');
+            }
+            else {
+                $('.repass-group').removeClass('has-error').find('.div-error').html('');
+                $('#repass').removeClass('error');
+                $('.btn-signin').removeClass('disabled');
+            }
+        });
+
+    </script>
+
+    <script>
+
+    </script>
+{% endblock %}
