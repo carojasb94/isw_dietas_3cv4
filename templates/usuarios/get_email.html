@@ -1,0 +1,44 @@
+{% extends 'base/base_no_sidebar.html' %}
+
+{% block content %}
+
+    <div class="row m-t-xl">
+        <div class="col-xs-6">
+            <div class="animated fadeInDown p-lg">
+                <h2 class="font-bold m-b-lg">Completa tu registro</h2>
+
+
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <p>Solo falta agregar tu email</p>
+                    {% for field in form %}
+                        <!-- Render the field label tag -->
+                        <div class="form-group {% if field.errors %}has-error{% endif %} ">
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {% if field.errors %}
+                                {% for error in field.errors %}
+                                    <span class="text-danger pull-right">
+                                        {{ error|safe }}&nbsp;
+                                        <i class="fa fa-exclamation-circle text-danger"></i>
+                                    </span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <input class="btn btn-primary" type="submit" value="Continuar"/>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function () {
+            $("#id_email").focus();
+        });
+    </script>
+
+{% endblock %}
+

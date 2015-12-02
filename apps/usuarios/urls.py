@@ -8,5 +8,6 @@ urlpatterns = [
     #url(r'^admin/', include(admin.site.urls)),
     #url(r'^', include('apps.usuarios.urls', namespace='usuarios_app')),
     url(r'^login$', 'apps.usuarios.views.login', name='login'),
+    url(r'^terminar_registro/', 'apps.usuarios.views.terminar_registro', name="terminar_registro"),
 
 ]

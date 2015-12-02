@@ -22,6 +22,8 @@ def login(request):
     login_form = LoginForm()
     template = 'usuarios/login3.html'
     register_error = False
+    if request.user.is_authenticated():
+        print("El usuario ya se loggeo")
 
     url_redireccion = request.GET['next'] if 'next' in request.GET else '/home'
 
@@ -116,6 +118,40 @@ def desactivar_Cuenta(request):
         form = DesactivarForm()
 
     return render(request, "usuarios/desactivar_Cuenta.html", {"form": form})
+
+
+
+
+# Necesaria para usuarios por twitter
+def terminar_registro(request):
+    # validacion de que estamos en el proceso de logueo de twitter
+    try:
+        backend = request.session['partial_pipeline']['backend']
+    except Exception as e:
+        logger.exception(e)
+        return render(request, '404.html')
+
+    if request.method == "POST":
+        if 'email' in request.POST:
+            form = terminar_registro_Form(request.POST)
+            if form.is_valid():
+                request.session['saved_email'] = request.POST['email']
+                # if 'username' in request.POST:
+                # request.session['saved_username'] = request.POST['username']
+                try:
+                    backend = request.session['partial_pipeline']['backend']
+                    url = '/complete/%s/' % backend
+                    return redirect(url)
+                except Exception as e:
+                    logger.exception(e)
+                    return render(request, '404.html')
+            return render(request, 'usuarios/get_email.html', {'form': form})
+    red_social = 1
+    # print(request)
+    return render(request, 'usuarios/get_email.html', {'form': terminar_registro_Form()})
+
+
+
 
 '''
 @login_required

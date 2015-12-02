@@ -173,7 +173,7 @@ def actualizar_datos(usuario, details):
 #
 #
 def create_user(strategy, details, user=None, *args, **kwargs):
-    '''
+    #'''
     print('create_user')
     print(strategy)
     print(details)
