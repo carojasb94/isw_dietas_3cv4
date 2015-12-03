@@ -29,14 +29,17 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     fecha_registro = models.DateTimeField(auto_now_add=True)
     email = models.EmailField(unique=True)
     status = models.BooleanField(default=False)  # para validar al usuario
+    avatar = models.URLField(blank=True)  # necesario para captar la imagen  de perfil de su red social
+
     niveles = (("nutriologo", "nutriologo"),
                ("paciente", "paciente"),
                )
     tipo = models.CharField(choices=niveles, max_length=30, default="inactivo")
-    objects = UserManager()
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_nutriologo = models.BooleanField(default=False)
+    objects = UserManager()
+
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
 
