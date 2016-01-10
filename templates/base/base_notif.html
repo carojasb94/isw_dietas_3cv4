@@ -1,0 +1,135 @@
+{% load staticfiles %}
+
+<link rel="stylesheet" href="{% static 'base/css/toastr/toastr.min.css' %}"/>
+<script src="{% static 'base/js/plugins/toastr/toastr.min.js' %}"></script>
+
+<script src="{% static 'notificaciones/js/ntf.js' %}"></script>
+<script src="{% static 'invitados/js/inv.js' %}"></script>
+
+<!-- Sección de notificaciones -->
+
+{% if Notificaciones %}
+    <li class="dropdown">
+        <a class="dropdown-toggle count-info" data-toggle="dropdown" id="numNotif"
+           onclick="quitarSolicitudes()">
+            <i class="fa fa-bell"></i>
+            <input type="hidden" name="num_notif" value="{{ numeroNotificaciones }}">
+            {% if numeroNotificaciones > 0 %}
+                <span id="cantidad_notif" class="label label-danger">{{ numeroNotificaciones }}</span>
+            {% else %}
+                <span id="cantidad_notif" class="label label-danger"
+                      style="display: none;">{{ numeroNotificaciones }}</span>
+            {% endif %}
+        </a>
+
+        <ul class="dropdown-menu dropdown-alerts no-padding lista-notificaciones">
+            <li class="p-xs gray-bg text-center"><span>Tus notificaciones</span></li>
+            {% for notificacion in Notificaciones %}
+                <li class="pointer li-notificacion">
+                    <form method="post" id="form_sol">
+                        {% csrf_token %}
+                        <div class="dropdown-messages-box p-xs border-bottom {% if not notificacion.leido %}unread{% endif %}"
+                             data-id="{{ notificacion.id_notificacion }}">
+                            <a href="{{ notificacion.url }}" class="pull-left">
+
+                                <div class="avatar
+                                {% if notificacion.is_proyecto or notificacion.is_renka %}
+                                    img-square
+                                {% else %}
+                                    img-circle
+                                {% endif %}
+                                img-notif{{ notificacion.id_notificacion }}">
+                                    <style scoped="">
+                                        .img-notif{{ notificacion.id_notificacion }} {
+                                            position: relative;
+                                            cursor: pointer;
+                                            top: 0;
+                                            background-image: url('{{ notificacion.imagen }}');
+                                            width: 45px !important;
+                                            margin-left: -15px;
+                                            padding-bottom: 45px;
+                                        }
+                                    </style>
+                                </div>
+                            </a>
+
+                            <div class="media-body">
+                                <a class="no-padding"
+                                   href="{{ notificacion.url }}">{{ notificacion.texto }}.</a>
+                                {% if notificacion.is_solicitud %}
+                                    <input type="hidden" name="action" id="action"
+                                           value=""/>
+                                    <input type="hidden" name="id_notificacion"
+                                           value="{{ notificacion.id_notificacion }}"/>
+                                    <div class="row m-t-xs">
+                                        <div class="col-xs-6">
+                                            <button type="button"
+                                                    class="btn btn-success btn-xs btn-block inline"
+                                                    name="confirmar" onclick="confirm()">
+                                                Confirmar
+                                            </button>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <button type="button"
+                                                    class="btn btn-danger btn-xs btn-block inline"
+                                                    name="cancelar" onclick="cancel()">
+                                                Cancelar
+                                            </button>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {% if notificacion.is_invitacion %}
+                                    <input type="hidden" name="action" id="action"
+                                           value=""/>
+                                    <input type="hidden" name="id_notificacion"
+                                           value="{{ notificacion.id_notificacion }}"/>
+                                    <div class="row m-t-xs">
+                                        <div class="col-xs-6">
+                                            <button type="button"
+                                                    class="btn btn-success btn-xs btn-block inline"
+                                                    name="confirmar" onclick="confirm_2()">
+                                                Aceptar.
+                                            </button>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <button type="button"
+                                                    class="btn btn-danger btn-xs btn-block inline"
+                                                    name="rechazar" onclick="cancel_2()">
+                                                No gracias.
+                                            </button>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </form>
+                </li>
+            {% endfor %}
+
+            <li>
+                <div class="text-center link-block">
+                    <a href="/notificaciones">
+                        <i class="fa fa-bell"></i> <strong>Ver todas las
+                        notificaciones</strong>
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </li>
+{% else %}
+    <li class="dropdown">
+        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+            <i class="fa fa-bell"></i>
+        </a>
+
+        <ul class="dropdown-menu dropdown-alerts">
+            <li>
+                <div class="text-center link-block">
+                    <a href="/notificaciones">
+                        <strong>No hay notificaciones pendientes</strong>
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </li>
+{% endif %}

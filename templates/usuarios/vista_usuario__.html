@@ -1,0 +1,29 @@
+{% extends 'base/base.html' %}
+{% block content %}
+    {{ user }}
+    {% if integrantes %}
+        <table>
+            <tr>
+                <th>eliminar</th>
+                <th>usuario</th>
+                <th>correo</th>
+                <th>hora</th>
+                <th>actividad</th>
+                <th>Notificacion</th>
+            </tr>
+            {% for integrante in integrantes %}
+                {% if not integrante %}
+                    <input type="email" name="nuevo_integrante" id="nuevo_integrante"/>
+                {% else %}
+                    <tr>
+                        <th></th>
+                        <th>{{ integrante.correo }}</th>
+                        <th>{{ integrante.ejercio }}</th>
+                        <th>{{ integrante.hora }}</th>
+                        <th>{{ integrante.molestar }}</th>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endblock %}

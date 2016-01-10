@@ -1,0 +1,556 @@
+{% extends 'base/base_no_sidebar.html' %}
+{% load staticfiles %}
+
+{% block title %}
+{{ user.get_short_name }}
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'base/css/cropper/cropper.min.css' %}"/>
+
+    <style>
+        .btn-file {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-file input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            background: red;
+            cursor: inherit;
+            display: block;
+        }
+
+        input[readonly] {
+            background-color: white !important;
+            cursor: text !important;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="content">
+    <div class="row m-t-xl">
+        <div class="col-xs-12">
+            <div class="white-bg shadow">
+                <div class="row">
+                    <div class="col-md-4 text-center text-white p-xl" style="background-color: #242a31;">
+                        <div class="avatar usuario-avatar img-circle block-center" style="width: 120px;">
+                            <style>
+                                .usuario-avatar {
+                                    background-image: url('{{ user.get_image }}');
+                                    padding-bottom: 120px;
+                                }
+                            </style>
+                        </div>
+                        <div class="block-center m-t-md">
+                            <a class="btn btn-primary btn-outline btn-phantom btn-xs m-b-sm" href="#"
+                               data-toggle="modal" data-target="#modal-avatar">
+                                <i class="fa fa-picture-o"></i>&nbsp;&nbsp;Editar foto
+                            </a>
+                            <p>{{ user.get_full_name }}</p>
+                            <p>Email: {{ user.email }}</p>
+                            <p>Username: {{ user.username }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 p-md">
+                        <h2>
+                            Perfil
+                            <a class="btn btn-link btn-xs m-l-md" href="#" data-toggle="modal" data-target="#modal-perfil">
+                                <i class="fa fa-pencil"></i>&nbsp;Editar datos
+                            </a>
+                        </h2>
+                        <p>Usuario desde: {{ user.fecha_registro|date }}</p>
+                        <p>Fecha de nacimiento: {{ perfil.fechaNac|date }}</p>
+                        <p>Sexo: {{ perfil.sexo }}</p>
+                        <p>CP : {{ perfil.codigoPostal }}</p>
+                        <p>Pais : {{ perfil.pais }}</p>
+                        <p>Teléfono : {{ perfil.telefono }}</p>
+                        <p>Celular : {{ perfil.celular }}</p>
+                    </div>
+                    <div class="col-md-4 p-md">
+                        <h2>
+                            Otros datos:
+                            <a class="btn btn-link btn-xs m-l-md" href="#" data-toggle="modal" data-target="#modal-documentos">
+                                <i class="fa fa-pencil"></i>&nbsp;Editar datos
+                            </a>
+                        </h2>
+                        <p>IFE: <span id="persona_ife"></span>
+                            {% if  perfil.get_ife %}
+                                <a href="{{ perfil.get_ife }}" target="_blank">Ver</a>
+                            {% else %}
+                                Ninguna
+                            {% endif %}
+                        </p>
+                        <p>RFC: <span id="perfil_rfc"></span>{{ perfil.RFC }}</p>
+                        <p>Tipo de persona: <span id="nombre_persona"></span>{{ perfil.tipo_persona }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal inmodal" id="modal-perfil" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated fadeIn">
+        <form class="form-group" method="post" enctype="multipart/form-data" id="form_perfil">
+            {% csrf_token %}
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h3>Modifica tus datos básicos</h3>
+            </div>
+            <div class="modal-body">
+            {% if errores %}
+                {% for error in errores %}
+                    <p class="error">
+                         <span class="text-danger">*{{ error }}</span>
+                    </p>
+                {% endfor %}
+            {% endif %}
+
+                <div class="form-group">
+                    <label for="id_nombre">Nombre:</label>
+                    <input class="form-control" id="id_nombre" maxlength="50" name="nombre" type="text"
+                           value="{{ user.nombre }}"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_apellidos">Apellidos:</label>
+                    <input class="form-control" id="id_apellidos" maxlength="50" name="apellidos" type="text"
+                           value="{{ user.apellidos }}"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_apellidos">Telefono:</label>
+                    <input class="form-control" id="id_telefono" maxlength="15" name="telefono" type="text"
+                           value="{{ perfil.telefono }}"/>
+                </div>
+                <div class="form-group">
+                    <label for="id_apellidos">Celular:</label>
+                    <input class="form-control" id="id_celular" maxlength="15" name="celular" type="text"
+                           value="{{ perfil.celular }}"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_imagen">Imagen:</label>
+                    Actualmente: <a href="{{ perfil.imagen }}">{{ perfil.imagen }}</a>
+                    <br/>Modificar: <input id="id_imagen" name="imagen" type="file"/>
+                    <img id="id_imagenprewview" src="">
+                </div>
+
+                <div class="form-group">
+                    <label for="id_fechaNac">Fecha de nacimiento:</label>
+                    <input class="form-control" id="id_fechaNac" name="fechaNac" type="date" value="{{ fecha_nacimiento }}"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_sexo_0">Sexo:</label>
+                    <ul id="id_sexo">
+                        <li><label for="id_sexo_0"><input {% if perfil.sexo == 'Hombre' %} checked="checked" {% endif %} id="id_sexo_0" name="sexo" type="radio" value="Hombre"/> Hombre</label></li>
+                        <li><label for="id_sexo_1"><input {% if perfil.sexo == 'Mujer' %} checked="checked" {% endif %} id="id_sexo_1" name="sexo" type="radio" value="Mujer"/> Mujer</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_codigoPostal">Codigo Postal:</label>
+                    <input class="form-control" id="id_codigoPostal" maxlength="5" name="codigoPostal" type="text"
+                           value="{{ perfil.codigoPostal }}"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_pais">Pais:</label>
+                    <input class="form-control" id="id_pais" maxlength="40" name="pais" type="text"
+                           value="{{ perfil.pais }}"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_email">Email:</label>
+                    <input class="form-control" id="id_email" maxlength="60" name="email" type="email"
+                           value="{{ user.email }}"/>
+                </div>
+                <div class="form-group">
+                    <div class="i-checks">
+                        <label>
+                            <i></i>&nbsp;&nbsp;Usuario anónimo
+                            <input class="form-control" id="id_anonimo" name="anonimo" type="checkbox"
+                                    {% if user.anonimo %} checked {% endif %}
+                            />
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-primary btn-status" name="actualizar_perfil" id="actualizar_perfil">Guardar cambios</button>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
+{% comment %} modal para documentos {% endcomment %}
+<div class="modal inmodal" id="modal-documentos" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated fadeIn">
+        <form class="form-group" method="post" enctype="multipart/form-data" id="form_datos_extra">
+            {% csrf_token %}
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h3>Informacion extra</h3>
+            </div>
+
+            <div class="modal-body" id="informacion_extra">
+                <div class="form-group">
+                    <label for="id_IFE">Imagen escaneada de tu IFE:</label><br>
+                    <a href="{{ perfil.get_ife }}">Actualmente</a>
+                    <br/>Modificar: <input id="id_IFE" name="IFE" type="file">
+                    <img id="id_imagenprewview" src="">
+                </div>
+
+                <div class="form-group">
+                    <label for="id_RFC">TU RFC:</label><br>
+                    <input class="form-control" id="id_RFC" maxlength="13" name="RFC" placeholder="RFC" type="text" value="{{ perfil.RFC }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="id_tipo_persona_0">Persona:</label><br>
+                    <ul id="id_tipo_persona">
+                        <li><label for="id_tipo_persona_0"><input {% if perfil.tipo_persona == 'fisica' %} checked="checked" {% endif %} id="id_tipo_persona_0" name="tipo_persona"
+                                                                  type="radio" value="fisica"> fisica</label></li>
+                        <li><label for="id_tipo_persona_1"><input {% if perfil.tipo_persona == 'moral' %}checked="checked" {% endif %} id="id_tipo_persona_1"
+                                                                  name="tipo_persona" type="radio" value="moral"> moral</label>
+                        </li>
+                    </ul>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal" id="btn-extra-data2">Cerrar</button>
+                <button type="button" class="btn btn-primary btn-status" name="actualizar_datos_extra" id="btn-extra-data" onclick="saveExtraAjax()">Guardar cambios</button>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
+
+
+{% comment %} modal para cuentas {% endcomment %}
+<div class="modal inmodal" id="modal-cuentas" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated fadeIn">
+
+        <form class="form-group" method="post" enctype="multipart/form-data" id="form_cuentas">
+            {% csrf_token %}
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h3>Agrega tu cuenta bancaria dondre podremos hacerte el deposito de tus ganancias</h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="id_titular">Titular:</label>
+                    <span class="text-danger">(Obligatorio)</span>
+                    <input class="form-control" id="id_titular" maxlength="50" name="titular"
+                           placeholder="Titular de la cuenta" type="text" value="{{ user.get_full_name }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="id_banco">Banco:</label>
+                    <span class="text-danger">(Obligatorio)</span>
+                    <input class="form-control" id="id_banco" maxlength="60" name="banco"
+                           placeholder="Banco" type="text">
+                </div>
+
+                <div class="form-group">
+                    <label for="id_sucursal">Numero de sucursal:</label>
+                    <span class="text-danger">(Obligatorio)</span>
+                    <input class="form-control" id="id_sucursal" maxlength="4" name="sucursal" placeholder="(4 digitos)"
+                           type="text" pattern="[0-9]{4}" >
+                </div>
+
+                <div class="form-group">
+                    <label for="id_clabe">Clabe:</label>
+                    <span class="text-danger">(Obligatorio)</span>
+                    <input class="form-control" id="id_clabe" maxlength="18" name="clabe" type="text"
+                           placeholder="Clabe interbancaria" pattern="[0-9]{12,}">
+                </div>
+
+                <div class="form-group">
+                    <label for="id_numero_de_cuenta">Numero de cuenta:</label>
+                    <span class="text-danger">(Obligatorio)</span>
+                    <input class="form-control" id="id_numero_de_cuenta" maxlength="18" name="numero_de_cuenta"
+                           placeholder="Numero de cuenta" type="text" pattern="[0-9]{12,}">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary btn-status" name="actualizar_datos_cuenta"
+                        id="btn-extra-data" onclick="saveCuentaAjax()">Agregar
+                </button>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
+
+    <div class="modal inmodal" id="modal-avatar" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content animated fadeIn">
+                <div class="modal-header renka-bg">
+                    <h2>Cambia tu foto de perfil</h2>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label for="input-avatar">Sube tu foto de perfil</label>
+
+                                <div class="input-group">
+                                <span class="input-group-btn">
+                                    <span class="btn btn-primary btn-file no-shadows">
+                                        Selecciona una foto&hellip; <input id="input-avatar" class="form-control"
+                                                                           type="file" accept="image/*">
+                                    </span>
+                                </span>
+                                    <input type="text" class="form-control" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-xs-offset-3">
+                            <div class="cropper-img" id="cropper-avatar">
+                                <img class="img-responsive" src="{% static 'base/img/default-avatar.jpg' %}"
+                                     alt="Avatar">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" id="btn-save-avatar">Guardar foto de perfil</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                //console.log(input.id);
+                reader.onload = function (e) {
+                    $('#cropper-avatar > img').attr('src', e.target.result);
+                    $('#cropper-avatar > img').cropper('replace', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        $("#id_imagen").change(function () {
+            readURL(this);
+        });
+
+    </script>
+
+    {% comment %}
+        <script>
+            var timeoutId;
+            $('#form_perfil').on('input propertychange change', function () {
+                console.log('aplicar timeout');
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(function () {
+                    // Runs 1 second (1000 ms) after the last change
+                    saveUsuarioAjax($('#form_perfil'));
+                }, 200);
+            });
+
+            function saveUsuarioAjax(form) {
+                console.log('saveUsuario ajax');
+
+                var data = new FormData(form.get(0));
+                $.ajax({
+                    url: "{% url 'usuarios_app:editar_perfil_ajax' %}",
+                    type: form.attr('method'),
+                    data: data,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function (xhr) {
+                        // Let them know we are saving
+                        $('button').addClass('disabled');
+                        $('#actualizar_perfil').html('<i class="fa fa-refresh fa-spin"></i>&nbsp;&nbsp;Guardando');
+                    },
+                    success: function () {
+                        location.reload();
+                    },
+                    error: function (xhr, errmsg, err) {
+                        // Show an error
+                        $('#actualizar_perfil').html('<i class="fa fa-times text-danger"></i>&nbsp;&nbsp;Error al guardar');
+                        console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                    }
+                });
+            }
+        </script>
+    {% endcomment %}
+
+    <script>
+        $('#actualizar_perfil').on('click', function () {
+            $('button').addClass('disabled');
+            $(this).html('<i class="fa fa-refresh fa-spin"></i>&nbsp;&nbsp;Guardando');
+        });
+    </script>
+
+{% comment %} Datos extra {% endcomment %}
+    <script>
+    //form_datos_extra
+        function saveExtraAjax() {
+            //console.log('saveUsuario ajax');
+            form = $('#form_datos_extra');
+
+            var data = new FormData(form.get(0));
+            $.ajax({
+                url: "#",
+                type: form.attr('method'),
+                data: data,
+                cache: false,
+                processData: false,
+                contentType: false,
+                beforeSend: function (xhr) {
+                    // Let them know we are saving
+                    $('button').addClass('disabled');
+                    $('button[name="actualizar_datos_extra"]').html('<i class="fa fa-refresh fa-spin"></i>&nbsp;&nbsp;Guardando');
+                },
+                success: function () {
+                    $('button').removeClass('disabled');
+                    location.reload();
+                },
+                error: function (xhr, errmsg, err) {
+                    // Show an error
+                    $('#btn-extra-data2').removeClass('disabled');
+                    $('button[name="actualizar_datos_extra"]').html('<i class="fa fa-times text-danger"></i>&nbsp;&nbsp;Error al guardar');
+                    //console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                }
+            });
+        }
+    </script>
+
+
+{% comment %} Datos extra {% endcomment %}
+<script>
+function saveCuentaAjax() {
+    //console.log('saveCuenta ajax');
+    form = $('#form_cuentas');
+
+    var data = new FormData(form.get(0));
+    $.ajax({
+        url: "#",
+        type: form.attr('method'),
+        data: data,
+        cache: false,
+        processData: false,
+        contentType: false,
+        beforeSend: function (xhr) {
+            // Let them know we are saving
+            $('button').addClass('disabled');
+            $('button[name="actualizar_datos_cuenta"]').html('<i class="fa fa-refresh fa-spin"></i>&nbsp;&nbsp;Guardando');
+        },
+        success: function () {
+            location.reload();
+            // var informacion_actual = $('#cuentas_bancarias_user').html();
+            // var html = '<p>Banco: <span name="nombre_banco">' + $('input[name="banco"]:value') + '</span> Numero: <span>' + $('input[name="numero_de_cuenta"]:value') + '</span></p>';
+            // informacion_actual.append(html);
+        },
+        error: function (xhr, errmsg, err) {
+            // Show an error
+            $('button').removeClass('disabled');
+            $('button[name="actualizar_datos_cuenta"]').html('<i class="fa fa-times text-danger"></i>&nbsp;&nbsp;Error al guardar');
+            //console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });
+}
+</script>
+
+    <script src="{% static 'base/js/plugins/cropper/cropper.min.js' %}"></script>
+    <script src="{% static 'base/js/canvas-to-blob.min.js' %}"></script>
+
+    <script>
+        $(document).on('change', '.btn-file :file', function () {
+            var input = $(this),
+                    numFiles = input.get(0).files ? input.get(0).files.length : 1,
+                    label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+            input.trigger('fileselect', [numFiles, label]);
+        });
+
+        $(document).ready(function () {
+            $('.btn-file :file').on('fileselect', function (event, numFiles, label) {
+
+                var input = $(this).parents('.input-group').find(':text'),
+                        log = numFiles > 1 ? numFiles + ' Archivos seleccionados' : label;
+
+                if (input.length) {
+                    input.val(log);
+                } else {
+                    if (log) alert(log);
+                }
+
+            });
+        });
+    </script>
+
+    <script>
+        $("#input-avatar").change(function () {
+            $("#cropper-avatar > img").cropper({
+                aspectRatio: 1 / 1,
+                autoCropArea: 0.90,
+                strict: false,
+                guides: true,
+                highlight: false,
+                dragCrop: false
+            });
+            readURL(this);
+        });
+
+        $('#btn-save-avatar').click(enviarImgPerfil);
+
+        function enviarImgPerfil() {
+            var canvas = $("#cropper-avatar > img").cropper('getCroppedCanvas');
+            var data = canvas.toDataURL("image/jpeg");
+            var formData = new FormData();
+            formData.append('imagen_perfil', data);
+            $.ajax({
+                method: "POST",
+                url: '#',
+                data: formData,
+                processData: false,
+                contentType: false,
+                beforeSend: function () {
+                    $('#btn-save-avatar').addClass('disabled').html('<i class="fa fa-refresh fa-spin"></i>&nbsp;&nbsp;Guardando, espera ...');
+                    $('#btn-save-avatar').prev().addClass('disabled');
+                },
+                success: function () {
+                    location.reload();
+                },
+                error: function () {
+                    $('#btn-save-avatar').removeClass('disabled').addClass('btn-error').html('<i class="fa fa-times"></i>&nbsp;&nbsp;Reintentar');
+                }
+            });
+
+        }
+    </script>
+
+{% endblock %}
+

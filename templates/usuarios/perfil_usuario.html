@@ -1,0 +1,1279 @@
+{% extends 'base/base.html' %}
+{% load staticfiles %}
+{% load humanize %}
+
+
+{% block title %}
+    Inversionista
+{% endblock %}
+
+
+{% block styles %}
+
+    <link rel="stylesheet" href="{% static 'proyectos/css/custom.css' %}"/>
+    <link rel="stylesheet" href="{% static 'base/css/chosen/chosen.css' %}"/>
+    <link rel="stylesheet" href="{% static 'base/css/nouslider/jquery.nouislider.css' %}"/>
+    <link rel="stylesheet" href="{% static 'base/css/datapicker/datepicker3.css' %}"/>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap.tagsinput/0.4.2/bootstrap-tagsinput.css"/>
+    <link rel="stylesheet" href="{% static 'socios/css/style.css' %}"/>
+    <link rel="stylesheet" href="{% static 'proyectos/css/busqueda.css' %}"/>
+
+    <script src="{% static 'base/js/plugins/rickshaw/vendor/d3.v3.js' %}"></script>
+    <script src="{% static 'base/js/plugins/rickshaw/rickshaw.min.js' %}"></script>
+
+    <style>
+        .bootstrap-tagsinput {
+            width: 100%;
+        }
+
+        path.domain {
+            display: none;
+        }
+
+        h5 {
+            margin-top: 20px;
+        }
+
+        .filtros-bar {
+            min-width: 300px;
+            padding: 15px;
+            width: 300px;
+            position: absolute;
+            top: 40px;
+            left: -60px;
+        }
+
+        .filtros-bar.no-left {
+            left: 0;
+        }
+
+        .chosen-container {
+            width: 270px !important;
+        }
+
+        .titulo {
+            padding-top: 15px !important;
+        }
+
+        .social-btn {
+            margin-left: 15px;
+            display: inline-block;
+            font-size: 1.4em;
+            float: right;
+        }
+
+        .fb-btn, .fb-btn * {
+            color: #3b5998;
+        }
+
+        .twt-btn, .twt-btn * {
+            color: #55acee;
+        }
+
+        .li-btn, .li-btn * {
+            color: #287bbc;
+        }
+
+        .social-btn i {
+            font-size: 1.6em;
+        }
+
+    </style>
+
+
+    <script>window.twttr = (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0],
+                t = window.twttr || {};
+        if (d.getElementById(id)) return t;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://platform.twitter.com/widgets.js";
+        fjs.parentNode.insertBefore(js, fjs);
+        t._e = [];
+        t.ready = function (f) {
+            t._e.push(f);
+        };
+        return t;
+    }(document, "script", "twitter-wjs"));</script>
+
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="row m-b-xl">
+        <!-- Etiqueta y botones de saldo -->
+        <div class="col-md-4">
+
+            <div class="widget lazur-bg">
+                <h3>
+                    Saldo disponible
+                </h3>
+
+                <h2 class="saldo">${{ saldo|floatformat:'2'|intcomma }}</h2>
+            </div>
+
+            {% if debug_activo %}
+                <a href="{% url 'socios_app:retirar' %}" class="btn btn-default m-t-md">Retirar saldo</a>
+                <a href="{% url 'socios_app:agregar_saldo' %}" class="btn btn-info pull-right m-t-md">Agregar saldo</a>
+            {% endif %}
+
+        </div>
+        <!-- Gráfica de las ganancias del mes -->
+        {% if proyectos_intentados and proyectos_exitosos and proyectos_campana and proyectos_retribucion %}
+            <div class="col-md-7 col-md-offset-1">
+                <h3>Ganancias en el mes</h3>
+
+                <div class="white-bg text-center h-200 p-md">
+                    <div class="flot-chart">
+                        <div class="flot-chart-content" id="chart_intereses"></div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+
+    <!-- Se muestra el mensaje en caso de no tener proyectos asociados -->
+    {% if not proyectos_intentados and not proyectos_exitosos and not proyectos_campana  and not proyectos_retribucion %}
+        <div class="text-left">
+            <h2>
+                Aún no tienes proyectos que mostrar 😞
+                <br/>
+                <small>Invierte en un proyecto para comenzar.</small>
+            </h2>
+        </div>
+    {% endif %}
+
+
+    <form method="get" action="{% url "socios_app:perfil" %}" name="forma" id="forma">
+        <!-- Se imprimen los valores para los proyectos con los que vas a invertir -->
+        {% if  proyectos_retribucion %}
+
+            <input type="hidden" id="retribucion" name="retribucion" value="{{ ordenar_retribucion }}"/>
+
+            <div class="row">
+                <div class="col-sm-7">
+                    <h1>Proyectos en retribución</h1>
+                </div>
+                <div class="col-sm-5">
+                    <div class="btn-group m-t-md pull-right">
+
+                        <button id="btn-ordenar" name="algomas" data-toggle="dropdown"
+                                class="btn btn-primary btn-outline dropdown-toggle">
+                            Ordenar por
+                            <span class="caret m-l-lg"></span>
+                        </button>
+
+                        <ul class="dropdown-menu ordenar">
+                            <li><a name="interes" onclick="asignarOrden('#retribucion',this)">Porcentaje de Interés</a>
+                            </li>
+                            <li><a name="inversion" onclick="asignarOrden('#retribucion',this)">Inversión</a></li>
+                            <li><a name="meta" onclick="asignarOrden('#retribucion',this)">Meta</a></li>
+                            <li><a name="dias_restantes" onclick="asignarOrden('#retribucion',this)">Días restantes</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 m-b-lg">
+                    <h3>{{ proyectos_retribucion| length }} proyectos activos</h3>
+                </div>
+            </div>
+
+            {% for proyecto in proyectos_retribucion %}
+                <div class="row white-bg m-b-md">
+                    <div class="col-md-2 no-padding">
+                        <a href="{% url 'proyectos_app:detalle2' proyecto.slug %}">
+                            <img class="img-responsive"
+                                 src="{{ proyecto.url_imagen }}" alt=""/>
+                        </a>
+                    </div>
+                    <div class="col-md-10" style="padding-bottom: 20px;">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h3 class="titulo">
+                                    <a href="{% url 'proyectos_app:detalle2' proyecto.slug %}"> {{ proyecto.nombre|upper|slice:"60" }}</a>
+                                    {% if 'transferencia' in proyecto.origenes %}
+                                        <i class="fa fa-exchange" data-toggle="tooltip" data-placement="top"
+                                           title="Transferencia"></i>
+                                    {% endif %}
+                                    {% if 'tarjeta' in proyecto.origenes %}
+                                        <i class="fa fa-credit-card" data-toggle="tooltip" data-placement="top"
+                                           title="Tarjeta de Credito"></i>
+                                    {% endif %}
+                                    {% if 'oxxo' in proyecto.origenes %}
+                                        <img class="tipo_pago_icon" alt="image"
+                                             src="{% static 'base/img/logo_oxxo.jpg' %}"
+                                             data-toggle="tooltip" data-placement="top" title="Deposito en OXXO"/>
+                                    {% endif %}
+                                    {% if 'Renkacoins' in proyecto.origenes %}
+                                        <img class="tipo_pago_icon" alt="image"
+                                             src="{% static 'base/img/renkacoins.png' %}"
+                                             data-toggle="tooltip" data-placement="top" title="Saldo Renka"/>
+                                    {% endif %}
+                                    {% if 'cupon' in proyecto.origenes %}
+                                        <i class="fa fa-tags" data-toggle="tooltip" data-placement="top"
+                                           title="Cupon"></i>
+                                    {% endif %}
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="row pointer" data-toggle="modal"
+                             data-target="#modal_retribucion{{ proyecto.id_proyecto }}-{{ forloop.counter }}">
+                            <div class="col-md-3">
+                                <h2 class="text-renka font-bold">
+                                    ${{ proyecto.inversion|floatformat:2|intcomma }}
+                                </h2>
+
+                                <small>Inversión</small>
+                            </div>
+                            <div class="col-md-3">
+                                <h2 class="text-renka font-bold">
+                                    ${{ proyecto.utilidad |floatformat:2|intcomma }}</h2>
+                                <small>Utilidad</small>
+                            </div>
+                            <div class="col-md-3">
+                                <h2 class="text-renka font-bold">{{ proyecto.interes|floatformat:0|intcomma }}%</h2>
+                                <small>Interés</small>
+                            </div>
+
+                            <div class="col-md-3">
+                                <h2 class="text-renka font-bold">{{ proyecto.siguiente_pago|date:"d N" }}</h2>
+                                <small>Siguiente pago</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal inmodal" id="modal_retribucion{{ proyecto.id_proyecto }}-{{ forloop.counter }}"
+                         tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content animated fadeIn">
+
+                                <div class="modal-header lazur-bg shadow">
+                                    <button type="button" class="close" data-dismiss="modal">
+                                        <span aria-hidden="true">&times;</span>
+                                        <span class="sr-only">Cerrar</span>
+                                    </button>
+
+                                    <h2 class="modal-title">Detalles del Proyecto</h2>
+
+                                    <h2 class="font-bold">{{ proyecto.nombre|upper }}</h2>
+
+                                </div>
+                                <div class="modal-body">
+                                    <h2 class="font-bold text-center m-b-lg">Intereses a ganar</h2>
+
+                                    <div id="y_axis"></div>
+                                    <div id="grafica_pagos_retribucion{{ proyecto.id_proyecto }}-{{ forloop.counter }}"
+                                         class="rickshaw_graph text-center"></div>
+                                    <script>
+
+
+                                        var grafica_pagos_exitoso = new Rickshaw.Graph({
+                                            element: document.querySelector("#grafica_pagos_retribucion{{ proyecto.id_proyecto }}-{{ forloop.counter }}"),
+                                            renderer: 'bar',
+                                            series: [
+                                                {
+                                                    data: [
+                                                        {% for datos in proyecto.inversionistas %}
+                                                            {
+                                                                x: {{ datos.plazo }},
+                                                                y: {{datos.capital}}
+                                                            },
+                                                        {% endfor %}
+                                                    ],
+                                                    color: '#2f4afb'
+                                                }, {
+                                                    data: [
+                                                        {% for datos in proyecto.inversionistas %}
+                                                            {
+                                                                x: {{ datos.plazo }},
+                                                                y: {{datos.interes}}
+                                                            },
+                                                        {% endfor %}
+                                                    ],
+                                                    color: '#41e094'
+                                                }]
+                                        });
+
+                                        grafica_pagos_exitoso.render();
+                                        {% comment %}
+                                        var Xaxis = new Rickshaw.Graph.Axis.X({
+                                            graph: graph,
+                                            tickFormat: Rickshaw.Fixtures.Number.formatKMBT
+                                        });
+                                        var y_axis = new Rickshaw.Graph.Axis.Y({
+                                            graph: graph,
+                                            orientation: 'left',
+                                            tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
+                                            element: document.getElementById('y_axis')
+                                        });
+
+                                        Xaxis.render();
+                                        y_axis.render();
+                                        {% endcomment %}
+
+                                    </script>
+
+                                    <hr/>
+                                    <h2 class="font-bold m-b-lg">Detalle de pagos</h2>
+                                    <table class="table table-hover table-renka right">
+                                        <thead>
+                                        <tr>
+                                            <th>Plazo</th>
+                                            <th><span>Interés *</span></th>
+                                            <th>% Interés</th>
+                                            <th>Capital</th>
+                                            <th>% Capital</th>
+                                            <th>Total</th>
+                                            <th>% Total</th>
+                                            <th class="text-right">Estado</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for socio in proyecto.inversionistas %}
+                                            <tr>
+                                                <th>{{ socio.plazo }}</th>
+                                                <th class="text-success">
+                                                    ${{ socio.interes|floatformat:3|intcomma }}</th>
+                                                <th class="text-success">
+                                                    %{{ socio.porcentaje_interes|floatformat:3|intcomma }}</th>
+                                                <th class="text-renka">${{ socio.capital|floatformat:3|intcomma }}</th>
+                                                <th class="text-renka">
+                                                    %{{ socio.porcentaje_capital|floatformat:3|intcomma }}</th>
+                                                <th>${{ socio.total|floatformat:3|intcomma }}</th>
+                                                <th>%{{ socio.porcentaje_total|floatformat:3|intcomma }}</th>
+                                                {% if socio.estado == 'pagado' %}
+                                                    <th class="text-right">
+                                                        <i class="fa fa-check fa-2x text-success" data-toggle="tooltip"
+                                                           data-placement="top" title="Pagado"></i>
+                                                    </th>
+                                                {% endif %}
+                                                {% if socio.estado == 'no pagado' %}
+                                                    <th class="text-right">
+                                                        <i class="fa fa-exclamation-triangle fa-2x text-warning"
+                                                           data-toggle="tooltip" data-placement="top"
+                                                           title="Atrasado"></i>
+                                                    </th>
+                                                {% endif %}
+                                                {% if socio.estado == 'pendiente' %}
+                                                    <th class="text-right">
+                                                        <i class="fa fa-clock-o fa-2x text-info" data-toggle="tooltip"
+                                                           data-placement="top" title="Pendiente"></i>
+                                                    </th>
+                                                {% endif %}
+                                            </tr>
+                                        {% endfor %}
+                                        <tr>
+                                            <th>total</th>
+                                            <th class="text-success">{{ proyecto.totales.interes|floatformat:1|intcomma }}</th>
+                                            <th class="text-success">{{ proyecto.totales.pinteres|floatformat:2|intcomma }}</th>
+                                            <th class="text-renka">{{ proyecto.totales.capital|floatformat:0|intcomma }}</th>
+                                            <th class="text-renka">{{ proyecto.totales.pcapital|floatformat:2|intcomma }}</th>
+                                            <th>{{ proyecto.totales.total|floatformat:1|intcomma }}</th>
+                                            <th>{{ proyecto.totales.ptotal|floatformat:0|intcomma }}</th>
+                                            <th class="text-right"></th>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-white" data-dismiss="modal"><i
+                                            class="fa fa-times-circle"></i> Cerrar
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Se imprimen los valores para los proyectos en los que ya se invirtió pero que aún están enpero que aún están en campaña -->
+        {% if proyectos_campana %}
+            <div class="row">
+                <div class="col-sm-7">
+                    <h1>Proyectos apoyados en campaña</h1>
+                </div>
+                <div class="col-sm-5">
+                    <div class="btn-group m-t-md pull-right">
+
+                        <input type="hidden" id="campania" name="campania" value="{{ ordenar_campana }}"/>
+
+                        <button id="btn-ordenar" name="algomas" data-toggle="dropdown"
+                                class="btn btn-primary btn-outline dropdown-toggle">
+                            Ordenar por
+                            <span class="caret m-l-lg"></span>
+                        </button>
+                        <ul class="dropdown-menu ordenar">
+                            <li><a name="interes" onclick="asignarOrden('#campania',this)">Porcentaje de Interés</a>
+                            </li>
+                            <li><a name="inversion" onclick="asignarOrden('#campania',this)">Inversión</a></li>
+                            <li><a name="meta" onclick="asignarOrden('#campania',this)">Meta</a></li>
+                            <li><a name="dias_restantes" onclick="asignarOrden('#campania',this)">Días restantes</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 m-b-lg">
+                    <h3>{{ proyectos_campana | length }}
+                        {% if proyectos_campana|length == 1 %}
+                            proyecto
+                        {% else %}
+                            proyectos
+                        {% endif %}
+                    </h3>
+                </div>
+            </div>
+
+            {% for proyecto in proyectos_campana %}
+                <div class="row white-bg m-b-md">
+                    <div class="col-sm-2 no-padding">
+                        <a href="{% url 'proyectos_app:detalle2' proyecto.slug %}">
+                            <img class="img-responsive"
+                                 src="{{ proyecto.url_imagen }}" alt=""/>
+                        </a>
+
+                        <!-- Ventana modal para mostrar a los inversionistas -->
+                        <a class="font-bold btn btn-link btn-block m-t-xs" data-toggle="modal"
+                           data-target="#myModal{{ proyecto.id_proyecto }}">
+                            Socios ({{ proyecto.inversionistas | length }})
+                        </a>
+
+                        <div class="modal inmodal" id="myModal{{ proyecto.id_proyecto }}" tabindex="-1" role="dialog"
+                             aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content animated fadeInUp">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">
+                                            <span aria-hidden="true">&times;</span><span
+                                                class="sr-only">Cerrar</span></button>
+                                        <h4 class="modal-title">Inversionistas del proyecto: {{ proyecto.nombre }}</h4>
+                                        <small class="font-bold">Estos son otros inversionistas que
+                                            también han apoyado al proyecto.
+                                        </small>
+                                    </div>
+
+                                    <!-- Aquí se muestra la información de los inversionistas asociados -->
+                                    <div class="modal-body">
+                                        <div>
+                                            <div class="feed-activity-list">
+
+                                                {% for socio in proyecto.inversionistas %}
+                                                    <div class="feed-element">
+                                                        <div class="pull-left">
+                                                            <img alt="image" class="img-circle"
+                                                                 src="{{ socio.imagen }}">
+                                                        </div>
+
+                                                        <div class="media-body ">
+                                                            <strong>{{ socio.nombre_usuario }}</strong>
+                                                            <br>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-white"
+                                                data-dismiss="modal">Cerrar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-10">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                {% if proyecto.estado == 'pendiente' %}
+                                    <span class="label label-danger pull-right">PENDIENTE</span>
+                                {% endif %}
+                                <h3 class="titulo">
+                                    <a href="{% url 'proyectos_app:detalle2' proyecto.slug %}"> {{ proyecto.nombre|upper|slice:"60" }}</a>
+                                    {% if 'transferencia' in proyecto.origenes %}
+                                        <i class="fa fa-exchange" data-toggle="tooltip" data-placement="top"
+                                           title="Transferencia"></i>
+                                    {% endif %}
+                                    {% if 'tarjeta' in proyecto.origenes %}
+                                        <i class="fa fa-credit-card" data-toggle="tooltip" data-placement="top"
+                                           title="Tarjeta de Credito"></i>
+                                    {% endif %}
+                                    {% if 'oxxo' in proyecto.origenes %}
+                                        <img class="tipo_pago_icon" alt="image"
+                                             src="{% static 'base/img/logo_oxxo.jpg' %}"
+                                             data-toggle="tooltip" data-placement="top" title="Deposito en OXXO"/>
+                                    {% endif %}
+                                    {% if 'Renkacoins' in proyecto.origenes %}
+                                        <img class="tipo_pago_icon" alt="image"
+                                             src="{% static 'base/img/renkacoins.png' %}"
+                                             data-toggle="tooltip" data-placement="top" title="Saldo Renka"/>
+                                    {% endif %}
+                                    {% if 'cupon' in proyecto.origenes %}
+                                        <i class="fa fa-tags" data-toggle="tooltip" data-placement="top"
+                                           title="Cupon"></i>
+                                    {% endif %}
+
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="row pointer">
+                            <a href="{% url 'proyectos_app:detalle2' proyecto.slug %}">
+                                {% if proyecto.tipo == 'inversion' %}
+                                    <div class="col-md-3">
+                                        <h2 class="text-renka font-bold">
+                                            ${{ proyecto.inversion|floatformat:2|intcomma }}</h2>
+                                        <small>Inversión</small>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h2 class="text-renka font-bold">{{ proyecto.interes |floatformat:0|intcomma }}%</h2>
+                                        <small>Interés</small>
+                                    </div>
+                                {% else %}
+                                    <div class="col-md-3">
+                                        <h2 class="text-renka font-bold">
+                                            ${{ proyecto.inversion|floatformat:2|intcomma }}</h2>
+                                        <small>Recompensas</small>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h2 class="text-renka font-bold"><i class="fa fa-gift"></i></h2>
+                                        <small>Recompensa :{{ proyecto.interes }}</small>
+                                    </div>
+                                {% endif %}
+                                <div class="col-md-3">
+                                    <h2 class="text-renka font-bold">
+                                        ${{ proyecto.meta|floatformat:2|intcomma }}</h2>
+                                    <small>Meta</small>
+                                </div>
+                                <div class="col-md-3">
+                                    <h2 class="text-renka font-bold">{{ proyecto.dias_restantes }}
+                                        días</h2>
+                                    <small>Restantes</small>
+                                </div>
+                            </a>
+                        </div>
+                        <div id="proyecto_campana{{ forloop.counter }}" class="row">
+                            <div class="col-xs-12">
+                                <div class="progress-bar progress-bar-sm">
+                                    <div class="bar">
+                                        <style>
+                                            #proyecto_campana{{ forloop.counter }} .progress-bar .bar {
+                                                width: {{ proyecto.porcentaje_llevado }}%;
+                                            }
+                                        </style>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h4>Llevamos:  <span
+                                        class="text-renka">{{ proyecto.porcentaje_faltante }}%</span>
+                                </h4>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="pull-right">
+                                    <h3>Compartir :</h3>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="fb-btn social-btn pull-left">
+                                    <a onclick="openFbPopUp('{{ HOST }}', '/proyectos/{{ proyecto.slug }}', '{{ proyecto.nombre|escapejs }}', '{{ proyecto.descripcion|escapejs }}', '{{ proyecto.imagen_ico }}', {{ proyecto.id_proyecto }}, 0 )">
+                                        <i class="fa fa-facebook-square"></i>
+                                    </a>
+                                </div>
+                                <div class="twt-btn social-btn pull-left">
+                                    <a onclick="opentwPopUp('{{ HOST }}', '/proyectos/{{ proyecto.slug }}', '{{ proyecto.nombre|escapejs }}', '{{ proyecto.descripcion|escapejs }}', 'somosRENKA', {% if hashtag %}'{{ hashtag }}'{% else %}'somosRENKA'{% endif %}, {{ proyecto.id_proyecto }}, 0)">
+                                        <i class="fa fa-twitter-square"></i>
+                                    </a>
+                                </div>
+                                <div class="li-btn social-btn pull-left">
+                                    <a onclick="openLkInPopUp('{{ HOST }}', '/proyectos/{{ proyecto.slug }}', '{{ proyecto.nombre|escapejs }}', '{{ proyecto.descripcion|escapejs }}', '{{ proyecto.imagen_ico }}', {{ proyecto.id_proyecto }}, 0 )">
+                                        <i class="fa fa-linkedin-square"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+
+
+        <!-- Se imprimen los valores para los proyectos en los que ya se invirtió y que ya son existosos -->
+        {% if proyectos_exitosos %}
+            <input type="hidden" value="" name="exitoso" id="exitoso" {{ ordenar_exitoso }}/>
+            <div class="row">
+                <div class="col-sm-7">
+                    <h1>Proyectos Exitosos</h1>
+                </div>
+                <div class="col-sm-5">
+                    <div class="btn-group m-t-md pull-right">
+                        <button id="btn-ordenar" data-toggle="dropdown"
+                                class="btn btn-primary btn-outline dropdown-toggle">
+                            Ordenar por <span class="caret m-l-lg"></span>
+                        </button>
+                        <ul class="dropdown-menu ordenar">
+                            <li><a name="inversion" onclick="asignarOrden('#exitoso',this)">Inversión</a></li>
+                            <li><a name="meta" onclick="asignarOrden('#exitoso',this)">Meta</a></li>
+                            <li><a name="dias_restantes" onclick="asignarOrden('#exitoso',this)">Días restantes</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 m-b-lg">
+                    <h3>{{ proyectos_exitosos| length }} proyectos</h3>
+                </div>
+            </div>
+
+            {% for proyecto in proyectos_exitosos %}
+                <div class="row white-bg m-b-md">
+                    <div class="col-sm-2 no-padding">
+                        <a href="{% url 'proyectos_app:detalle2' proyecto.slug %}">
+                            <img class="img-responsive"
+                                 src="{{ proyecto.url_imagen }}" alt=""/>
+                        </a>
+                        <a class="font-bold btn btn-link btn-block m-t-xs" data-toggle="modal"
+                           data-target="#myModal{{ proyecto.id_proyecto }}">
+                            Socios ({{ proyecto.inversionistas | length }})
+                        </a>
+                        <!-- Ventana modal para mostrar a los inversionistas -->
+                        <div class="modal inmodal" id="myModal{{ proyecto.id_proyecto }}" tabindex="-1" role="dialog"
+                             aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content animated bounceInRight">
+                                    <div class="modal-header">
+                                        <button type="button" class="close"
+                                                data-dismiss="modal"><span
+                                                aria-hidden="true">&times;</span><span
+                                                class="sr-only">Cerrar</span></button>
+                                        <h4 class="modal-title">Inversionistas del proyecto: {{ proyecto.nombre }}</h4>
+                                        <small class="font-bold">Estos son otros inversionistas
+                                            que también han apoyado al proyecto.
+                                        </small>
+                                    </div>
+
+                                    <!-- Aquí se muestra la información de los inversionistas asociados -->
+                                    <div class="modal-body">
+                                        <div>
+                                            <div class="feed-activity-list">
+
+                                                {% for socio in proyecto.inversionistas %}
+                                                    <div class="feed-element">
+                                                        <div class="pull-left">
+                                                            <img alt="image" class="img-circle"
+                                                                 src="{{ socio.imagen }}">
+                                                        </div>
+
+                                                        <div class="media-body ">
+                                                            <strong>{{ socio.nombre_usuario }}</strong>
+                                                            <br>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-white" data-dismiss="modal">
+                                            Cerrar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h3 class="titulo">
+                                    <a href="{% url 'proyectos_app:detalle2' proyecto.slug %}"> {{ proyecto.nombre|upper|slice:"60" }}</a>
+                                    {% if 'transferencia' in proyecto.origenes %}
+                                        <i class="fa fa-exchange" data-toggle="tooltip" data-placement="top"
+                                           title="Transferencia"></i>
+                                    {% endif %}
+                                    {% if 'tarjeta' in proyecto.origenes %}
+                                        <i class="fa fa-credit-card" data-toggle="tooltip" data-placement="top"
+                                           title="Tarjeta de Credito"></i>
+                                    {% endif %}
+                                    {% if 'oxxo' in proyecto.origenes %}
+                                        <img class="tipo_pago_icon" alt="image"
+                                             src="{% static 'base/img/logo_oxxo.jpg' %}"
+                                             data-toggle="tooltip" data-placement="top" title="Deposito en OXXO"/>
+                                    {% endif %}
+                                    {% if 'Renkacoins' in proyecto.origenes %}
+                                        <img class="tipo_pago_icon" alt="image"
+                                             src="{% static 'base/img/renkacoins.png' %}"
+                                             data-toggle="tooltip" data-placement="top" title="Saldo Renka"/>
+                                    {% endif %}
+                                    {% if 'cupon' in proyecto.origenes %}
+                                        <i class="fa fa-tags" data-toggle="tooltip" data-placement="top"
+                                           title="Cupon"></i>
+                                    {% endif %}
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="row pointer" data-toggle="modal"
+                             data-target="#modal_exitoso{{ proyecto.id_proyecto }}-{{ forloop.counter }}">
+                            <div class="col-md-4"><h2 class="text-renka font-bold">
+                                ${{ proyecto.inversion|floatformat:2|intcomma }}</h2>
+                                {% if proyecto.tipo == 'inversion' %}
+                                    <small>Inversión</small>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h2 class="text-renka font-bold">{{ proyecto.interes |floatformat:0|intcomma }}%</h2>
+                                        <small>Interés obtenido</small>
+                                    </div>
+                                    <div class="modal inmodal"
+                                         id="modal_exitoso{{ proyecto.id_proyecto }}-{{ forloop.counter }}"
+                                         tabindex="-1" role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content animated fadeIn">
+
+                                                <div class="modal-header lazur-bg shadow">
+                                                    <button type="button" class="close" data-dismiss="modal">
+                                                        <span aria-hidden="true">&times;</span>
+                                                        <span class="sr-only">Cerrar</span>
+                                                    </button>
+
+                                                    <h2 class="modal-title">Detalles del Proyecto</h2>
+
+                                                    <h2 class="font-bold">{{ proyecto.nombre|upper }}</h2>
+
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h2 class="font-bold text-center m-b-lg">Intereses a ganar</h2>
+
+                                                    <div id="grafica_pagos_exitoso{{ proyecto.id_proyecto }}-{{ forloop.counter }}"
+                                                         class="rickshaw_graph text-center"></div>
+                                                    <script>
+                                                        var grafica_pagos_exitoso = new Rickshaw.Graph({
+                                                            element: document.querySelector("#grafica_pagos_exitoso{{ proyecto.id_proyecto }}-{{ forloop.counter }}"),
+                                                            renderer: 'bar',
+                                                            series: [
+                                                                {
+                                                                    data: [
+                                                                        {% for datos in proyecto.inversionistas %}
+                                                                            {
+                                                                                x: {{ datos.plazo }},
+                                                                                y: {{datos.capital}}
+                                                                            },
+                                                                        {% endfor %}
+                                                                    ],
+                                                                    color: '#2f4afb'
+                                                                }, {
+                                                                    data: [
+                                                                        {% for datos in proyecto.inversionistas %}
+                                                                            {
+                                                                                x: {{ datos.plazo }},
+                                                                                y: {{datos.interes}}
+                                                                            },
+                                                                        {% endfor %}
+                                                                    ],
+                                                                    color: '#41e094'
+                                                                }]
+                                                        });
+                                                        grafica_pagos_exitoso.render();
+                                                    </script>
+
+                                                    <hr/>
+                                                    <h2 class="font-bold m-b-lg">Detalle de pagos</h2>
+                                                    <table class="table table-hover table-renka right">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>Mes</th>
+                                                            <th>Interés*</th>
+                                                            <th>IVA (Incluido)</th>
+                                                            <th>% Interés</th>
+                                                            <th>Capital</th>
+                                                            <th>% Capital</th>
+                                                            <th>Total</th>
+                                                            <th>% Total</th>
+                                                            <th class="text-right">Estado</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for socio in proyecto.pagos %}
+                                                            <tr>
+                                                                <th>{{ socio.plazo }}</th>
+                                                                <th class="text-success">
+                                                                    ${{ socio.interes|floatformat:3|intcomma }}</th>
+                                                                <th class="text-success">
+                                                                    %{{ socio.porcentaje_interes|floatformat:3|intcomma }}</th>
+                                                                <th class="text-renka">
+                                                                    ${{ socio.capital|floatformat:3|intcomma }}</th>
+                                                                <th class="text-renka">
+                                                                    %{{ socio.porcentaje_capital|floatformat:3|intcomma }}</th>
+                                                                <th>${{ socio.total|floatformat:3|intcomma }}</th>
+                                                                <th>
+                                                                    %{{ socio.porcentaje_total|floatformat:3|intcomma }}</th>
+                                                                {% if socio.estado == 'pagado' %}
+                                                                    <th class="text-right">
+                                                                        <i class="fa fa-check fa-2x text-success"
+                                                                           data-toggle="tooltip"
+                                                                           data-placement="top" title="Pagado"></i>
+                                                                    </th>
+                                                                {% endif %}
+                                                                {% if socio.estado == 'no pagado' %}
+                                                                    <th class="text-right">
+                                                                        <i class="fa fa-exclamation-triangle fa-2x text-warning"
+                                                                           data-toggle="tooltip" data-placement="top"
+                                                                           title="Atrasado"></i>
+                                                                    </th>
+                                                                {% endif %}
+                                                                {% if socio.estado == 'pendiente' %}
+                                                                    <th class="text-right">
+                                                                        <i class="fa fa-clock-o fa-2x text-info"
+                                                                           data-toggle="tooltip"
+                                                                           data-placement="top" title="Pendiente"></i>
+                                                                    </th>
+                                                                {% endif %}
+                                                            </tr>
+                                                        {% endfor %}
+                                                        <tr>
+                                                            <th>total</th>
+                                                            <th class="text-success">{{ proyecto.totales.interes|floatformat:1|intcomma }}</th>
+                                                            <th class="text-success">{{ proyecto.totales.pinteres|floatformat:2|intcomma }}</th>
+                                                            <th class="text-renka">{{ proyecto.totales.capital|floatformat:0|intcomma }}</th>
+                                                            <th class="text-renka">{{ proyecto.totales.pcapital|floatformat:2|intcomma }}</th>
+                                                            <th>{{ proyecto.totales.total|floatformat:1|intcomma }}</th>
+                                                            <th>{{ proyecto.totales.ptotal|floatformat:0|intcomma }}</th>
+                                                            <th class="text-right"></th>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-white" data-dismiss="modal"><i
+                                                            class="fa fa-times-circle"></i> Cerrar
+                                                    </button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4"><h2
+                                            class="text-renka font-bold">{{ proyecto.fin_de_campana | date }}</h2>
+                                        <small>Fin de campaña</small>
+                                    </div>
+                                {% else %}
+                                    <small>Recompensas</small>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h2 class="text-renka font-bold"><i class="fa fa-gift"></i></h2>
+                                        <small>Recompensa :{{ proyecto.interes }}</small>
+                                    </div>
+                                    <div class="col-md-4"><h2
+                                            class="text-renka font-bold">{{ proyecto.fin_de_campana | date }}</h2>
+                                        <small>Fecha de entrega</small>
+                                    </div>
+                                {% endif %}
+
+                    </div>
+                </div>
+                <div class="col-md-2 text-center">
+                    <i class="text-info fa fa-check fa-5x m-t-sm"></i>
+
+                    <h3>Proyecto exitoso</h3>
+                </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Se imprimen los valores para los proyectos en los que ya se invirtió y que ya son existosos -->
+        {% if proyectos_intentados %}
+
+            <input type="hidden" value="" name="intentados" id="intentados" value="{{ ordenar_intentados }}"/>
+
+            <div class="row">
+                <div class="col-sm-7">
+                    <h1>Proyectos sin alcanzar la meta</h1>
+                </div>
+                <div class="col-sm-5">
+                    <div class="btn-group m-t-md pull-right">
+                        <button id="btn-ordenar" data-toggle="dropdown"
+                                class="btn btn-primary btn-outline dropdown-toggle">
+                            Ordenar por <span
+                                class="caret m-l-lg"></span></button>
+                        <ul class="dropdown-menu ordenar">
+                            <li><a name="interes" onclick="asignarOrden('#campania',this)">Porcentaje de Interés</a>
+                            </li>
+                            <li><a name="inversion" onclick="asignarOrden('#intentados',this)">Inversión</a></li>
+                            <li><a name="meta" onclick="asignarOrden('#intentados',this)">Meta</a></li>
+                            <li><a name="fecha_fin_campana" onclick="asignarOrden('#intentados',this)">Fin de la
+                                campaña</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 m-b-lg">
+                    <h3>{{ proyectos_intentados | length }} proyectos</h3>
+                </div>
+            </div>
+
+            {% for proyecto in proyectos_intentados %}
+
+                <div class="row white-bg m-b-md">
+                    <div id="proyecto_intentado{{ forloop.counter }}" class="col-xs-12">
+
+                        <div class="col-sm-2 no-padding">
+                            <h2>
+                                <a href="{% url 'proyectos_app:detalle2' proyecto.slug %}">
+                                    <img class="img-responsive"
+                                         src="{{ proyecto.url_imagen }}" alt=""/>
+                                </a>
+                            </h2>
+
+                            <!-- Ventana modal para mostrar a los inversionistas -->
+                            <a class="btn btn-link btn-block m-t-xs" data-toggle="modal"
+                               data-target="#myModal{{ proyecto.id_proyecto }}">
+                                Socios ({{ proyecto.inversionistas | length }})
+                            </a>
+
+                            <div class="modal inmodal" id="myModal{{ proyecto.id_proyecto }}" tabindex="-1"
+                                 role="dialog"
+                                 aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content animated bounceInRight">
+                                        <div class="modal-header">
+                                            <button type="button" class="close"
+                                                    data-dismiss="modal"><span
+                                                    aria-hidden="true">&times;</span><span
+                                                    class="sr-only">Cerrar</span></button>
+                                            <h4 class="modal-title">Inversionistas del
+                                                proyecto: {{ proyecto.nombre }}</h4>
+                                            <small class="font-bold">Estos son otros inversionistas
+                                                que también han apoyado al proyecto.
+                                            </small>
+                                        </div>
+
+                                        <!-- Aquí se muestra la información de los inversionistas asociados -->
+                                        <div class="modal-body">
+                                            <div>
+                                                <div class="feed-activity-list">
+
+                                                    {% for socio in proyecto.inversionistas %}
+                                                        <div class="feed-element">
+                                                            <div class="pull-left">
+                                                                <img alt="image" class="img-circle"
+                                                                     src="{{ socio.imagen }}">
+                                                            </div>
+
+                                                            <div class="media-body ">
+                                                                <strong>{{ socio.nombre_usuario }}</strong>
+                                                                <br>
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-white"
+                                                    data-dismiss="modal">Cerrar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-10">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <h3 class="titulo">
+                                        <a href="{% url 'proyectos_app:detalle2' proyecto.slug %}"> {{ proyecto.nombre|upper|slice:"60" }}</a>
+                                        {% if 'transferencia' in proyecto.origenes %}
+                                            <i class="fa fa-exchange" data-toggle="tooltip" data-placement="top"
+                                               title="Transferencia"></i>
+                                        {% endif %}
+                                        {% if 'tarjeta' in proyecto.origenes %}
+                                            <i class="fa fa-credit-card" data-toggle="tooltip" data-placement="top"
+                                               title="Tarjeta de Credito"></i>
+                                        {% endif %}
+                                        {% if 'oxxo' in proyecto.origenes %}
+                                            <img class="tipo_pago_icon" alt="image"
+                                                 src="{% static 'base/img/logo_oxxo.jpg' %}"
+                                                 data-toggle="tooltip" data-placement="top" title="Deposito en OXXO"/>
+                                        {% endif %}
+                                        {% if 'Renkacoins' in proyecto.origenes %}
+                                            <img class="tipo_pago_icon" alt="image"
+                                                 src="{% static 'base/img/renkacoins.png' %}"
+                                                 data-toggle="tooltip" data-placement="top" title="Saldo Renka"/>
+                                        {% endif %}
+                                        {% if 'cupon' in proyecto.origenes %}
+                                            <i class="fa fa-tags" data-toggle="tooltip" data-placement="top"
+                                               title="Cupon"></i>
+                                        {% endif %}
+                                    </h3>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h2 class="font-bold">{{ proyecto.inversion|floatformat:2|intcomma }}</h2>
+                                    {% if proyecto.tipo == 'inversion' %}
+                                        <small>Inversión</small>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <h2 class="text-renka font-bold">{{ proyecto.interes |floatformat:0|intcomma }}%</h2>
+                                            <small>Interés</small>
+                                        </div>
+                                    {% else %}
+                                        <small>Recompensas</small>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <h2 class="text-renka font-bold"><i class="fa fa-gift"></i></h2>
+                                            <small>Recompensa :{{ proyecto.interes }}</small>
+                                        </div>
+                                    {% endif %}
+                            <div class="col-md-3">
+                                <h2 class="font-bold">
+                                    ${{ proyecto.meta|floatformat:2|intcomma }}</h2>
+                                <small>Meta</small>
+                            </div>
+                            <div class="col-md-3">
+                                <h2 class="font-bold">{{ proyecto.fecha_fin_campana|date }}</h2>
+                                <small>Fín de campaña</small>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="progress-bar progress-bar-sm">
+                                    <div class="bar gray-bar">
+                                        <style>
+                                            #proyecto_intentado .progress-bar .bar {
+                                                width: {{ proyecto.porcentaje_llevado }}%;
+                                            }
+                                        </style>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h4>Alcanzamos:
+                                    <span>{{ proyecto.porcentaje_faltante }}%</span>
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </form>
+
+    <!-- Se imprimen los valores para los proyectos en los que ya se invirtió y que ya son existosos -->
+    {% if proyectos_recomendados %}
+        <div class="row">
+            <div class="col-xs-12">
+                <h1>Proyectos que podrían interesarte</h1>
+            </div>
+            {% for proyecto in proyectos_recomendados %}
+                <div id="proyecto{{ forloop.counter }}" class="col-sm-6 col-lg-4">
+                    <div class="white-bg m-b-sm proyecto-div">
+                        <a href="{% url 'proyectos_app:detalle2' proyecto.slug %}">
+                            <div class="img-proyecto img-bg">
+                                <style>
+                                    #proyecto{{ forloop.counter }} .img-proyecto {
+                                        background-image: url('{{ proyecto.imagen_ico }}');
+                                    }
+                                </style>
+                            </div>
+
+                            <div class="empresario-proyecto">
+                                <div class="img-empresario img-bg img-circle">
+                                    <style>
+                                        #proyecto{{ forloop.counter }} .img-empresario {
+                                            background-image: url('{{ proyecto.img_empresario}}');
+                                        }
+                                    </style>
+                                </div>
+                                <div class="empresario-info">
+                                    <p>{{ proyecto.empresario.get_full_name }}</p>
+                                <span><i
+                                        class="fa fa-map-marker text-renka"></i> {{ proyecto.ubicacion }}</span>
+                                </div>
+                            </div>
+
+                            <div class="data-proyecto">
+                                <h3 class="titulo">{{ proyecto.nombre|upper|slice:"60" }}</h3>
+
+                                <h3 class="descr">
+                                    <small>{{ proyecto.descripcion|slice:"140" }}</small>
+                                </h3>
+
+                                <div class="row datos text-center">
+                                    <div class="col-xs-4">
+                                        {% if proyecto.esDonacion %}
+                                            <p class="num text-renka">
+                                                <span><i class="fa fa-gift"></i></span>
+                                                {{ proyecto.recompensas }}
+                                            </p>
+                                            <span class="text font-bold">Recompensas</span>
+                                        {% else %}
+                                            <p class="num text-renka">
+                                                <span>%</span> {{ proyecto.intereses_max }}
+                                            </p>
+                                            <span class="text font-bold">Intereses</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <p class="num text-renka"><span><i
+                                                class="fa fa-users"></i></span> {{ proyecto.socio|length }}</p>
+                                        <span class="text font-bold">Socios</span>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <p class="num text-renka"><span><i class="fa fa-clock-o"></i></span>
+                                            {{ proyecto.dame_dias_restantes_termino_campana }}
+                                        </p>
+                                        <span class="text font-bold">Días más</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="progress-bar progress-bar-sm">
+                                            <div class="bar">
+                                                <style>
+                                                    #proyecto{{ forloop.counter }} .progress-bar .bar {
+                                                        width: {{ proyecto.porcentaje_llevado }}%;
+                                                    }
+                                                </style>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row bottom">
+                                    <div class="col-xs-12">
+                                        <p class="inline">Meta: <span
+                                                class="text-renka">${{ proyecto.monto|floatformat:"2"|intcomma }}</span>
+                                        </p>
+
+                                        <div class="pull-right inline">
+                                            <p>Llevamos:  <span
+                                                    class="text-renka">{{ proyecto.porcentaje_faltante }}%</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+
+{% block scripts %}
+
+    <!-- Sparkline -->
+    <script src="{% static 'base/js/plugins/sparkline/jquery.sparkline.min.js' %}"></script>
+
+    <!-- JSKnob -->
+    <script src="{% static 'base/js/plugins/jsKnob/jquery.knob.js' %}"></script>
+
+
+    <script src="{% static 'base/js/plugins/sociales/social-scripts.js' %}"></script>
+
+    <script>
+        $('.ordenar li').click(function () {
+            $('#btn-ordenar').html($(this).html() + ' <span class="caret m-l-lg">')
+        });
+    </script>
+
+
+    <script>
+
+        $(function () {
+            var barOptions = {
+                series: {
+                    lines: {
+                        show: true,
+                        lineWidth: 2,
+                        fill: true,
+                        fillColor: {
+                            colors: [{
+                                opacity: 0.0
+                            }, {
+                                opacity: 0.0
+                            }]
+                        }
+                    }
+                },
+                xaxis: {
+                    mode: "time",
+                    min: (new Date("{{ fin }}")).getTime(),
+                    max: (new Date("{{ inicio }}")).getTime(),
+                    tickSize: [1, "month"],
+                    axisLabel: 'Meses',
+                    label: "Meses",
+                    monthNames: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dic"],
+                    timeformat: "%b-%y"
+                },
+                yaxis: {
+                    min: 0,
+                    label: "Intereses",
+                },
+
+                colors: ["#009688"],
+                grid: {
+                    color: "#999999",
+                    hoverable: true,
+                    clickable: true,
+                    tickColor: "#D4D4D4",
+                    borderWidth: 0
+                },
+                legend: {
+                    show: true,
+                },
+                tooltip: true,
+                tooltipOpts: {
+                    content: "Fecha: %x, cantidad intereses: %y"
+                }
+            };
+
+            var barData = {
+                label: "Intereses obtenidos",
+                data: [
+                    {% for x in inversiones %}
+                        [(new Date("{{ x.fecha }}")).getTime(), {{ x.valor }}],
+                    {% endfor %}
+                ]
+            };
+            $.plot($("#chart_intereses"), [barData], barOptions);
+
+        });
+
+
+    </script>
+
+    <script>
+
+        function asignarOrden(campo, valor) {
+            $(campo).val(valor.name);
+            $("#forma").submit();
+        }
+    </script>
+
+{% endblock %}
