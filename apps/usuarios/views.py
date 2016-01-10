@@ -55,6 +55,8 @@ def log_in(request):
                     if True:
                         user.backend = 'django.contrib.auth.backends.ModelBackend'
                         login(request, user)
+                        if url_redireccion == '/':
+                            url_redireccion = reverse('usuarios_app:perfil_paciente', kwargs={'username':user.username})
                         return redirect(url_redireccion)
                         # return render(request, template, {'user_register': user_register,
                         #                                  'login_form': login_form,})
@@ -69,21 +71,11 @@ def log_in(request):
                     password=login_form.cleaned_data['password'])
                 # #print(user)
                 if user is not None:
-                    # #print(user)
-                    if user.is_active:
-                        user.backend = 'django.contrib.auth.backends.ModelBackend'
-                        login(request, user)
-                        return redirect(url_redireccion)
-                    else:
-                        # user.is_active = True
-                        # print('el usuario no ha verificado su cuenta aun')
-                        # user.backend = 'django.contrib.auth.backends.ModelBackend'
-                        # login(request, user)
-                        request.session['cuenta_sin_validar'] = True
-
-                        url_redireccion = '/valida_tu_cuenta'
-                        return redirect(url_redireccion)
-                        # 'desactivado': 'Gracias por volver a activar tu cuenta !! :D '})
+                    user.backend = 'django.contrib.auth.backends.ModelBackend'
+                    login(request, user)
+                    if url_redireccion == '/':
+                        url_redireccion = reverse('usuarios_app:perfil_paciente', kwargs={'username':user.username})
+                    return redirect(url_redireccion)
 
                 else:
                     # #print("el usuario y contraseña son invalidos")
