@@ -1,0 +1,28 @@
+{% load static swampdragon_tags %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<h1>Notifications demo</h1>
+<h2>{{ usuario }}</h2>
+
+<!-- This is our list of notifications -->
+<ul id="notifications">
+    {% for notification in notificaciones %}
+    <li>{{ notification.message }}</li>
+    {% endfor %}
+</ul>
+
+
+<!-- SwampDragon -->
+{% swampdragon_settings %}
+<script type="text/javascript" src="{% static 'swampdragon/js/dist/swampdragon.min.js' %}"></script>
+
+<!-- notifications -->
+<script type="text/javascript" src="{{ STATIC_URL }}notifications.js"></script>
+</body>
+</html>

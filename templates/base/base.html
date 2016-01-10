@@ -74,49 +74,25 @@
                         </div>
                     {% endif %}
                     <div class="logo-element">
-                        <a href="{% url 'index_app:home' %}">
-                            <img src="{% static 'base/img/logo-base.png' %}" alt="" style="width: 50%;"/>
+                        <a href="{% url 'home_app:home' %}">
+                            <img src="#" alt="  _LOGO_" style="width: 50%;"/>
                         </a>
                     </div>
                 </li>
-                <li class="visible-xs vis">
-                    <a href="#" data-toggle="modal" data-target="#modal_crear_proyecto"> Sube tu proyecto </a>
-                </li>
-                <li class="visible-xs">
-                    <a href="{% url 'proyectos_app:proyectos' %}"> Descubre Negocios </a>
-                </li>
-                <li class="visible-xs">
-                    <a href="{% url 'faq_app:info_como_funciona' %}"> ¿Cómo funciona? </a>
-                </li>
                 <li>
-                    <a href="{% url 'socios_app:perfil' %}"><i class="fa fa-usd"></i> <span class="nav-label">Mis inversiones</span></a>
+                    <a href="#"><i class="fa fa-usd"></i> <span class="nav-label">Mis __algo__</span></a>
                     <ul class="nav nav-second-level collapse in">
-                        <li><a href="{% url 'socios_app:perfil' %}">Ver inversiones</a></li>
-                        <li><a href="{% url 'socios_app:estado_cuenta' %}">Estado de cuenta</a></li>
-                        <li><a href="{% url 'invitados_app:buscar' %}">Invitar amigos</a></li>
-                        {% if tiene_cupon_personal %}
-                            <li><a href="{% url 'cupones_app:cupon_personal' %}">Cupón personal</a></li>
-                        {% endif %}
+                        <li><a href="#">algo mas</a></li>
                     </ul>
                 </li>
 
-                {% if user.isEmpresario %}
+                {% if user.is_nutriologo %}
                     <hr>
                     <li>
-                        <a href="{% url 'empresarios_app:perfil' %}"><i class="fa fa-th-large"></i> <span
-                                class="nav-label">Mis Proyectos</span> </a>
+                        <a href="#"><i class="fa fa-th-large"></i> <span
+                                class="nav-label">Mis Pacientes</span> </a>
                         <ul class="nav nav-second-level collapse in">
-                            <li><a href="{% url 'empresarios_app:perfil' %}">Ver proyectos</a></li>
-                            <li><a href="{% url 'empresarios_app:estado_cuenta' %}">Estado de cuenta</a></li>
-                        </ul>
-                    </li>
-                {% endif %}
-                {% if user.isCofundador %}
-                    <hr>
-                    <li>
-                        <a href="#"><i class="fa fa-users"></i> <span class="nav-label">Cofundador</span> </a>
-                        <ul class="nav nav-second-level collapse in">
-                            <li><a href="{% url 'empresarios_app:cofunder' %}">Ver proyectos</a></li>
+                            <li><a href="#">Ver citas</a></li>
                         </ul>
                     </li>
                 {% endif %}
@@ -124,7 +100,7 @@
                 <li>
                     <a href="#"><i class="fa fa-user"></i> <span class="nav-label">Mi cuenta</span></a>
                     <ul class="nav nav-second-level collapse in">
-                        <li><a href="{% url 'usuarios_app:perfil' %}">Editar Perfil</a></li>
+                        <li><a href="#">Editar Perfil</a></li>
                     </ul>
                 </li>
             </ul>
@@ -138,34 +114,9 @@
                     <a class="navbar-minimalize minimalize-styl-2 btn btn-primary visible-xs" href="#"><i
                             class="fa fa-bars"></i>
                     </a>
-                    <a href="{% url 'index_app:index' %}" class="navbar-brand p-m hidden-xs">
-                        <img src="{% static 'base/img/logo-base.png' %}" alt=""/>
+                    <a href="#" class="navbar-brand p-m hidden-xs">
+                        <img src="__LOGO_" alt=""/>
                     </a>
-                    <ul class="nav navbar-nav m-xs hidden-xs">
-                        <li>
-                            <a href="#" data-toggle="modal" data-target="#modal_crear_proyecto"> Sube tu proyecto </a>
-                            {% include 'base/base_modal_crear_proyecto.html' %}
-                        </li>
-                        <li>
-                            <a href="{% url 'proyectos_app:proyectos' %}"> Invierte y apoya </a>
-                        </li>
-                        <li>
-                            <a href="{% url 'faq_app:info_como_funciona' %}"> ¿Cómo funciona? </a>
-                        </li>
-                        <li class="visible-md-block visible-lg-block">
-                            <form role="search" method="get" class="navbar-form"
-                                  action="{% url 'proyectos_app:buscar' %}">
-                                <button type="submit" class="input-group-addon pointer submit-query no-borders">
-                                    <i class="fa fa-search icon-buscar text-renka" style="cursor: pointer;"></i>
-                                </button>
-                                <div class="form-group inline">
-                                    <input type="text" placeholder="Buscar..."
-                                           class="form-control hidden-md hidden-sm border-bottom m-l-md" name="query"
-                                           id="top-search">
-                                </div>
-                            </form>
-                        </li>
-                    </ul>
                 </div>
                 <ul class="nav navbar-top-links navbar-right">
                     {% if user.is_authenticated %}
@@ -198,13 +149,12 @@
                             {% endif %}
                         </li>
                         <ul class="dropdown-menu" role="menu" aria-labelledby="menu-profile">
-                            <li><a href="{% url 'socios_app:perfil' %}">Mis inversiones</a></li>
-                            {% if user.isEmpresario %}
-                                <li><a href="{% url 'empresarios_app:perfil' %}">Mis proyectos</a></li>
+                            <li><a href="#">OTRA_COSA_</a></li>
+                            {% if user.is_nutriologo %}
+                                <li><a href="#">Mis algo__</a></li>
                             {% endif %}
                             <li class="divider"></li>
-                            <li><a href="{% url 'usuarios_app:perfil' %}">Mi cuenta</a></li>
-                            <li><a href="{% url 'invitados_app:buscar' %}">Invitar amigos</a></li>
+                            <li><a href="#">Mi cuenta</a></li>
                             <li><a href="{% url 'usuarios_app:logout' %}"><i class="fa fa-sign-out"></i> Cerrar
                                 sesión </a></li>
                         </ul>
@@ -216,7 +166,7 @@
                         </li>
                     {% endif %}
                     <li class="hidden-sm">
-                        <a href="{% url 'faq_app:FAQ' %}">
+                        <a href="#">
                             <i class="fa fa-question-circle"></i>FAQ
                         </a>
                     </li>
@@ -244,26 +194,25 @@
                         <span>©</span>
                     </div>
                     <div class="col-xs-6 col-md-2 m-t-lg m-b-lg">
-                        <h5>PROYECTOS</h5>
+                        <h5>TITULO_</h5>
                         <ul>
-                            <li><a class="text-white" href="{% url 'proyectos_app:proyectos' %}">Descubre Negocios</a>
+                            <li><a class="text-white" href="#">ALGO</a>
                             </li>
-                            <li><a class="text-white" href="#" data-toggle="modal" data-target="#modal_crear_proyecto">Sube
-                                tu proyecto</a></li>
+                            <li><a class="text-white" href="#" data-toggle="modal" data-target="#modal_crear_proyecto">ALGO_2</a></li>
                         </ul>
                     </div>
                     <div class="col-xs-6 col-md-3 m-t-lg m-b-lg">
                         <h5>SOPORTE</h5>
                         <ul>
-                            <li><a class="text-white" href="{% url 'faq_app:faq' %}">Preguntas frecuentes (FAQ)</a></li>
+                            <li><a class="text-white" href="#">Preguntas frecuentes (FAQ)</a></li>
                         </ul>
                     </div>
                     <div class="col-xs-6 col-md-3 m-t-lg m-b-lg">
                         <h5>LEGAL</h5>
                         <ul>
-                            <li><a class="text-white" href="{% url 'registros_app:terminosycondiciones' %}">Términos y
+                            <li><a class="text-white" href="#">Términos y
                                 Condiciones</a></li>
-                            <li><a class="text-white" href="{% url 'registros_app:avisodeprivacidad' %}">Aviso de
+                            <li><a class="text-white" href="#">Aviso de
                                 privacidad</a></li>
                         </ul>
                     </div>
@@ -272,17 +221,7 @@
                         <ul>
                             <li>
                                 <a target="_blank" class="text-white"
-                                   href="{% url 'blog_app:blog' %}">Blog</a>
-                            </li>
-                            <li>
-                                <a target="_blank" class="text-white"
-                                   href="{% url 'index_app:equipo' %}">Equipo</a>
-                            </li>
-                            <li>
-                                <a target="_blank" class="text-white text-facebook"
-                                   href="https://www.facebook.com/somosrenka">
-                                    <i class="fa fa-phone fa-2x"></i>&nbsp;&nbsp;
-                                </a>
+                                   href="{% url 'home_app:equipo' %}">Equipo</a>
                             </li>
                             <li>
                                 <a target="_blank" class="text-white text-facebook"
@@ -354,19 +293,11 @@
         $('form.navbar-form').submit();
     });
 
-    $("input[name='span_proyecto']").numeric({negative: false}, function () {
-        this.value = "";
-        this.focus();
-    });
-    $("input[name='span_proyecto']").number(true, 0);
-
-    $('form#pre-wizard').submit(function () {
-        $("input[name='monto_proyecto']").val($("input[name='span_proyecto']").val())
-    });
 </script>
 
 <!-- iCheck -->
 <script src="{% static 'proyectos/js/icheck.min.js' %}"></script>
+
 <script>
 
     $(document).ready(function () {
@@ -377,60 +308,9 @@
         });
     });
     $(document).ready(function () {
-        setInterval(notifAsync, 10000);
     });
 
 </script>
-<!--Start of Zopim Live Chat Script-->
-<script type="text/javascript">
-    window.$zopim || (function (d, s) {
-        var z = $zopim = function (c) {
-            z._.push(c)
-        }, $ = z.s =
-                d.createElement(s), e = d.getElementsByTagName(s)[0];
-        z.set = function (o) {
-            z.set.
-                    _.push(o)
-        };
-        z._ = [];
-        z.set._ = [];
-        $.async = !0;
-        $.setAttribute("charset", "utf-8");
-        $.src = "//v2.zopim.com/?3SjlbUkDtQNSTAKsakFyjvRj86CxM9My";
-        z.t = +new Date;
-        $.
-                type = "text/javascript";
-        e.parentNode.insertBefore($, e)
-    })(document, "script");
-    $zopim(function () {
-        $zopim.livechat.setName('{{ user.username }}');
-        $zopim.livechat.setEmail('{{ user.email }}');
-        $zopim.livechat.setGreetings({
-            'online': 'RenkaChat',
-            'offline': 'Offline'
-        });
-        $zopim.livechat.offlineForm.setGreetings('Por el momento no estamos, pero atenderemos tus dudas lo antes posible');
-        $zopim.livechat.sendVisitorPath();
-    });
-</script>
-<script>
-    (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
-    ga('create', 'UA-69272153-1', 'auto');
-    ga('send', 'pageview');
-
-</script>
-<!--End of Zopim Live Chat Script-->
 {% block scripts %}
 
 {% endblock %}

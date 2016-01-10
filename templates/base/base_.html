@@ -1,10 +1,9 @@
 {% load staticfiles %}
-{% load static swampdragon_tags %}
 <!DOCTYPE html>
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>{% block title %}{% endblock %} - Karussa</title>
+    <title>{% block title %}{% endblock %} - EDS</title>
     <link rel="stylesheet" href="{% static 'base/css/bootstrap.min.css' %}"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{% static 'base/css/base.css' %}"/>
@@ -31,7 +30,7 @@
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
             <ul class="nav navbar-nav">
-                <li><a href="{% url 'servicios_app:planes' %}">Planes</a></li>
+                <li><a href="#">Planes</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown
                         <span class="caret"></span></a>
@@ -47,7 +46,7 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="{% url 'servicios_app:configurar' %}">Miembros</a></li>
+                <li><a href="#">Miembros</a></li>
                 {% comment %}
                 {% if not user.is_authenticated %}
                     <li><a href="{% url 'empresa_app:login' %}">Inicia sesión</a></li>
@@ -79,18 +78,6 @@
 <script src="//cdn.jsdelivr.net/jquery.validation/1.14.0/jquery.validate.min.js"></script>
 <script src="//cdn.jsdelivr.net/jquery.validation/1.14.0/additional-methods.min.js"></script>
 
-
-
-<!-- SwampDragon -->
-{% swampdragon_settings %}
-<script type="text/javascript" src="{% static 'swampdragon/js/dist/swampdragon.min.js' %}"></script>
-
-<!-- notifications -->
-<script type="text/javascript" src="{% static 'notificaciones/notificaciones.js' %}"></script>
-
-{% comment %}
-
-{% endcomment %}
 
 {% block scripts %}
 

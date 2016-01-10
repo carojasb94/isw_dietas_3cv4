@@ -81,13 +81,15 @@ class SignUpForm(forms.ModelForm):
             usuario = False
         if Usuario.objects.filter(email__iexact=cleaned_data.get("email").lower()).exists():
             # print("El email ya esta en uso...")
+            '''
             tipo = get_red_loggeo(Usuario.objects.filter(email__iexact=cleaned_data.get("email").lower()))
             if tipo is not None:
                 self._errors['email'] = self.error_class(["El email ya esta en uso con %s..." % tipo])
                 correo = False
             else:
-                self._errors['email'] = self.error_class(["El email ya esta en uso ..."])
-                correo = False
+            '''
+            self._errors['email'] = self.error_class(["El email ya esta en uso ..."])
+            correo = False
 
         if usuario and correo:
             return cleaned_data

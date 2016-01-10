@@ -11,23 +11,26 @@ from django.contrib.auth.decorators import login_required
 from django.core import serializers
 
 import pytz
+from apps.nutriologo.forms import Actualizar_a_Nutriologo_form
+from apps.nutriologo.models import Peticion_para_Ser_Nutriologo
+from apps.usuarios.constantes import mensaje_nutriologo
+from apps.usuarios.funciones import inicializar_estructura_usuario
 
 from .forms import LoginForm, SignUpForm, DesactivarForm, terminar_registro_Form
 
 from .models import Usuario, EmailOrUsernameModelBackend
 
 
-def login(request):
+def log_in(request):
     user_register = SignUpForm()
     login_form = LoginForm()
     template = 'usuarios/login3.html'
     register_error = False
-    if request.user.is_authenticated():
-        print("El usuario ya se loggeo")
 
-    url_redireccion = request.GET['next'] if 'next' in request.GET else '/home'
+    url_redireccion = request.GET['next'] if 'next' in request.GET else '/'
 
     if request.user.is_authenticated():
+        print('usuario ya autenticado')
         return redirect(url_redireccion)
 
     if request.method == 'POST':
@@ -128,7 +131,7 @@ def terminar_registro(request):
     try:
         backend = request.session['partial_pipeline']['backend']
     except Exception as e:
-        logger.exception(e)
+        #logger.exception(e)
         return render(request, '404.html')
 
     if request.method == "POST":
@@ -143,7 +146,7 @@ def terminar_registro(request):
                     url = '/complete/%s/' % backend
                     return redirect(url)
                 except Exception as e:
-                    logger.exception(e)
+                    #logger.exception(e)
                     return render(request, '404.html')
             return render(request, 'usuarios/get_email.html', {'form': form})
     red_social = 1
@@ -151,6 +154,86 @@ def terminar_registro(request):
     return render(request, 'usuarios/get_email.html', {'form': terminar_registro_Form()})
 
 
+
+def perfil_usuario(request, username):
+    print(username)
+    if request.user.is_authenticated():
+        print("usuario loggeado")
+        print(request.user.username)
+        if username == request.user.username:
+            print("es propietario del perfil")
+
+        return render(request, 'usuarios/vista_usuario__.html',{'mi_perfil':True})
+    else:
+        return render(request, 'usuarios/vista_usuario__.html',{'mi_perfil':False})
+
+    raise Http404("Ocurrio un error, vuelva a intentarlo")
+
+
+# perfil_paciente
+def perfil_paciente(request, username):
+    print('perfil paciente')
+    print(username)
+    try:
+        usuario = Usuario.objects.get(username=username)
+
+        if request.user.is_authenticated():
+            print("usuario loggeado")
+            print(request.user.username)
+            if username == request.user.username:
+                print("es propietario del perfil")
+
+                return render(request, 'usuarios/perfil_paciente.html',{'anonimo' : False,
+                                                                        'mi_perfil' : True,
+                                                                        'usuario': inicializar_estructura_usuario(request.user),
+                                                                    })
+            #sacamos de la base de datos la demas informacion del ysyarui al que kle estan visitando su perfil
+            return render(request, 'usuarios/perfil_paciente.html',{'anonimo' : False,
+                                                                    'mi_perfil' : False,
+                                                                    'usuario' : inicializar_estructura_usuario(usuario),
+                                                                    })
+        else:
+            return render(request, 'usuarios/perfil_paciente.html',{'anonimo':True,
+                                                                    'usuario' : inicializar_estructura_usuario(usuario),
+                                                                    })
+    except Exception as e:
+        raise Http404("No existe ese nombre de usuario D= : "+str(e),' '+str(e.args))
+
+
+
+# actualizar_a_nutriologo
+@login_required
+def actualizar_a_nutriologo(request):
+    try:
+        if request.method == 'POST':
+            print('metodo post actualizar_a_nutriologo')
+            print(request.POST)
+            print(request.FILES)
+            actualizar_a_nutriologo_form = Actualizar_a_Nutriologo_form(request.POST, request.FILES)
+            print(actualizar_a_nutriologo_form)
+
+            if actualizar_a_nutriologo_form.is_valid():
+                print('form valido')
+                Peticion_para_Ser_Nutriologo(mensaje = mensaje_nutriologo%(request.user.username),
+                                             usuario = request.user,
+                                             cedula = request.FILES['cedula'],
+                                             )
+                actualizar_a_nutriologo_form.save()
+                return redirect(reverse('usuarios_app:solicitud_enviada'))
+            else:
+                print('form no valido')
+            return render(request, 'usuarios/actualizar_a_nutriologo.html',{'nutriologo_form':Actualizar_a_Nutriologo_form(),
+                                                                            'error':True})
+
+        return render(request, 'usuarios/actualizar_a_nutriologo.html',{'nutriologo_form':Actualizar_a_Nutriologo_form() })
+
+    except Exception as e:
+        raise Http404("Ocurrio un error, vuelva a intentarlo "+str(e)+' '+str(e.args))
+
+
+def solicitud_enviada(request):
+    print('solicitud_enviada')
+    return render(request, 'usuarios/solicitud_enviada.html',{})
 
 
 '''
@@ -315,7 +398,6 @@ def ajax_datos_extra(request):
 '''
 
 
-
 # Necesaria para usuarios por twitter
 def terminar_registro(request):
     # validacion de que estamos en el proceso de logueo de twitter
@@ -337,7 +419,7 @@ def terminar_registro(request):
                     url = '/complete/%s/' % backend
                     return redirect(url)
                 except Exception as e:
-                    logger.exception(e)
+                    #logger.exception(e)
                     return render(request, '404.html')
             return render(request, 'usuarios/get_email.html', {'form': form})
     red_social = 1

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>
+        <script>
+            var sd = new VanillaDragon({onopen: onOpen, onchannelmessage: onChannelMessage});
+
+            function onOpen() {
+                sd.subscribe('call-notifications', 'notifications');
+            }
+
+            function onChannelMessage(channels, message) {
+                // Add the notification
+                showNotification(message);
+            }
+
+            function showNotification(data) {
+                console.log(data);
+            }
+        </script>
+    </title>
+</head>
+<body>
+    <h2>DEMO 2</h2>
+
+
+    <h2>{{ usuario }}</h2>
+
+    <!-- This is our list of notifications -->
+    <ul id="notifications">
+        {% for notification in notificaciones %}
+        <li>{{ notification.message }}</li>
+        {% endfor %}
+    </ul>
+
+
+
+</body>
+
+
+</html>
+
+

@@ -1,0 +1,35 @@
+{% extends 'base/base.html' %}
+{% load staticfiles %}
+
+{% block title %}TEST chat {% endblock %}
+
+{% block styles %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 text-center">
+                <h1>Notificaciones prueba</h1>
+
+                <ul id="notifications">
+                    {% for mensaje in mensajes %}
+                        <li>{{ mensaje.remitente }} : {{ mensaje.mensaje }}</li>
+                    {% endfor %}
+                </ul>
+                <br>
+            <input type="button" onclick="call_router_custom('send_two_messages','notifications')" value="enviar">
+            <br>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+
+{% block scripts %}
+    <script src="{% static 'chat/chat.js' %}"></script>
+
+{% endblock %}

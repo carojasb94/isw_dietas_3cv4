@@ -3,6 +3,8 @@
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
+from django.templatetags.static import static
+
 
 class UserManager(BaseUserManager, models.Manager):
     def _create_user(self, username, email, password, is_staff, is_superuser, is_active=False, **extra_fields):
@@ -33,8 +35,9 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
     niveles = (("nutriologo", "nutriologo"),
                ("paciente", "paciente"),
+               ("inactivo","inactivo")
                )
-    tipo = models.CharField(choices=niveles, max_length=30, default="inactivo")
+    tipo = models.CharField(choices=niveles, max_length=30, default="paciente")
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_nutriologo = models.BooleanField(default=False)
@@ -67,6 +70,12 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     def __unicode__(self):
         return self.get_short_name
 
+    @property
+    def get_image(self):
+        if self.avatar:
+            return self.avatar
+        else:
+            return static('base/img/default-avatar.jpg')
 
 class EmailOrUsernameModelBackend(ModelBackend):
     def authenticate(self, username=None, password=None):

@@ -53,6 +53,8 @@ LOCAL_APPS = (
     'apps.usuarios',
     'apps.dieta',
     'apps.home',
+    'apps.nutriologo',
+    'apps.chat',
 
 )
 

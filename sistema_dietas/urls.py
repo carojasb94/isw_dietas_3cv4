@@ -6,8 +6,9 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^', include('apps.usuarios.urls', namespace='usuarios_app')),
-    url(r'^', include('apps.dieta.urls', namespace='dietas_app')),
     url(r'^', include('apps.home.urls', namespace='home_app')),
+    url(r'^', include('apps.dieta.urls', namespace='dietas_app')),
+    url(r'^', include('apps.chat.urls', namespace='chat_app')),
 
 
     url(r'^reset/password_reset/$', 'django.contrib.auth.views.password_reset', name='reset_password_reset1'),
