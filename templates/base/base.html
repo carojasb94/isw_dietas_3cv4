@@ -14,7 +14,7 @@
 
     {% include 'base/favicons.html' %}
 
-    <title>{% block title %}{% endblock %} | Renka</title>
+    <title>{% block title %}{% endblock %} | EDS </title>
 
     <!-- <script src="{% static 'base/js/jquery-2.1.1.js' %}"></script> -->
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
@@ -62,15 +62,6 @@
                                      style="height: 48px; width: 48px; border: 3px solid #FFFFFF;"/>
                                 <span class="text-muted font-bold m-t-sm">{{ user.get_short_name }}</span>
                             </a>
-
-                            {% comment %}
-                            <ul class="dropdown-menu">
-                                <li><a href="{% url 'socios_app:perfil' %}">Mi Cuenta</a></li>
-                                <li class="divider"></li>
-                                <li><a href="{% url 'usuarios_app:editar_perfil' %}">Editar Perfil</a></li>
-                                <li><a href="{% url 'usuarios_app:logout' %}"><i class="fa fa-sign-out"></i> Cerrar sesión </a></li>
-                            </ul>
-                            {% endcomment %}
                         </div>
                     {% endif %}
                     <div class="logo-element">
@@ -79,30 +70,29 @@
                         </a>
                     </div>
                 </li>
-                <li>
-                    <a href="#"><i class="fa fa-usd"></i> <span class="nav-label">Mis __algo__</span></a>
-                    <ul class="nav nav-second-level collapse in">
-                        <li><a href="#">algo mas</a></li>
-                    </ul>
-                </li>
-
                 {% if user.is_nutriologo %}
-                    <hr>
+
+                    <li>
+                        {# Si el usuario es de tipo paciente se muestra esta pestaña #}
+                        <a href="#"><i class="fa fa-usd"></i> <span class="nav-label"> Mis pacientes </span></a>
+                        <ul class="nav nav-second-level collapse in">
+                            <li><a href="#">Citas </a></li>
+                            <li><a href="#">Dietas</a></li>
+                            <li><a href="#">Progreso</a></li>
+                        </ul>
+                    </li>
+
+                {% else %}
                     <li>
                         <a href="#"><i class="fa fa-th-large"></i> <span
-                                class="nav-label">Mis Pacientes</span> </a>
+                                class="nav-label">Mis perfil</span> </a>
                         <ul class="nav nav-second-level collapse in">
                             <li><a href="#">Ver citas</a></li>
+                            <li><a href="#">Dietas</a></li>
+                            <li><a href="#">Progreso</a></li>
                         </ul>
                     </li>
                 {% endif %}
-                <hr>
-                <li>
-                    <a href="#"><i class="fa fa-user"></i> <span class="nav-label">Mi cuenta</span></a>
-                    <ul class="nav nav-second-level collapse in">
-                        <li><a href="#">Editar Perfil</a></li>
-                    </ul>
-                </li>
             </ul>
 
         </div>
