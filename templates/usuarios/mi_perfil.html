@@ -54,7 +54,7 @@
                     <h2>Tus citas pendientes.</h2>
                     {% for cita in citas_pendientes %}
                         <div class="cita_nutriologo">
-                            <p>Tienes cita con {{ cita.nutriologo.get_short_name }} el dia {{ cita.fecha|date }} a las {{ cita.fecha|time }}</p>
+                            <p>Tienes cita con  <a href="{% url 'usuarios_app:perfil_paciente' cita.nutriologo.username %}">{{ cita.nutriologo.get_short_name }}</a>  el dia {{ cita.fecha|date }} a las {{ cita.fecha|time }}</p>
                             <p>Informacion Extra : {{ cita.mensaje }}</p>
                         </div>
                     {% endfor %}
@@ -114,7 +114,7 @@
                             {% csrf_token %}
                             {% for cita in citas_aplicadas_nutriologo %}
                                 <div class="cita-aplicada">
-                                    <h4>Tienes cita con {{ cita.paciente.get_short_name }} el dia {{ cita.fecha|date }} a las {{ cita.fecha|time }}</h4>
+                                    <h4>Tienes cita con <a href="{% url 'usuarios_app:perfil_paciente' cita.paciente.username %}">{{ cita.paciente.get_short_name }}</a>  el dia {{ cita.fecha|date }} a las {{ cita.fecha|time }}</h4>
                                     <p>¿Ya sabes que dieta necesita el paciente? Genera su Dieta ! :D </p>
                                     <form method="POST" action="{% url 'nutriologo_app:crear_dieta' %}" accept-charset="utf-8" enctype="multipart/form-data">
                                         {% csrf_token %}

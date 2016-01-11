@@ -155,15 +155,18 @@ class terminar_registro_Form(forms.ModelForm):
             self._errors['email'] = self.error_class(["Necesitamos una cuenta de correo para poder crea tu cuenta"])
             valido = False
         else:
+            return cleaned_data
+
+            '''
             try:
                 usuario = Usuario.objects.get(email=email)
                 self._errors['email'] = self.error_class(["Ya existe un usuario con ese email, disculpa"])
                 valido = False
                 # print(usuario)
-
             except Exception as e:
                 # logger.exception(e)
                 pass
+            '''
         if (valido):
             return cleaned_data
 
