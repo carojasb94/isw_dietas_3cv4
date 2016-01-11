@@ -14,7 +14,8 @@ import pytz
 from apps.nutriologo.forms import Actualizar_a_Nutriologo_form, Actualizar_Horarios_form
 from apps.nutriologo.models import Peticion_para_Ser_Nutriologo
 from apps.usuarios.constantes import mensaje_nutriologo
-from apps.usuarios.funciones import inicializar_estructura_usuario, tiene_citas_pasadas, tiene_citas_pendientes
+from apps.usuarios.funciones import inicializar_estructura_usuario, tiene_citas_pasadas, tiene_citas_pendientes, \
+    tiene_citas_pendientes_nutriologo
 
 from .forms import LoginForm, SignUpForm, DesactivarForm, terminar_registro_Form
 

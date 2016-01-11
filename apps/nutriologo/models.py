@@ -55,15 +55,15 @@ class Horario_de_nutriologo(models.Model):
 
 
 class Cita(models.Model):
-    nutriologo = models.ForeignKey(Usuario, related_name='nutriologo')
-    paciente = models.ForeignKey(Usuario,related_name='paciente')
+    nutriologo = models.ForeignKey(Usuario, related_name='cita_nutriologo')
+    paciente = models.ForeignKey(Usuario,related_name='cita_paciente')
     fecha = models.DateTimeField(default=datetime.now())
     mensaje = models.CharField(max_length=100, default='', blank=True)
     status = models.CharField(choices=(('aplicada','aplicada'),('pendiente','pendiente'),('sin_estado','sin_estado')), max_length=30, default="sin_estado")
 
 class Dieta(models.Model):
-    nutriologo = models.ForeignKey(Usuario, related_name='nutriologo')
-    paciente = models.ForeignKey(Usuario,related_name='paciente')
+    nutriologo = models.ForeignKey(Usuario, related_name='dieta_nutriologo')
+    paciente = models.ForeignKey(Usuario,related_name='dieta_paciente')
     fecha = models.DateTimeField(default=datetime.now())
     mensaje = models.CharField(max_length=100, default='', blank=True)
     status = models.CharField(choices=(('vigente','vigente'),('pasada','pasada')), max_length=30, default="vigente")
