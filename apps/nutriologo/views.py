@@ -1,9 +1,11 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 # Create your views here.
 from apps.nutriologo.forms import agendar_cita_form
 
 
+@login_required
 def agendar_cita(request):
     print('agendar_cita')
     print(request)

@@ -203,6 +203,7 @@ def perfil_paciente(request, username):
 
 
 ##  Guardar Horarios
+@login_required
 def actualizar_horarios_nutriologo(request):
     print(request)
     if request.method=='POST':
@@ -250,6 +251,7 @@ def actualizar_a_nutriologo(request):
         raise Http404("Ocurrio un error, vuelva a intentarlo "+str(e)+' '+str(e.args))
 
 
+@login_required
 def solicitud_enviada(request):
     print('solicitud_enviada')
     return render(request, 'usuarios/solicitud_enviada.html',{})
