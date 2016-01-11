@@ -235,11 +235,12 @@ def actualizar_a_nutriologo(request):
 
             if actualizar_a_nutriologo_form.is_valid():
                 print('form valido')
-                Peticion_para_Ser_Nutriologo(mensaje = mensaje_nutriologo%(request.user.username),
+                Peticion_para_Ser_Nutriologo.objects.create(mensaje = mensaje_nutriologo%(request.user.username),
                                              usuario = request.user,
                                              cedula = request.FILES['cedula'],
                                              )
                 #actualizar_a_nutriologo_form.save()
+                request.session['done'] = 'ok'
                 return redirect(reverse('usuarios_app:solicitud_enviada'))
             else:
                 print('form no valido')
@@ -254,9 +255,11 @@ def actualizar_a_nutriologo(request):
 
 @login_required
 def solicitud_enviada(request):
-    print('solicitud_enviada')
-    return render(request, 'usuarios/solicitud_enviada.html',{})
-
+    if 'done' in request.session:
+        del request.session['done']
+        print('solicitud_enviada')
+        return render(request, 'usuarios/solicitud_enviada.html',{})
+    raise Http404("Tu no deberias de estar aqui tampoco D= ")
 
 '''
 @login_required
