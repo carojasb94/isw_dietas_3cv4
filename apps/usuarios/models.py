@@ -35,6 +35,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     status = models.BooleanField(default=False)  # para validar al usuario
     avatar = models.URLField(blank=True)  # necesario para captar la imagen  de perfil de su red social
 
+
     niveles = (("nutriologo", "nutriologo"),
                ("paciente", "paciente"),
                ("inactivo","inactivo")
