@@ -1,11 +1,16 @@
+{% if mi_perfil %}
+    {% extends 'base/perfil_usuario_2.html' %}
+{% else %}
+    {% extends 'base/base_no_sidebar.html' %}
+{% endif %}
 
-{% extends 'base/base_no_sidebar.html' %}
 {% load staticfiles %}
 {% load humanize %}
 
 
 {% block title %}
-    {% if mi_perfil %}Mi perfil{% else %}{{ user.username }}{% endif %}
+    {% if mi_perfil %}Mi perfil
+    {% else %}{{ user.username }}{% endif %}
 {% endblock %}
 
 
