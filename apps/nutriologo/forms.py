@@ -4,7 +4,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from apps.usuarios.models import Usuario
-from apps.nutriologo.models import Peticion_para_Ser_Nutriologo
+from apps.nutriologo.models import Peticion_para_Ser_Nutriologo, Horario_de_nutriologo
 
 class Actualizar_a_Nutriologo_form(forms.ModelForm):
     '''
@@ -38,7 +38,7 @@ class Actualizar_a_Nutriologo_form(forms.ModelForm):
 ##***********
 class Actualizar_Horarios_form(forms.ModelForm):
     class Meta:
-        model = Peticion_para_Ser_Nutriologo
+        model = Horario_de_nutriologo
         fields = \
             ('lunes_inicio','lunes_fin',
              'martes_inicio','martes_fin',
