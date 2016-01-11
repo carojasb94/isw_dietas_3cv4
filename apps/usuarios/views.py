@@ -31,6 +31,7 @@ def log_in(request):
 
     if request.user.is_authenticated():
         print('usuario ya autenticado')
+        url_redireccion = reverse('usuarios_app:perfil_paciente', kwargs={'username':user.username})
         return redirect(url_redireccion)
 
     if request.method == 'POST':
