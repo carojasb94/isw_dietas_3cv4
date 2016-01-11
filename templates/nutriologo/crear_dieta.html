@@ -14,9 +14,34 @@
 
 
 {% block content %}
-    {% if sucess %}
-        <h4>Exito al agendar la cita, puedes consultar mas detalles en tu perfil </h4>
-    {% endif %}
+    <div class="row">
+        {% if success %}
+            <div class="col-lg-6 p-md">
+                <h4>Exito al agendar la cita, puedes consultar mas detalles en tu perfil </h4>
+            </div>
+        {% endif %}
+            <div class="col-lg-8 p-md">
+                <form method="POST" accept-charset="utf-8" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% for field in formulario_dieta %}
+                        <div class="form-group {% if field.errors %}has-error{% endif %} ">
+                            {{ field.label_tag }}<br>
+                            {{ field }}
+                            {% if field.errors %}
+                                {% for error in field.errors %}
+                                    <span class="text-danger pull-right">
+                                        {{ error|safe }}&nbsp;
+                                        <i class="fa fa-exclamation-circle text-danger"></i>
+                                    </span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <input type="submit" value="Generar su Dieta" name="btn_dieta_form">
+                </form>
+            </div>
+    </div>
+
 
 
 {% endblock %}

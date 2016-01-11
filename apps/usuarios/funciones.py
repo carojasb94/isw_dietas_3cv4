@@ -25,7 +25,7 @@ def tiene_citas_pasadas(usuario):
 
 def tiene_citas_pendientes_nutriologo(usuario):
     print('tiene_citas aplicadas nutriologo')
-    citas = Cita.objects.filter(nutriologo=usuario).filter(status='aplicada').exclude(status='sin_estado')
+    citas = Cita.objects.filter(nutriologo=usuario).filter(status='pendiente').exclude(status='sin_estado')
     return citas
 
 

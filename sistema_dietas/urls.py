@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^', include('apps.home.urls', namespace='home_app')),
     url(r'^', include('apps.dieta.urls', namespace='dietas_app')),
     url(r'^', include('apps.chat.urls', namespace='chat_app')),
+    url(r'^', include('apps.nutriologo.urls', namespace='nutriologo_app')),
 
 
     url(r'^reset/password_reset/$', 'django.contrib.auth.views.password_reset', name='reset_password_reset1'),

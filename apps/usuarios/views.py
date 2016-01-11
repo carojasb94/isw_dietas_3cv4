@@ -32,7 +32,7 @@ def log_in(request):
 
     if request.user.is_authenticated():
         print('usuario ya autenticado')
-        url_redireccion = reverse('usuarios_app:perfil_paciente', kwargs={'username':user.username})
+        url_redireccion = reverse('usuarios_app:perfil_paciente', kwargs={'username':request.user.username})
         return redirect(url_redireccion)
 
     if request.method == 'POST':
@@ -224,7 +224,7 @@ def actualizar_horarios_nutriologo(request):
         print(formulario)
         if formulario.is_valid():
             print('el formulario de horarios fue valido')
-            return redirect(reverse('usuarios_app:perfil_paciente',kwargs={'username':request.user.username}))
+            return redirect(reverse('usuarios_app:perfil_paciente',kwargs={'username':request.user.username},args={'success':True}))
 
     raise Http404("Tu no deberias de estar aqui D= : ")
 

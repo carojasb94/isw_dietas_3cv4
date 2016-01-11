@@ -16,10 +16,13 @@
 {% block content %}
 
     <div class="row">
-        <div class="col-md-4 p-md">
+        {% if success %}
+            <div class="col-lg-6 p-md">
+                <h3 style="color: darkred">Exito al agendar tu Cita ! :D </h3>
+            </div>
+        {% endif %}
+        <div class="col-lg-6 p-md">
             <h2>
-            {{ formulario_horarios.media }}
-
                 Perfil
                 <a class="btn btn-link btn-xs m-l-md" href="#" data-toggle="modal" data-target="#modal-perfil">
                     <i class="fa fa-pencil"></i>&nbsp;Editar datos
@@ -42,83 +45,94 @@
             <p>Teléfono : {{ usuario.telefono }}</p>
             <p>Nombre : {{ usuario.nombre }}</p>
             <p>Apellidos : {{ usuario.apellidos }}</p>
-            <img src="{{ usuario.avatar }}">
+        </div>
 
-            {% if no_soy_nutriologo %}
-                <p>¿Eres un nutriologo?</p>
-                {# Boton para que el usuario pueda solicitar su cambio a nutriologo #}
-                <div class="col-md-4 col-md-2 col-md-offset-3">
-                    <a class="btn-primary " href="{% url 'usuarios_app:actualizar_a_nutriologo' %}" value="Quiero ser nutriologo">Quiero ser nutriologo</a>
+        {% if no_soy_nutriologo %}
+            {# Boton para que el usuario pueda solicitar su cambio a nutriologo #}
+            {% if citas_pendientes %}
+                <div class="col-md-7">
+                    <h2>Tus citas pendientes.</h2>
+                    {% for cita in citas_pendientes %}
+                        <div class="cita_nutriologo">
+                            <p>Tienes cita con {{ cita.nutriologo.get_short_name }} el dia {{ cita.fecha|date }} a las {{ cita.fecha|time }}</p>
+                            <p>Informacion Extra : {{ cita.mensaje }}</p>
+                        </div>
+                    {% endfor %}
                 </div>
             {% else %}
-            {# Si el usuario no ha terminado sus horarios, se le pide que los termine de llenar #}
-                {% if not usuario.termino_horarios %}
-                    {#  #}
-                    <div class="col-md-4 p-md">
-                        <h3>Por favor llena tus horarios disponibles para que podamos agendar citas segun tu tiempo</h3>
-                        <form method="POST" action="{% url 'usuarios_app:actualizar_horarios_nutriologo' %}">
-                            {% csrf_token %}
-                            {% for field in formulario_horarios %}
-                                <div class="form-group {% if field.errors %}has-error{% endif %} ">
-                                    {{ field.label_tag }}
-                                    {{ field }}
-                                    {% if field.errors %}
-                                        {% for error in field.errors %}
-                                            <span class="text-danger pull-right">
-                                                {{ error|safe }}&nbsp;
-                                                <i class="fa fa-exclamation-circle text-danger"></i>
-                                            </span>
-                                        {% endfor %}
-                                    {% endif %}
-                                </div>
-                            {% endfor %}
-                        </form>
+                <div class="col-md-7">
+                    <h2>No tienes Citas pendientes.</h2>
+                </div>
+            {% endif %}
+            {% if citas_pasadas %}
+                    <div class="col-md-7">
+                        <h2>Tus Historial de citas.</h2>
+                        {% for cita in citas_pendientes %}
+                            <div class="cita_nutriologo">
+                                <p>Cita con {{ cita.nutriologo.get_short_name }} el dia {{ cita.fecha|date }}</p>
+                                <p>Extra {{ cita.mensaje }}</p>
+                            </div>
+                        {% endfor %}
                     </div>
-                {% else %}
-                    {# Aqui van las citas aplicadas que tiene el Nutriologo #}
-                    {% if citas_aplicadas_nutriologo  %}
-                        <div class="col-md-4 p-md">
-                            <h3>Tus Citas Futuras/Pendientes</h3>
-                                {% csrf_token %}
-                                {% for cita in citas_aplicadas_nutriologo %}
-                                    <div class="cita-aplicada">
-                                        <h3>{{ cita.paciente }} </h3>
-                                    </div>
-                                    <form method="POST" action="{% url 'usuarios_app:actualizar_horarios_nutriologo' %}">
+            {% endif %}
+
+            <div class="col-lg-4">
+                <p>¿Eres un nutriologo?     Atiende pacientes de EDS ! :D</p>
+                <a class="btn-primary " href="{% url 'usuarios_app:actualizar_a_nutriologo' %}" value="Quiero ser nutriologo">Quiero ser nutriologo</a>
+            </div>
+
+
+        {% else %}
+        {# Si el usuario no ha terminado sus horarios, se le pide que los termine de llenar #}
+            {% if not usuario.termino_horarios %}
+                {#  #}
+                <div class="col-lg-12">
+                    <h3>Por favor llena tus horarios disponibles para que podamos agendar citas segun tu tiempo</h3>
+                    <form method="POST" action="{% url 'usuarios_app:actualizar_horarios_nutriologo' %}">
+                        {% csrf_token %}
+                        {% for field in formulario_horarios %}
+                            <div class="form-group {% if field.errors %}has-error{% endif %} ">
+                                {{ field.label_tag }}
+                                {{ field }}
+                                {% if field.errors %}
+                                    {% for error in field.errors %}
+                                        <span class="text-danger pull-right">
+                                            {{ error|safe }}&nbsp;
+                                            <i class="fa fa-exclamation-circle text-danger"></i>
+                                        </span>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </form>
+                </div>
+            {% else %}
+                {# Aqui van las citas aplicadas que tiene el Nutriologo #}
+                {% if citas_aplicadas_nutriologo  %}
+                    <div class="col-md-4 p-md">
+                        <h3>Tus Citas Futuras/Pendientes de generar Dieta </h3>
+                            {% csrf_token %}
+                            {% for cita in citas_aplicadas_nutriologo %}
+                                <div class="cita-aplicada">
+                                    <h4>Tienes cita con {{ cita.paciente.get_short_name }} el dia {{ cita.fecha|date }} a las {{ cita.fecha|time }}</h4>
+                                    <p>¿Ya sabes que dieta necesita el paciente? Genera su Dieta ! :D </p>
+                                    <form method="POST" action="{% url 'nutriologo_app:crear_dieta' %}" accept-charset="utf-8" enctype="multipart/form-data">
+                                        {% csrf_token %}
                                         <input type="hidden" value="{{ cita.paciente.id }}" name="id_paciente">
                                         <input type="submit" name="btn_generar_dieta_paciente" value="generar Dieta">
                                     </form>
-                                {% endfor %}
-                        </div>
-                    {% else %}
-                        {# no tiene citas pendientes el nutriologo #}
-                        <h4>No tienes citas pendientes :( </h4>
-                    {% endif %}
-                {% endif %}
-
-            {% endif %}
-            {# veremos si tiene itas pendientes, o ya echas del usuario y las mostraremos #}
-                {% if citas_pendientes %}
-                    <div class="col-md-7">
-                        <h2>Tus citas pendientes.</h2>
-                        {% for cita in citas_pendientes %}
-                            <p>{{ cita }}</p>
-                        {% endfor %}
+                                </div>
+                            {% endfor %}
                     </div>
                 {% else %}
-                    <div class="col-md-7">
-                        <h2>No tienes Citas pendientes.</h2>
+                    {# no tiene citas pendientes el nutriologo #}
+                    <div class="col-md-4 p-md">
+                        <h4>No tienes citas pendientes :( </h4>
                     </div>
                 {% endif %}
-                {% if citas_pasadas %}
-                        <div class="col-md-7">
-                            <h2>Tus Historial de citas.</h2>
-                            {% for cita in citas_pendientes %}
-                                <p>{{ cita }}</p>
-                            {% endfor %}
-                        </div>
-                {% endif %}
-        </div>
+            {% endif %}
+
+        {% endif %}
 
         {# comment #}
 {% endblock %}

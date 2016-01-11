@@ -119,7 +119,7 @@ class crear_dieta_form(forms.ModelForm):
     class Meta:
         model = Dieta
 
-        fields = ('mensaje','carbohidratos','azucares','lipidos','proteinas')
+        fields = ('carbohidratos','azucares','lipidos','proteinas','mensaje')
 
         widgets = {'mensaje':forms.Textarea(),
                    'carbohidratos': forms.Textarea(),
