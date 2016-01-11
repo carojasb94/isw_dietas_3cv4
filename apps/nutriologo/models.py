@@ -32,20 +32,20 @@ class Peticion_para_Ser_Nutriologo(models.Model):
 
 class Horario_de_nutriologo(models.Model):
     nutriologo = models.ForeignKey(Usuario)
-    lunes_inicio = models.DateTimeField(null=True,blank=True)
-    lunes_fin = models.DateTimeField(null=True,blank=True)
-    martes_inicio = models.DateTimeField(null=True,blank=True)
-    martes_fin = models.DateTimeField(null=True,blank=True)
-    miercoles_inicio = models.DateTimeField(null=True,blank=True)
-    miercoles_fin = models.DateTimeField(null=True,blank=True)
-    jueves_inicio = models.DateTimeField(null=True,blank=True)
-    jueves_fin = models.DateTimeField(null=True,blank=True)
-    viernes_inicio = models.DateTimeField(null=True,blank=True)
-    viernes_fin = models.DateTimeField(null=True,blank=True)
-    sabado_inicio = models.DateTimeField(null=True,blank=True)
-    sabado_fin = models.DateTimeField(null=True,blank=True)
-    domingo_inicio = models.DateTimeField(null=True,blank=True)
-    domingo_fin = models.DateTimeField(null=True,blank=True)
+    lunes_inicio = models.TimeField(null=True,blank=True, default = datetime.now().replace(hour=10, minute=00, second=00) )
+    lunes_fin = models.TimeField(null=True,blank=True, default=datetime.now().replace(hour=16, minute=00, second=00))
+    martes_inicio = models.TimeField(null=True,blank=True, default=datetime.now().replace(hour=10, minute=00, second=00))
+    martes_fin = models.TimeField(null=True,blank=True, default=datetime.now().replace(hour=16, minute=00, second=00))
+    miercoles_inicio = models.TimeField(null=True,blank=True, default=datetime.now().replace(hour=10, minute=00, second=00))
+    miercoles_fin = models.TimeField(null=True,blank=True, default=datetime.now().replace(hour=16, minute=00, second=00))
+    jueves_inicio = models.TimeField(null=True,blank=True, default=datetime.now().replace(hour=10, minute=00, second=00))
+    jueves_fin = models.TimeField(null=True,blank=True, default=datetime.now().replace(hour=16, minute=00, second=00))
+    viernes_inicio = models.TimeField(null=True,blank=True, default=datetime.now().replace(hour=10, minute=00, second=00))
+    viernes_fin = models.TimeField(null=True,blank=True, default=datetime.now().replace(hour=16, minute=00, second=00))
+    sabado_inicio = models.TimeField(null=True,blank=True, default=datetime.now().replace(hour=10, minute=00, second=00))
+    sabado_fin = models.TimeField(null=True,blank=True, default=datetime.now().replace(hour=16, minute=00, second=00))
+    domingo_inicio = models.TimeField(null=True,blank=True, default=datetime.now().replace(hour=10, minute=00, second=00))
+    domingo_fin = models.TimeField(null=True,blank=True, default=datetime.now().replace(hour=16, minute=00, second=00))
 
     def __str__(self):
         return self.nutriologo
@@ -60,6 +60,18 @@ class Cita(models.Model):
     fecha = models.DateTimeField(default=datetime.now())
     mensaje = models.CharField(max_length=100, default='', blank=True)
     status = models.CharField(choices=(('aplicada','aplicada'),('pendiente','pendiente'),('sin_estado','sin_estado')), max_length=30, default="sin_estado")
+
+class Dieta(models.Model):
+    nutriologo = models.ForeignKey(Usuario, related_name='nutriologo')
+    paciente = models.ForeignKey(Usuario,related_name='paciente')
+    fecha = models.DateTimeField(default=datetime.now())
+    mensaje = models.CharField(max_length=100, default='', blank=True)
+    status = models.CharField(choices=(('vigente','vigente'),('pasada','pasada')), max_length=30, default="vigente")
+
+
+
+
+
 
 
 

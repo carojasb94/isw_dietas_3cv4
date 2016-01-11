@@ -13,14 +13,19 @@ def inicializar_estructura_usuario(usuario):
 
 
 def tiene_citas_pendientes(usuario):
-    print('tiene_citas')
+    print('tiene_citas pendientes')
     citas = Cita.objects.filter(paciente=usuario).filter(status='pendiente').exclude(status='sin_estado')
     return citas
 
 def tiene_citas_pasadas(usuario):
-    print('tiene_citas')
+    print('tiene_citas aplicadas')
     citas = Cita.objects.filter(paciente=usuario).filter(status='aplicada').exclude(status='sin_estado')
     return citas
 
+
+def tiene_citas_pendientes_nutriologo(usuario):
+    print('tiene_citas aplicadas nutriologo')
+    citas = Cita.objects.filter(nutriologo=usuario).filter(status='aplicada').exclude(status='sin_estado')
+    return citas
 
 

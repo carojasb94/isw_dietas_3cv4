@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from apps.usuarios.models import Usuario
 from apps.nutriologo.models import Peticion_para_Ser_Nutriologo, Horario_de_nutriologo, Cita
-
+from datetimewidget.widgets import DateTimeWidget
 
 class Actualizar_a_Nutriologo_form(forms.ModelForm):
     '''
@@ -50,29 +50,36 @@ class Actualizar_Horarios_form(forms.ModelForm):
              'domingo_inicio','domingo_fin')
 
         widgets = {
-            'lunes_inicio': forms.DateTimeInput(),
-            'lunes_fin': forms.DateTimeInput(),
-            'martes_inicio': forms.DateTimeInput(),
-            'martes_fin': forms.DateTimeInput(),
-            'miercoles_inicio': forms.DateTimeInput(),
-            'miercoles_fin': forms.DateTimeInput(),
-            'jueves_inicio': forms.DateTimeInput(),
-            'jueves_fin': forms.DateTimeInput(),
-            'viernes_inicio': forms.DateTimeInput(),
-            'viernes_fin': forms.DateTimeInput(),
-            'sabado_inicio': forms.DateTimeInput(),
-            'sabado_fin': forms.DateTimeInput(),
-            'domingo_inicio': forms.DateTimeInput(),
-            'domingo_fin': forms.DateTimeInput(),
+            'lunes_inicio': forms.TimeInput(format='%H:%M'),
+            'lunes_fin': forms.TimeInput(format='%H:%M'),
+            'martes_inicio': forms.TimeInput(format='%H:%M'),
+            'martes_fin': forms.TimeInput(format='%H:%M'),
+            'miercoles_inicio': forms.TimeInput(format='%H:%M'),
+            'miercoles_fin': forms.TimeInput(format='%H:%M'),
+            'jueves_inicio': forms.TimeInput(format='%H:%M'),
+            'jueves_fin': forms.TimeInput(format='%H:%M'),
+            'viernes_inicio': forms.TimeInput(format='%H:%M'),
+            'viernes_fin': forms.TimeInput(format='%H:%M'),
+            'sabado_inicio': forms.TimeInput(format='%H:%M'),
+            'sabado_fin': forms.TimeInput(format='%H:%M'),
+            'domingo_inicio': forms.TimeInput(format='%H:%M'),
+            'domingo_fin': forms.TimeInput(format='%H:%M'),
         }
         labels = {
-            'lunes': _("Tu rango de horario libre en Lunes"),
-            'martes': _("Tu rango de horario libre en Martes"),
-            'miercoles': _("Tu rango de horario libre en Miercoles"),
-            'jueves': _("Tu rango de horario libre en Jueves"),
-            'viernes': _("Tu rango de horario libre en Viernes"),
-            'sabado': _("Tu rango de horario libre en Sabado"),
-            'domingo': _("Tu rango de horario libre en Domingo"),
+            'lunes_inicio': _("Desde"),
+            'lunes_fin': _("Hasta"),
+            'martes_inicio': _("Desde"),
+            'martes_fin': _("Hasta"),
+            'miercoles_inicio': _("Desde"),
+            'miercoles_fin': _("Hasta"),
+            'jueves_inicio': _("Desde"),
+            'jueves_fin': _("Hasta"),
+            'viernes_inicio': _("Desde"),
+            'viernes_fin': _("Hasta"),
+            'sabado_inicio': _("Desde"),
+            'sabado_fin': _("Hasta"),
+            'domingo_inicio': _("Desde"),
+            'domingo_fin': _("Hasta"),
         }
 
     def clean(self):
@@ -82,7 +89,8 @@ class Actualizar_Horarios_form(forms.ModelForm):
         #print(cleaned_data['cedula'])
         return cleaned_data
 
-
+    def __init__(self, *args, **kwargs):
+        super(Actualizar_Horarios_form, self).__init__(*args, **kwargs)
 
 
 

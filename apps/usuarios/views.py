@@ -176,10 +176,18 @@ def perfil_paciente(request, username):
             if username == request.user.username:
                 print("es propietario del perfil")
 
+                citas_pendientes = list()
+                citas_pasadas = list()
+                citas_aplicadas_nutriologo = list()
 
-                #   Veremos si tiene citas el usuario
-                citas_pendientes = tiene_citas_pendientes(usuario)
-                citas_pasadas = tiene_citas_pasadas(usuario)
+                usuario_dueno = request.user
+                if usuario_dueno.is_nutriologo:
+                    pass
+                    citas_aplicadas_nutriologo = tiene_citas_pendientes_nutriologo(usuario_dueno)
+                else:
+                    #   Veremos si tiene citas el usuario
+                    citas_pendientes = tiene_citas_pendientes(usuario)
+                    citas_pasadas = tiene_citas_pasadas(usuario)
                 return render(request, 'usuarios/mi_perfil.html',{'anonimo' : False,
                                                                   'mi_perfil': True,
                                                                   'no_soy_nutriologo': (not request.user.is_nutriologo),
@@ -187,6 +195,7 @@ def perfil_paciente(request, username):
                                                                   'usuario': request.user,
                                                                   'citas_pendientes':citas_pendientes,
                                                                   'citas_pasadas':citas_pasadas,
+                                                                  'citas_aplicadas_nutriologo':citas_aplicadas_nutriologo,
                                                                   })
             #sacamos de la base de datos la demas informacion del usuario que que estan visitando su perfil
             #Un usuario logueado esta viendo el perfil de alguien mas

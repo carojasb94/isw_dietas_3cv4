@@ -80,6 +80,7 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.security.SecurityMiddleware',
     # 'django_user_agents.middleware.UserAgentMiddleware',
     'apps.usuarios.middleware.CustomSocialAuthExceptionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 )
 
 AUTHENTICATION_BACKENDS = (
