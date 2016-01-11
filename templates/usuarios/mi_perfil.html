@@ -1,0 +1,90 @@
+{% extends 'base/perfil_usuario_2.html' %}
+
+{% load staticfiles %}
+{% load humanize %}
+
+
+{% block title %}
+    {% if mi_perfil %}Mi perfil{% else %}{{ user.username }}{% endif %}
+{% endblock %}
+
+
+{% block styles %}
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-sm-7">
+            {% if user.is_superuser %}
+                <h4>NOTA* al ingresar a la direccion /admin  se entra a la URL para administradores de la pagina</h4>
+            {% else %}
+                <h4>mi informacion </h4>
+            {% endif %}
+        </div>
+
+        <div class="col-sm-5">
+                Username: {{ usuario.username }}
+            <br>
+                Nombre : {{ usuario.nombre }}
+            <br>
+                Apellidos : {{ usuario.apellidos }}
+            <br>
+                <img src="{{ usuario.avatar }}">
+            <br>
+                Email : {{ usuario.email }}
+            <br>
+                Soy {{ usuario.nivel }}
+            <br>
+
+            {# Boton para que el usuario pueda solicitar su cambio a nutriologo #}
+            <div class="col-xs-4 col-md-2 col-md-offset-3">
+            <input type="button" href="{% url 'usuarios_app:actualizar_a_nutriologo' %}" value="Quiero ser nutriologo">
+
+                <a href="{% url 'usuarios_app:actualizar_a_nutriologo' %}"
+                   class="btn btn-primary btn-block btn-facebook">
+                    <i class="fa m-r-sm"></i> <span class="hidden-sm">Quiero ser nutriologo</span>
+                </a>
+            </div>
+        </div>
+
+
+        <div class="col-md-4 p-md">
+            <h2>
+                Perfil
+                <a class="btn btn-link btn-xs m-l-md" href="#" data-toggle="modal" data-target="#modal-perfil">
+                    <i class="fa fa-pencil"></i>&nbsp;Editar datos
+                </a>
+            </h2>
+            <p>Usuario desde: {{ user.fecha_registro|date }}</p>
+            <p>Fecha de nacimiento: {{ perfil.fechaNac|date }}</p>
+            <p>Sexo: {{ perfil.sexo }}</p>
+            <p>CP : {{ perfil.codigoPostal }}</p>
+            <p>Pais : {{ perfil.pais }}</p>
+            <p>Teléfono : {{ perfil.telefono }}</p>
+            <p>Celular : {{ perfil.celular }}</p>
+
+            <p>Username : {{ usuario.username }}</p>
+            <p>Nombre : {{ usuario.nombre }}</p>
+            <p>Apellidos : {{ usuario.apellidos }}</p>
+            <img src="{{ usuario.avatar }}">
+            <p>Email : {{ usuario.email }}</p>
+            <p>Soy {{ usuario.nivel }}</p>
+            {% if usuario.is_nutriologo  %}
+                <h3>Soy Nutriologo :D </h3>
+            {% endif %}
+        </div>
+
+        {# comment #}
+{% endblock %}
+
+
+{% block scripts %}
+    {# Se especifican aqui los scripts #}
+
+
+{% endblock %}
+
+
+

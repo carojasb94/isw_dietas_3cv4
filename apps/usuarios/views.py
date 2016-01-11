@@ -175,7 +175,7 @@ def perfil_paciente(request, username):
             if username == request.user.username:
                 print("es propietario del perfil")
 
-                return render(request, 'usuarios/perfil_paciente.html',{'anonimo' : False,
+                return render(request, 'usuarios/mi_perfil.html',{'anonimo' : False,
                                                                         'mi_perfil' : True,
                                                                         'usuario': inicializar_estructura_usuario(request.user),
                                                                     })
