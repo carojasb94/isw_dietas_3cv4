@@ -166,9 +166,9 @@ def perfil_usuario(request, username):
 def perfil_paciente(request, username):
     print('perfil paciente')
     print(username)
-    try:
+    #try:
+    if True:
         usuario = Usuario.objects.get(username=username)
-
         if request.user.is_authenticated():
             print("usuario loggeado")
             print(request.user.username)
@@ -188,8 +188,8 @@ def perfil_paciente(request, username):
             return render(request, 'usuarios/perfil_paciente.html',{'anonimo':True,
                                                                     'usuario' : inicializar_estructura_usuario(usuario),
                                                                     })
-    except Exception as e:
-        raise Http404("No existe ese nombre de usuario D= : "+str(e),' '+str(e.args))
+    #except Exception as e:
+    #    raise Http404("No existe ese nombre de usuario D= : "+str(e),' '+str(e.args))
 
 
 

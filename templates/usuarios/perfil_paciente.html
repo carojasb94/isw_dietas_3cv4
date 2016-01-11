@@ -9,8 +9,7 @@
 
 
 {% block title %}
-    {% if mi_perfil %}Mi perfil
-    {% else %}{{ user.username }}{% endif %}
+    {% if mi_perfil %}Mi perfil{% else %}{{ user.username }}{% endif %}
 {% endblock %}
 
 
@@ -72,9 +71,7 @@
                 </a>
             </div>
 
-
     {# ALGUIEN LOGUEADO VISITA TU PERFIL #}
-
         {% else %}
 
             <br>
@@ -110,8 +107,6 @@
 
 {% block scripts %}
     {# Se especifican aqui los scripts #}
-
-
 {% endblock %}
 
 
