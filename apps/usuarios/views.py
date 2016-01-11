@@ -179,9 +179,11 @@ def perfil_paciente(request, username):
                                                                         'mi_perfil' : True,
                                                                         'usuario': inicializar_estructura_usuario(request.user),
                                                                     })
-            #sacamos de la base de datos la demas informacion del ysyarui al que kle estan visitando su perfil
+            #sacamos de la base de datos la demas informacion del usuario que que estan visitando su perfil
+            #Un usuario logueado esta viendo el perfil de alguien mas
             return render(request, 'usuarios/perfil_paciente.html',{'anonimo' : False,
                                                                     'mi_perfil' : False,
+                                                                    'no_soy_nutriologo': (not request.user.is_nutriologo),
                                                                     'usuario' : inicializar_estructura_usuario(usuario),
                                                                     })
         else:

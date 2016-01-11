@@ -5,7 +5,7 @@
 
 
 {% block title %}
-    {{ user.username }}
+    {{ usuario.username }}
 {% endblock %}
 
 
@@ -36,36 +36,6 @@
     {# CUANDO ENTRAS A TU PROPIO PERFIL  #}
         {% if mi_perfil %}
             <h3>Mi perfil </h3>
-
-            {% if user.is_superuser %}
-                <h4>NOTA* al ingresar a la direccion /admin  se entra a la URL para administradores de la pagina</h4>
-            {% endif %}
-            <h4>mi informacion </h4>
-
-            <br>
-                Username: {{ usuario.username }}
-            <br>
-                Nombre : {{ usuario.nombre }}
-            <br>
-                Apellidos : {{ usuario.apellidos }}
-            <br>
-                <img src="{{ usuario.avatar }}">
-            <br>
-                Email : {{ usuario.email }}
-            <br>
-                Soy {{ usuario.nivel }}
-            <br>
-
-            {# Boton para que el usuario pueda solicitar su cambio a nutriologo #}
-            <div class="col-xs-4 col-md-2 col-md-offset-3">
-            <input type="button" href="{% url 'usuarios_app:actualizar_a_nutriologo' %}" value="Quiero ser nutriologo">
-
-                <a href="{% url 'usuarios_app:actualizar_a_nutriologo' %}"
-                   class="btn btn-primary btn-block btn-facebook">
-                    <i class="fa m-r-sm"></i> <span class="hidden-sm">Quiero ser nutriologo</span>
-                </a>
-            </div>
-
     {# ALGUIEN LOGUEADO VISITA TU PERFIL #}
         {% else %}
 
@@ -82,7 +52,7 @@
             <br>
                 Soy {{ usuario.nivel }}
             <br>
-            {% if usuario.is_nutriologo  %}
+            {% if usuario.is_nutriologo and no_soy_nutriologo %}
                 <h3>Es un nutriologo :D </h3>
 
                 <div class="col-xs-4 col-md-2 col-md-offset-3">
