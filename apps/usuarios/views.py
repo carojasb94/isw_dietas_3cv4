@@ -14,7 +14,7 @@ import pytz
 from apps.nutriologo.forms import Actualizar_a_Nutriologo_form, Actualizar_Horarios_form
 from apps.nutriologo.models import Peticion_para_Ser_Nutriologo
 from apps.usuarios.constantes import mensaje_nutriologo
-from apps.usuarios.funciones import inicializar_estructura_usuario
+from apps.usuarios.funciones import inicializar_estructura_usuario, tiene_citas_pasadas, tiene_citas_pendientes
 
 from .forms import LoginForm, SignUpForm, DesactivarForm, terminar_registro_Form
 
@@ -175,11 +175,17 @@ def perfil_paciente(request, username):
             if username == request.user.username:
                 print("es propietario del perfil")
 
+
+                #   Veremos si tiene citas el usuario
+                citas_pendientes = tiene_citas_pendientes(usuario)
+                citas_pasadas = tiene_citas_pasadas(usuario)
                 return render(request, 'usuarios/mi_perfil.html',{'anonimo' : False,
                                                                   'mi_perfil': True,
                                                                   'no_soy_nutriologo': (not request.user.is_nutriologo),
                                                                   'formulario_horarios': Actualizar_Horarios_form(),
                                                                   'usuario': request.user,
+                                                                  'citas_pendientes':citas_pendientes,
+                                                                  'citas_pasadas':citas_pasadas,
                                                                   })
             #sacamos de la base de datos la demas informacion del usuario que que estan visitando su perfil
             #Un usuario logueado esta viendo el perfil de alguien mas

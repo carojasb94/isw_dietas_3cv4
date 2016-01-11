@@ -44,7 +44,6 @@
 
             {% if no_soy_nutriologo %}
                 <p>¿Eres un nutriologo?</p>
-
                 {# Boton para que el usuario pueda solicitar su cambio a nutriologo #}
                 <div class="col-xs-4 col-md-2 col-md-offset-3">
                     <a class="btn-primary " href="{% url 'usuarios_app:actualizar_a_nutriologo' %}" value="Quiero ser nutriologo">Quiero ser nutriologo</a>
@@ -74,6 +73,28 @@
                     {% endfor %}
                 </form>
             {% endif %}
+            {# veremos si tiene itas pendientes, o ya echas del usuario y las mostraremos #}
+                {% if citas_pendientes %}
+                    <div class="row">
+                        <div class="col-sm-7">
+                            <h2>Tus citas pendientes.</h2>
+                            {% for cita in citas_pendientes %}
+                                <p>{{ cita }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if citas_pasadas %}
+                    <div class="row">
+                        <div class="col-sm-7">
+                            <h2>Tus Historial de citas.</h2>
+                            {% for cita in citas_pendientes %}
+                                <p>{{ cita }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
 
         </div>
 

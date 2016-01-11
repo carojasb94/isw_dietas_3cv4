@@ -1,11 +1,36 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>Solicitud Enviada | EDS</title>
-</head>
-<body>
-    <h2>Tu solicitud para ser nutriologo sera revisada a la brevedad, espera un correo de confirmacion.</h2>
 
-</body>
-</html>
+{% extends 'base/base_no_sidebar.html' %}
+{% load staticfiles %}
+{% load humanize %}
+
+
+{% block title %}
+    Solicitud Enviada | EDS
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-sm-7">
+            <h2>Tu solicitud para ser nutriologo sera revisada a la brevedad, espera un correo de confirmacion.</h2>
+
+            <a href="{% url 'usuarios_app:perfil_paciente' user.username %}">Regresar a mi perfil</a>
+
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+{% block scripts %}
+{% endblock %}
+
+
+
+
+

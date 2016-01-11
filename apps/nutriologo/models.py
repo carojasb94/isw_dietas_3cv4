@@ -59,6 +59,7 @@ class Cita(models.Model):
     paciente = models.ForeignKey(Usuario,related_name='paciente')
     fecha = models.DateTimeField(default=datetime.now())
     mensaje = models.CharField(max_length=100, default='', blank=True)
+    status = models.CharField(choices=(('aplicada','aplicada'),('pendiente','pendiente'),('sin_estado','sin_estado')), max_length=30, default="sin_estado")
 
 
 
