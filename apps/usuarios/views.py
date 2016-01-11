@@ -176,11 +176,11 @@ def perfil_paciente(request, username):
                 print("es propietario del perfil")
 
                 return render(request, 'usuarios/mi_perfil.html',{'anonimo' : False,
-                                                                        'mi_perfil' : True,
-                                                                        'no_soy_nutriologo':(not request.user.is_nutriologo),
-                                                                        'formulario_horarios': Actualizar_Horarios_form(),
-                                                                        'usuario': request.user,
-                                                                    })
+                                                                  'mi_perfil': True,
+                                                                  'no_soy_nutriologo': (not request.user.is_nutriologo),
+                                                                  'formulario_horarios': Actualizar_Horarios_form(),
+                                                                  'usuario': request.user,
+                                                                  })
             #sacamos de la base de datos la demas informacion del usuario que que estan visitando su perfil
             #Un usuario logueado esta viendo el perfil de alguien mas
             return render(request, 'usuarios/perfil_paciente.html',{'anonimo' : False,
