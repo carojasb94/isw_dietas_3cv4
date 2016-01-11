@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>¡Checa tu Dieta!</title>
+</head>
+<body>
+    <p>Tu Nutriologo ya te ha mandado por escrito tu Dieta</p>
+    <p>{{ dieta.nutriologo.get_short_name }} te recomienda:</p>
+    <p>Lipidos : <b>{{ dieta.lipidos }}</b> </p>
+    <p>Carbohidratos : <b>{{ dieta.carbohidratos }}</b> </p>
+    <p>Azucares : <b>{{ dieta.azucares }}</b> </p>
+    <p>Proteinas : <b>{{ dieta.proteinas }}</b> </p>
+    {% if dieta.mensaje != '' %}
+        <p>Como informacion extra te sugiere : <b>{{ dieta.mensaje }}</b> </p>
+    {% endif %}
+</body>
+</html>
+

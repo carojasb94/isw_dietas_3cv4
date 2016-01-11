@@ -18,6 +18,7 @@ def aprobar_solicitud(self, request, queryset):
         #Buscamos al usuario para pasarlo a ser nutriologo
         Horario_de_nutriologo.objects.get_or_create(nutriologo=usuario)
         usuario.is_nutriologo = True
+        usuario.tipo = 'nutriologo'
         usuario.termino_horarios = True
         usuario.save()
         q.save()
