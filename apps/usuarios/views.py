@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.core import serializers
 
 import pytz
-from apps.nutriologo.forms import Actualizar_a_Nutriologo_form
+from apps.nutriologo.forms import Actualizar_a_Nutriologo_form, Actualizar_Horarios_form
 from apps.nutriologo.models import Peticion_para_Ser_Nutriologo
 from apps.usuarios.constantes import mensaje_nutriologo
 from apps.usuarios.funciones import inicializar_estructura_usuario
@@ -177,21 +177,40 @@ def perfil_paciente(request, username):
 
                 return render(request, 'usuarios/mi_perfil.html',{'anonimo' : False,
                                                                         'mi_perfil' : True,
-                                                                        'usuario': inicializar_estructura_usuario(request.user),
+                                                                        'no_soy_nutriologo':(not request.user.is_nutriologo),
+                                                                        'formulario_horarios': Actualizar_Horarios_form(),
+                                                                        'usuario': request.user,
                                                                     })
             #sacamos de la base de datos la demas informacion del usuario que que estan visitando su perfil
             #Un usuario logueado esta viendo el perfil de alguien mas
             return render(request, 'usuarios/perfil_paciente.html',{'anonimo' : False,
                                                                     'mi_perfil' : False,
                                                                     'no_soy_nutriologo': (not request.user.is_nutriologo),
-                                                                    'usuario' : inicializar_estructura_usuario(usuario),
+                                                                    'usuario' : usuario,
                                                                     })
         else:
             return render(request, 'usuarios/perfil_paciente.html',{'anonimo':True,
-                                                                    'usuario' : inicializar_estructura_usuario(usuario),
+                                                                    'usuario' : usuario,
                                                                     })
     #except Exception as e:
     #    raise Http404("No existe ese nombre de usuario D= : "+str(e),' '+str(e.args))
+
+
+##  Guardar Horarios
+def actualizar_horarios_nutriologo(request):
+    print(request)
+    if request.method=='POST':
+        print('request.POST')
+        print(request.POST)
+        formulario = Actualizar_Horarios_form(request.POST)
+        print(formulario)
+        if formulario.is_valid():
+            print('el formulario de horarios fue valido')
+            return redirect(reverse('usuarios_app:perfil_paciente',kwargs={'username':request.user.username}))
+
+    raise Http404("Tu no deberias de estar aqui D= : ")
+
+
 
 
 

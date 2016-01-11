@@ -26,34 +26,61 @@
             {% if user.is_superuser %}
                 <p>NOTA* al ingresar a la direccion /admin  se entra a la URL para administradores de la pagina</hp>
             {% endif %}
-
-            <p>Usuario desde: {{ user.fecha_registro|date }}</p>
-            <p>Fecha de nacimiento: {{ perfil.fechaNac|date }}</p>
-            <p>Sexo: {{ perfil.sexo }}</p>
-            <p>CP : {{ perfil.codigoPostal }}</p>
-            <p>Pais : {{ perfil.pais }}</p>
-            <p>Teléfono : {{ perfil.telefono }}</p>
-            <p>Celular : {{ perfil.celular }}</p>
-
             <p>Username : {{ usuario.username }}</p>
-            <p>Nombre : {{ usuario.nombre }}</p>
-            <p>Apellidos : {{ usuario.apellidos }}</p>
-            <img src="{{ usuario.avatar }}">
             <p>Email : {{ usuario.email }}</p>
             <p>Soy {{ usuario.nivel }}</p>
             {% if usuario.is_nutriologo  %}
                 <h3>Soy Nutriologo :D </h3>
             {% endif %}
 
-            {# Boton para que el usuario pueda solicitar su cambio a nutriologo #}
-            <div class="col-xs-4 col-md-2 col-md-offset-3">
-            <input type="button" href="{% url 'usuarios_app:actualizar_a_nutriologo' %}" value="Quiero ser nutriologo">
+            <p>Usuario desde: {{ usuario.fecha_registro|date }}</p>
+            <p>Fecha de nacimiento: {{ usuario.fecha_nacimiento|date }}</p>
+            <p>Sexo: {{ usuario.sexo }}</p>
+            <p>Codigo Postal : {{ usuario.codigo_postal}}</p>
+            <p>Teléfono : {{ usuario.telefono }}</p>
+            <p>Nombre : {{ usuario.nombre }}</p>
+            <p>Apellidos : {{ usuario.apellidos }}</p>
+            <img src="{{ usuario.avatar }}">
 
-                <a href="{% url 'usuarios_app:actualizar_a_nutriologo' %}"
-                   class="btn btn-primary btn-block btn-facebook">
-                    <i class="fa m-r-md"></i> <span class="hidden-sm">Quiero ser nutriologo</span>
-                </a>
-            </div>
+            {% if no_soy_nutriologo %}
+
+                {# Boton para que el usuario pueda solicitar su cambio a nutriologo #}
+                <div class="col-xs-4 col-md-2 col-md-offset-3">
+                <input type="button" href="{% url 'usuarios_app:actualizar_a_nutriologo' %}" value="Quiero ser nutriologo">
+
+                    <a href="{% url 'usuarios_app:actualizar_a_nutriologo' %}"
+                       class="btn btn-primary btn-block btn-facebook">
+                        <i class="fa fa-facebook"></i> <span class="hidden-sm">Quiero ser nutriologo</span>
+                    </a>
+                </div>
+            {% else %}
+            {# Si el usuario no ha terminado sus horarios, se le pide que los termine de llenar #}
+                {% if not usuario.termino_horarios %}
+                    {#  #}
+                    <div class="col-md-4 p-md">
+                        <h3>Por favor llena tus horarios disponibles para que podamos agendar citas segun tu tiempo</h3>
+                {% endif %}
+                <form method="POST" action="{% url 'usuarios_app:actualizar_horarios_nutriologo' %}">
+                    {% csrf_token %}
+                    {% for field in formulario_horarios %}
+                        <div class="form-group {% if field.errors %}has-error{% endif %} ">
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {% if field.errors %}
+                                {% for error in field.errors %}
+                                    <span class="text-danger pull-right">
+                                        {{ error|safe }}&nbsp;
+                                        <i class="fa fa-exclamation-circle text-danger"></i>
+                                    </span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+
+                </form>
+
+            {% endif %}
 
         </div>
 

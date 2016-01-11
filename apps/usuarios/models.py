@@ -29,6 +29,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     nombre = models.CharField(max_length=40, blank=True)
     apellidos = models.CharField(max_length=40, blank=True)
     fecha_registro = models.DateTimeField(auto_now_add=True)
+    fecha_nacimiento = models.DateTimeField(auto_now_add=True)
     email = models.EmailField(unique=True)
     status = models.BooleanField(default=False)  # para validar al usuario
     avatar = models.URLField(blank=True)  # necesario para captar la imagen  de perfil de su red social
@@ -41,6 +42,15 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_nutriologo = models.BooleanField(default=False)
+    sexo = models.CharField(choices=(('Hombre','Hombre'),('Mujer','Mujer'),('N/A','N/A')), max_length=30, default="N/A")
+    codigo_postal = models.CharField(max_length=30, default="00000")
+    telefono = models.CharField(max_length=30, default="xx-xxxxxxxx")
+    #Campo para verificar que el nutriologo ya lleno sus horarios para poder atender pacientes
+    termino_horarios = models.BooleanField(default=False)
+
+
+
+
     objects = UserManager()
 
     USERNAME_FIELD = 'username'

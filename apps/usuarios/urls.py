@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^terminar_registro/', 'apps.usuarios.views.terminar_registro', name="terminar_registro"),
     #url(r'^(?P<username>[\w-]+)/$', 'apps.usuarios.views.perfil_usuario', name='perfil_usuario'),
     url(r'^perfil/(?P<username>[\w-]+)/$', 'apps.usuarios.views.perfil_paciente', name='perfil_paciente'),
+    url(r'^actualizar_mis_horarios', 'apps.usuarios.views.actualizar_horarios_nutriologo', name='actualizar_horarios_nutriologo'),
 
 ]
 
