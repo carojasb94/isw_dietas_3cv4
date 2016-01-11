@@ -56,24 +56,41 @@
                     {#  #}
                     <div class="col-md-4 p-md">
                         <h3>Por favor llena tus horarios disponibles para que podamos agendar citas segun tu tiempo</h3>
+                        <form method="POST" action="{% url 'usuarios_app:actualizar_horarios_nutriologo' %}">
+                            {% csrf_token %}
+                            {% for field in formulario_horarios %}
+                                <div class="form-group {% if field.errors %}has-error{% endif %} ">
+                                    {{ field.label_tag }}
+                                    {{ field }}
+                                    {% if field.errors %}
+                                        {% for error in field.errors %}
+                                            <span class="text-danger pull-right">
+                                                {{ error|safe }}&nbsp;
+                                                <i class="fa fa-exclamation-circle text-danger"></i>
+                                            </span>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </form>
+                    </div>
+                {% else %}
+                    {# Aqui van las citas aplicadas que tiene el Nutriologo #}
+                    <div class="col-md-4 p-md">
+                        <h3>Tus Citas Futuras/Pendientes</h3>
+                            {% csrf_token %}
+                            {% for cita in citas_aplicadas_nutriologo %}
+                                <div class="cita-aplicada">
+                                    <h3>{{ cita.paciente }} </h3>
+                                </div>
+                                <form method="POST" action="{% url 'usuarios_app:actualizar_horarios_nutriologo' %}">
+                                </form>
+
+                            {% endfor %}
+                    </div>
+
                 {% endif %}
-                <form method="POST" action="{% url 'usuarios_app:actualizar_horarios_nutriologo' %}">
-                    {% csrf_token %}
-                    {% for field in formulario_horarios %}
-                        <div class="form-group {% if field.errors %}has-error{% endif %} ">
-                            {{ field.label_tag }}
-                            {{ field }}
-                            {% if field.errors %}
-                                {% for error in field.errors %}
-                                    <span class="text-danger pull-right">
-                                        {{ error|safe }}&nbsp;
-                                        <i class="fa fa-exclamation-circle text-danger"></i>
-                                    </span>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-                    {% endfor %}
-                </form>
+
             {% endif %}
             {# veremos si tiene itas pendientes, o ya echas del usuario y las mostraremos #}
                 {% if citas_pendientes %}

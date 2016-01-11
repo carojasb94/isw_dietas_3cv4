@@ -4,7 +4,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from apps.usuarios.models import Usuario
-from apps.nutriologo.models import Peticion_para_Ser_Nutriologo, Horario_de_nutriologo, Cita
+from apps.nutriologo.models import Peticion_para_Ser_Nutriologo, Horario_de_nutriologo, Cita, Dieta
 from datetimewidget.widgets import DateTimeWidget
 
 class Actualizar_a_Nutriologo_form(forms.ModelForm):
@@ -107,8 +107,33 @@ class agendar_cita_form(forms.ModelForm):
         labels = {'fecha': _("El dia y hora que desarias fuera tu cita"),
                   'mensaje':_("Algun comentario extra que quieras enviarle al nutriologo ")
                   }
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        print('clean data en form de nutriologo')
+        print(cleaned_data)
+        #print(cleaned_data['cedula'])
+        return cleaned_data
 
 
+class crear_dieta_form(forms.ModelForm):
+    class Meta:
+        model = Dieta
+
+        fields = ('mensaje','carbohidratos','azucares','lipidos','proteinas')
+
+        widgets = {'mensaje':forms.Textarea(),
+                   'carbohidratos': forms.Textarea(),
+                   'azucares': forms.Textarea(),
+                   'lipidos': forms.Textarea(),
+                   'proteinas': forms.Textarea(),
+                   }
+
+        labels = {'fecha': _("Algun comentario extra al paciente"),
+                  'carbohidratos':_("Carbohidratos recomendados "),
+                  'azucares':_("Azucares recomendadas "),
+                  'lipidos':_("Lipidos recomendados "),
+                  'proteinas':_("Proteinas recomendados "),
+                  }
 
     def clean(self):
         cleaned_data = self.cleaned_data
@@ -116,3 +141,4 @@ class agendar_cita_form(forms.ModelForm):
         print(cleaned_data)
         #print(cleaned_data['cedula'])
         return cleaned_data
+

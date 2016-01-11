@@ -67,6 +67,11 @@ class Dieta(models.Model):
     fecha = models.DateTimeField(default=datetime.now())
     mensaje = models.CharField(max_length=100, default='', blank=True)
     status = models.CharField(choices=(('vigente','vigente'),('pasada','pasada')), max_length=30, default="vigente")
+    carbohidratos = models.CharField(max_length=50, default="")
+    azucares = models.CharField(max_length=50, default="")
+    lipidos = models.CharField(max_length=50, default="")
+    proteinas = models.CharField(max_length=50, default="")
+
 
 
 
