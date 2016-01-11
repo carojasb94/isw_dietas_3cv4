@@ -1,0 +1,28 @@
+{% extends 'base/base_no_sidebar.html' %}
+
+{% load staticfiles %}
+{% load humanize %}
+
+
+{% block title %}
+    {{ usuario.username }}
+{% endblock %}
+
+
+{% block styles %}
+{% endblock %}
+
+
+{% block content %}
+    {% if sucess %}
+        <h4>Exito al agendar la cita, puedes consultar mas detalles en tu perfil </h4>
+    {% endif %}
+
+
+{% endblock %}
+
+
+{% block scripts %}
+{% endblock %}
+
+

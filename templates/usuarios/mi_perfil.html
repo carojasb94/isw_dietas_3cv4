@@ -47,7 +47,7 @@
             {% if no_soy_nutriologo %}
                 <p>¿Eres un nutriologo?</p>
                 {# Boton para que el usuario pueda solicitar su cambio a nutriologo #}
-                <div class="col-xs-4 col-md-2 col-md-offset-3">
+                <div class="col-md-4 col-md-2 col-md-offset-3">
                     <a class="btn-primary " href="{% url 'usuarios_app:actualizar_a_nutriologo' %}" value="Quiero ser nutriologo">Quiero ser nutriologo</a>
                 </div>
             {% else %}
@@ -76,45 +76,48 @@
                     </div>
                 {% else %}
                     {# Aqui van las citas aplicadas que tiene el Nutriologo #}
-                    <div class="col-md-4 p-md">
-                        <h3>Tus Citas Futuras/Pendientes</h3>
-                            {% csrf_token %}
-                            {% for cita in citas_aplicadas_nutriologo %}
-                                <div class="cita-aplicada">
-                                    <h3>{{ cita.paciente }} </h3>
-                                </div>
-                                <form method="POST" action="{% url 'usuarios_app:actualizar_horarios_nutriologo' %}">
-                                </form>
-
-                            {% endfor %}
-                    </div>
-
+                    {% if citas_aplicadas_nutriologo  %}
+                        <div class="col-md-4 p-md">
+                            <h3>Tus Citas Futuras/Pendientes</h3>
+                                {% csrf_token %}
+                                {% for cita in citas_aplicadas_nutriologo %}
+                                    <div class="cita-aplicada">
+                                        <h3>{{ cita.paciente }} </h3>
+                                    </div>
+                                    <form method="POST" action="{% url 'usuarios_app:actualizar_horarios_nutriologo' %}">
+                                        <input type="hidden" value="{{ cita.paciente.id }}" name="id_paciente">
+                                        <input type="submit" name="btn_generar_dieta_paciente" value="generar Dieta">
+                                    </form>
+                                {% endfor %}
+                        </div>
+                    {% else %}
+                        {# no tiene citas pendientes el nutriologo #}
+                        <h4>No tienes citas pendientes :( </h4>
+                    {% endif %}
                 {% endif %}
 
             {% endif %}
             {# veremos si tiene itas pendientes, o ya echas del usuario y las mostraremos #}
                 {% if citas_pendientes %}
-                    <div class="row">
-                        <div class="col-sm-7">
-                            <h2>Tus citas pendientes.</h2>
-                            {% for cita in citas_pendientes %}
-                                <p>{{ cita }}</p>
-                            {% endfor %}
-                        </div>
+                    <div class="col-md-7">
+                        <h2>Tus citas pendientes.</h2>
+                        {% for cita in citas_pendientes %}
+                            <p>{{ cita }}</p>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="col-md-7">
+                        <h2>No tienes Citas pendientes.</h2>
                     </div>
                 {% endif %}
-
                 {% if citas_pasadas %}
-                    <div class="row">
-                        <div class="col-sm-7">
+                        <div class="col-md-7">
                             <h2>Tus Historial de citas.</h2>
                             {% for cita in citas_pendientes %}
                                 <p>{{ cita }}</p>
                             {% endfor %}
                         </div>
-                    </div>
                 {% endif %}
-
         </div>
 
         {# comment #}
