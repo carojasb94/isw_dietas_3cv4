@@ -14,57 +14,62 @@
 
 {% block content %}
 {# block content #}
-        <h3> Requisitos para poder ser nutriologo en EDS</h3>
-            <h4> Cedula profesional o equivalente </h4>
-            <h4>Direccion personal</h4>
-        {% if error %}
-            <h4 style="color: red">
-                Los datos enviados son incorectos, por favor intentelo de nuevo
-            </h4>
-        {% endif %}
-        <form role="form" method="post" accept-charset="utf-8" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="form-group  ">
-                <label for="id_cedula">Cedula profesional:</label>
-                <input type="file" id="id_cedula" name="cedula" required="True">
-            </div>
-            <br>
-            <div class="form-group  ">
-                <label for="id_direccion">Direccion:</label>
-                <input class="form-control" id="id_direccion" maxlength="50" name="direccion" required="true" type="text">
-            </div>
 
-            <button class="button-" type="submit" name="nutriologo_form">Enviar solicitud</button>
+    <div class="row">
+        <div class="col-sm-7">
+            <h1>Proyectos en retribución</h1>
+        </div>
+        <div class="col-sm-5">
+            <div class="btn-group m-t-md pull-right">
 
-        </form>
-
-
-    <br>
-    {# usando el form nativo de django #}
-    {% comment %}
-        <form role="form" method="post" accept-charset="utf-8" enctype="multipart/form-data">
-            {% csrf_token %}
-
-            {% for field in nutriologo_form %}
-                <div class="form-group {% if field.errors %}has-error{% endif %} ">
-                    {{ field.label_tag }}
-                    {{ field }}
-                    {% if field.errors %}
-                        {% for error in field.errors %}
-                            <span class="text-danger pull-right">
-                                {{ error|safe }}&nbsp;
-                                <i class="fa fa-exclamation-circle text-danger"></i>
-                            </span>
-                        {% endfor %}
-                    {% endif %}
-                </div>
-            {% endfor %}
-
-                <button class="btn btn-primary btn-signin pull-right" id="btn-submit" type="submit"
-                    name="register_form">Enviar
+                <button id="btn-ordenar" name="algomas" data-toggle="dropdown"
+                        class="btn btn-primary btn-outline dropdown-toggle">
+                    Ordenar por
+                    <span class="caret m-l-lg"></span>
                 </button>
-        </form>
-    {% endcomment %}
+
+                <ul class="dropdown-menu ordenar">
+                    <li><a name="interes" onclick="asignarOrden('#retribucion',this)">Porcentaje de Interés</a>
+                    </li>
+                    <li><a name="inversion" onclick="asignarOrden('#retribucion',this)">Inversión</a></li>
+                    <li><a name="meta" onclick="asignarOrden('#retribucion',this)">Meta</a></li>
+                    <li><a name="dias_restantes" onclick="asignarOrden('#retribucion',this)">Días restantes</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-7">
+            <h1> Requisitos para poder ser nutriologo en EDS</h1>
+        </div>
+
+        <div class="col-md-7">
+                <h4> Cedula profesional o equivalente </h4>
+                <h4>Direccion personal</h4>
+            {% if error %}
+                <h4 style="color: red">
+                    Los datos enviados son incorectos, por favor intentelo de nuevo
+                </h4>
+            {% endif %}
+            <form role="form" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group  ">
+                    <label for="id_cedula">Cedula profesional:</label>
+                    <input type="file" id="id_cedula" name="cedula" required="True">
+                </div>
+                <br>
+                <div class="form-group  ">
+                    <label for="id_direccion">Direccion:</label>
+                    <input class="form-control" id="id_direccion" maxlength="50" name="direccion" required="true" type="text">
+                </div>
+                <button class="button-" type="submit" name="nutriologo_form">Enviar solicitud</button>
+            </form>
+        </div>
+    </div>
+
 {# endblock #}
 {% endblock %}
 
