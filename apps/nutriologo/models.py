@@ -54,7 +54,7 @@ class Horario_de_nutriologo(models.Model):
         return self.nutriologo
 
 
-def Cita():
+class Cita(models.Model):
     nutriologo = models.ForeignKey(Usuario, related_name='nutriologo')
     paciente = models.ForeignKey(Usuario,related_name='paciente')
     fecha = models.DateTimeField(default=datetime.now())
