@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 
 # Create your models here.
@@ -51,3 +52,13 @@ class Horario_de_nutriologo(models.Model):
 
     def __unicode__(self):
         return self.nutriologo
+
+
+def Cita():
+    nutriologo = models.ForeignKey(Usuario, related_name='nutriologo')
+    paciente = models.ForeignKey(Usuario,related_name='paciente')
+    fecha = models.DateTimeField(default=datetime.now())
+    mensaje = models.CharField(max_length=100, default='', blank=True)
+
+
+

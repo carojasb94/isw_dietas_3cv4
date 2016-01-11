@@ -46,12 +46,7 @@
 
                 {# Boton para que el usuario pueda solicitar su cambio a nutriologo #}
                 <div class="col-xs-4 col-md-2 col-md-offset-3">
-                <input type="button" href="{% url 'usuarios_app:actualizar_a_nutriologo' %}" value="Quiero ser nutriologo">
-
-                    <a href="{% url 'usuarios_app:actualizar_a_nutriologo' %}"
-                       class="btn btn-primary btn-block btn-facebook">
-                        <i class="fa fa-facebook"></i> <span class="hidden-sm">Quiero ser nutriologo</span>
-                    </a>
+                    <a class="btn-primary " href="{% url 'usuarios_app:actualizar_a_nutriologo' %}" value="Quiero ser nutriologo">
                 </div>
             {% else %}
             {# Si el usuario no ha terminado sus horarios, se le pide que los termine de llenar #}
@@ -76,10 +71,7 @@
                             {% endif %}
                         </div>
                     {% endfor %}
-
-
                 </form>
-
             {% endif %}
 
         </div>

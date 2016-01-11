@@ -4,7 +4,8 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from apps.usuarios.models import Usuario
-from apps.nutriologo.models import Peticion_para_Ser_Nutriologo, Horario_de_nutriologo
+from apps.nutriologo.models import Peticion_para_Ser_Nutriologo, Horario_de_nutriologo, Cita
+
 
 class Actualizar_a_Nutriologo_form(forms.ModelForm):
     '''
@@ -85,3 +86,25 @@ class Actualizar_Horarios_form(forms.ModelForm):
 
 
 
+class agendar_cita_form(forms.ModelForm):
+    class Meta:
+        model = Cita
+
+        fields = ('fecha','mensaje',)
+
+        widgets = {'fecha': forms.DateTimeInput(),
+                   'mensaje':forms.Textarea(),
+                   }
+
+        labels = {'fecha': _("El dia y hora que desarias fuera tu cita"),
+                  'mensaje':_("Algun comentario extra que quieras enviarle al nutriologo ")
+                  }
+
+
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        print('clean data en form de nutriologo')
+        print(cleaned_data)
+        #print(cleaned_data['cedula'])
+        return cleaned_data
