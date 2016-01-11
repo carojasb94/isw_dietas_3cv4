@@ -231,7 +231,7 @@ def actualizar_a_nutriologo(request):
                                              usuario = request.user,
                                              cedula = request.FILES['cedula'],
                                              )
-                actualizar_a_nutriologo_form.save()
+                #actualizar_a_nutriologo_form.save()
                 return redirect(reverse('usuarios_app:solicitud_enviada'))
             else:
                 print('form no valido')
