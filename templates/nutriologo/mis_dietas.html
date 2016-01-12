@@ -19,7 +19,19 @@
 
             {# DIETA VIGENTE  #}
             {% if dieta_vigente %}
-                <div></div>
+                <div>
+                    <h2>Tu dieta Actual</h2>
+
+                    <p>Te atendio {{ dieta_vigente .nutriologo }}</p>
+                    <p>Te recomienda: </p>
+                    <p>Lipidos : <b>{{ dieta_vigente.lipidos }}</b> </p>
+                    <p>Carbohidratos : <b>{{ dieta_vigente.carbohidratos }}</b> </p>
+                    <p>Azucares : <b>{{ dieta_vigente.azucares }}</b> </p>
+                    <p>Proteinas : <b>{{ dieta_vigente.proteinas }}</b> </p>
+                    {% if dieta_vigente.mensaje != '' %}
+                        <p>Como informacion extra te sugiere : <b>{{ dieta_vigente.mensaje }}</b> </p>
+                    {% endif %}
+                </div>
             {% else %}
             {# NO HA TENIDO DIETAS #}
                 <div>
@@ -29,6 +41,24 @@
             {% endif %}
             {# DIETAS PASADAS #}
             {% if dietas_pasadas %}
+                {# iteramos sobre las dietas #}
+                <div>
+                    <h2>Tus historial de citas</h2>
+                </div>
+                {% for dieta in dietas_pasadas %}
+                    <div>
+                        <h3>Dieta del{{ dieta.fecha|date }}</h3>
+                        <p>Te atendio {{ dieta.nutriologo }}</p>
+                        <p>Te recomendo: </p>
+                        <p>Lipidos : <b>{{ dieta.lipidos }}</b> </p>
+                        <p>Carbohidratos : <b>{{ dieta.carbohidratos }}</b> </p>
+                        <p>Azucares : <b>{{ dieta.azucares }}</b> </p>
+                        <p>Proteinas : <b>{{ dieta.proteinas }}</b> </p>
+                        {% if dieta.mensaje != '' %}
+                            <p>Como informacion extra te sugiere : <b>{{ dieta.mensaje }}</b> </p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
             {% else %}
             {# NO HA TENIDO DIETAS #}
                 <div>

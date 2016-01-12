@@ -119,6 +119,7 @@
                                     <form method="POST" action="{% url 'nutriologo_app:crear_dieta' %}" accept-charset="utf-8" enctype="multipart/form-data">
                                         {% csrf_token %}
                                         <input type="hidden" value="{{ cita.paciente.id }}" name="id_paciente">
+                                        <input type="hidden" value="{{ cita.id }}" name="id_cita">
                                         <input type="submit" name="btn_generar_dieta_paciente" value="generar Dieta">
                                     </form>
                                 </div>

@@ -85,17 +85,37 @@ def crear_dieta(request):
                                                  proteinas = formulario_dieta.cleaned_data['proteinas'],
                                                  status = 'vigente',
                                                  )
+
                     print('se creo sin problemas la cita')
+                    #volvemos pasadas todas las dietas que esten hasta el momento
+                    dietas_anteriores = Dieta.objects.all().exclude(id=dieta.id).exclude(status='pasada')
+                    for dieta in dietas_anteriores:
+                        dieta.status='pasada'
+                        dieta.save()
+
+                    # AHORA SE CANCELA O PASA A 'PASADA' LA CITA
+                    if 'id_cita' in request.session:
+                        id_paciente = request.session['id_cita']
+                        citas = Cita.objects.filter(nutriologo = request.user,
+                                                   paciente = paciente, id=id_cita)
+                        for cita in citas:
+                            cita.status='aplicada'
+                            cita.save()
+                        del request.session['id_paciente']
+                        del request.session['id_cita']
+
+
                     return redirect(reverse('usuarios_app:perfil_paciente',kwargs={'username':request.user.username}) )
 
             else:
                 return render(request, 'nutriologo/crear_dieta.html', {'success':False,
                                                                        'formulario_dieta':crear_dieta_form()})
 
-        elif 'id_paciente' in request.POST:
+        elif 'id_paciente' in request.POST and 'id_cita' in request.POST:
             #Viene desde la vista del nutriologo
             print('viene desde la vista de nutriologo con el usuario seleccionado')
             request.session['id_paciente'] = request.POST['id_paciente']
+            request.session['id_cita'] = request.POST['id_cita']
             return render(request, 'nutriologo/crear_dieta.html', {'success':False,
                                                                    'formulario_dieta':crear_dieta_form()})
 
@@ -113,9 +133,10 @@ def mis_dietas(request):
     print('mis_dietas')
     print (request)
 
-
-    dietas_pasadas = 1
-    return render(request, 'nutriologo/mis_dietas.html', {'dietas_pasadas':dietas_pasadas,})
+    dietas_pasadas = dame_dietas_pasadas(usuario)
+    dieta_vigente = dame_dieta_vigente(usuario)
+    return render(request, 'nutriologo/mis_dietas.html', {'dietas_pasadas':dietas_pasadas,
+                                                          'dieta_vigente':dieta_vigente, })
 
 
 
