@@ -78,11 +78,11 @@ def crear_dieta(request):
                     #creamos la dieta
                     dieta = Dieta.objects.create(nutriologo = request.user,
                                                  paciente = paciente,
-                                                 mensaje = formulario_dieta.cleaned_data[''],
-                                                 carbohidratos = formulario_dieta.cleaned_data[''],
-                                                 azucares = formulario_dieta.cleaned_data[''],
-                                                 lipidos = formulario_dieta.cleaned_data[''],
-                                                 proteinas = formulario_dieta.cleaned_data[''],
+                                                 mensaje = formulario_dieta.cleaned_data['mensaje'],
+                                                 carbohidratos = formulario_dieta.cleaned_data['carbohidratos'],
+                                                 azucares = formulario_dieta.cleaned_data['azucares'],
+                                                 lipidos = formulario_dieta.cleaned_data['lipidos'],
+                                                 proteinas = formulario_dieta.cleaned_data['proteinas'],
                                                  status = 'vigente',
                                                  )
                     print('se creo sin problemas la cita')
@@ -109,6 +109,13 @@ def crear_dieta(request):
     raise Http404("Estas intentando acceder a una vista sin permiso >:(")
 
 
+def mis_dietas(request):
+    print('mis_dietas')
+    print (request)
+
+
+    dietas_pasadas = 1
+    return render(request, 'nutriologo/mis_dietas.html', {'dietas_pasadas':dietas_pasadas,})
 
 
 

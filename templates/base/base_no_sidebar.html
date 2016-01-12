@@ -114,11 +114,13 @@
                                 {% endif %}
                             </li>
                             <ul class="dropdown-menu" role="menu" aria-labelledby="menu-profile">
+                                <li><a href="{% url 'usuarios_app:perfil_paciente' user.username %}">Mi cuenta</a></li>
+                                <li class="divider"></li>
                                 {% if user.is_nutriologo %}
                                     <li><a href="#">Mis pacientes</a></li>
+                                {% else %}
+                                    <li><a href="{% url 'nutriologo_app:mis_dietas' %}">Mis Dietas</a></li>
                                 {% endif %}
-                                <li class="divider"></li>
-                                <li><a href="{% url 'usuarios_app:perfil_paciente' user.username %}">Mi cuenta</a></li>
                                 <li><a href="/logout"><i class="fa fa-sign-out"></i> Cerrar sesión </a></li>
                             </ul>
                         {% else %}

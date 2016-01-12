@@ -1,0 +1,47 @@
+{% extends 'base/base_no_sidebar.html' %}
+
+{% load staticfiles %}
+{% load humanize %}
+
+{% block title %}
+    {{ usuario.username }}
+{% endblock %}
+
+
+{% block styles %}
+{% endblock %}
+
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-6 p-md">
+            <h3>Mis dietas</h3>
+
+            {# DIETA VIGENTE  #}
+            {% if dieta_vigente %}
+                <div></div>
+            {% else %}
+            {# NO HA TENIDO DIETAS #}
+                <div>
+                    <h3>No tienes una dieta Vigente :c</h3>
+                </div>
+
+            {% endif %}
+            {# DIETAS PASADAS #}
+            {% if dietas_pasadas %}
+            {% else %}
+            {# NO HA TENIDO DIETAS #}
+                <div>
+                    <h3>Sin Historial de Dietas :( </h3>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block scripts %}
+{% endblock %}
+
+

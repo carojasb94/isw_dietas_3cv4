@@ -61,6 +61,9 @@ class Cita(models.Model):
     mensaje = models.CharField(max_length=100, default='', blank=True)
     status = models.CharField(choices=(('aplicada','aplicada'),('pendiente','pendiente'),('sin_estado','sin_estado')), max_length=30, default="sin_estado")
 
+class Alimento(models.Model):
+    nombre = models.CharField(max_length=100, default='', blank=True)
+
 class Dieta(models.Model):
     nutriologo = models.ForeignKey(Usuario, related_name='dieta_nutriologo')
     paciente = models.ForeignKey(Usuario,related_name='dieta_paciente')
@@ -71,6 +74,24 @@ class Dieta(models.Model):
     azucares = models.CharField(max_length=50, default="")
     lipidos = models.CharField(max_length=50, default="")
     proteinas = models.CharField(max_length=50, default="")
+    #alimento = models.ManyToManyField(Alimento, through='Emprendido', related_name='Empresario')
+
+
+class HorarioDieta(models.Model):
+    dieta = models.ForeignKey(Dieta)
+    nutriologo = models.ForeignKey(Usuario, related_name='horarioDieta_nutriologo')
+    paciente = models.ForeignKey(Usuario,related_name='horarioDieta_paciente')
+    estados = (('lunes', 'lunes'),
+               ('martes', 'martes'),
+               ('miercoles', 'miercoles'),
+               ('jueves', 'jueves'),
+               ('viernes', 'viernes'),
+               ('sabado', 'sabado'),
+               ('domingo', 'domingo'),
+               )
+    dia = models.CharField(max_length=20, choices=estados, default='lunes')
+    fecha = models.DateTimeField(default=datetime.now())
+
 
 
 
