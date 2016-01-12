@@ -17,5 +17,15 @@ con eso el proyecto correra en localhost:8000
 
 #En windows 
 
-1.-
+1.-Activar el entorno virtual 
+
+entrar a la carpeta : entorno_dietas_windows/Scripts/
+y dentro correr el comando:  activate
+
+
+2.- Correr el servidor web 
+entrar a isw_dietas_3cv4/ y correr el comando
+python manage.py runserver
+
+con eso el proyecto correra en localhost:8000
 
