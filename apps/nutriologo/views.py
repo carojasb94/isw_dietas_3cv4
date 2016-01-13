@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 from apps.nutriologo.forms import agendar_cita_form, crear_dieta_form
 from apps.nutriologo.models import Cita, Dieta
 from apps.usuarios.models import Usuario
+from apps.nutriologo.funciones import dame_dietas_pasadas,dame_dieta_vigente
 
 
 @login_required
